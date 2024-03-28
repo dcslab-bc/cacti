@@ -8165,7 +8165,7 @@ __metadata:
     typescript-optional: "npm:2.0.1"
     uuid: "npm:9.0.1"
     web3-eth-abi: "npm:4.0.3"
-    web3-utils: "npm:4.0.3"
+    web3-utils: "npm:4.2.1"
   languageName: unknown
   linkType: soft
 
@@ -52836,6 +52836,19 @@ __metadata:
     web3-types: "npm:^1.1.1"
     web3-validator: "npm:^2.0.1"
   checksum: 10/886c99b921765ccff9015ca4b9218d33058fa398ef905f24bbfc0d25054331dfa8cfb54de4eff906163b1109c86bf90c3a6ac0200248ec4ac5dac1fa77ab859c
+  languageName: node
+  linkType: hard
+
+"web3-utils@npm:4.2.1":
+  version: 4.2.1
+  resolution: "web3-utils@npm:4.2.1"
+  dependencies:
+    ethereum-cryptography: "npm:^2.0.0"
+    eventemitter3: "npm:^5.0.1"
+    web3-errors: "npm:^1.1.4"
+    web3-types: "npm:^1.5.0"
+    web3-validator: "npm:^2.0.4"
+  checksum: 10/1b9ab1d4f5b1cfb820ad9b72d6362ed553b19a94555cf52a25064079c8b00d398c6c311dcba787cde6a6ccf68ff36103eb808190451d7d6fe2d545111bac57bb
   languageName: node
   linkType: hard
 
