@@ -42,9 +42,9 @@ export class GetPastLogsEndpoint implements IWebServiceEndpoint {
     this.log = LoggerProvider.getOrCreate({ level, label });
   }
 
-  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-past-logs"] {
+  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-past-logs"] {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-past-logs"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-past-logs"
     ];
   }
 

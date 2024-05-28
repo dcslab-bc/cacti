@@ -42,9 +42,9 @@ export class GetTransactionEndpoint implements IWebServiceEndpoint {
     this.log = LoggerProvider.getOrCreate({ level, label });
   }
 
-  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-transaction"] {
+  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-transaction"] {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-transaction"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-transaction"
     ];
   }
 

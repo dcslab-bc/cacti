@@ -56,9 +56,9 @@ export class GetPrometheusExporterMetricsEndpointV1
     return this.handleRequest.bind(this);
   }
 
-  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-prometheus-exporter-metrics"] {
+  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-prometheus-exporter-metrics"] {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-prometheus-exporter-metrics"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-prometheus-exporter-metrics"
     ];
   }
 

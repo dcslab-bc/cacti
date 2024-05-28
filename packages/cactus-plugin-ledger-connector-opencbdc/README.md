@@ -1,4 +1,4 @@
-# `@hyperledger/cactus-plugin-ledger-connector-besu`
+# `@hyperledger/cactus-plugin-ledger-connector-opencbdc`
 
 This plugin provides `Cactus` a way to interact with Besu networks. Using this we can perform:
 * Deploy Smart-contracts through bytecode.

@@ -42,9 +42,9 @@ export class GetBlockEndpoint implements IWebServiceEndpoint {
     this.log = LoggerProvider.getOrCreate({ level, label });
   }
 
-  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-block"] {
+  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-block"] {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-block"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-block"
     ];
   }
 

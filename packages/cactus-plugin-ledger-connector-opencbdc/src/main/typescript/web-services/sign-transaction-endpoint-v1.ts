@@ -54,9 +54,9 @@ export class BesuSignTransactionEndpointV1 implements IWebServiceEndpoint {
     return this.handleRequest.bind(this);
   }
 
-  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/sign-transaction"] {
+  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/sign-transaction"] {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/sign-transaction"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/sign-transaction"
     ];
   }
 

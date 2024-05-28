@@ -45,9 +45,9 @@ export class DeployContractSolidityBytecodeEndpoint
     this.log = LoggerProvider.getOrCreate({ level, label });
   }
 
-  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/deploy-contract-solidity-bytecode"] {
+  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/deploy-contract-solidity-bytecode"] {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/deploy-contract-solidity-bytecode"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/deploy-contract-solidity-bytecode"
     ];
   }
 

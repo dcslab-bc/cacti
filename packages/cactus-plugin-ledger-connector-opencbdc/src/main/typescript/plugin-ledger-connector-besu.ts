@@ -296,7 +296,7 @@ export class PluginLedgerConnectorBesu
     {
       const oasPath =
         OAS.paths[
-          "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-open-api-spec"
+          "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-open-api-spec"
         ];
 
       const operationId = oasPath.get.operationId;
@@ -318,7 +318,7 @@ export class PluginLedgerConnectorBesu
   }
 
   public getPackageName(): string {
-    return `@hyperledger/cactus-plugin-ledger-connector-besu`;
+    return `@hyperledger/cactus-plugin-ledger-connector-opencbdc`;
   }
 
   public async getConsensusAlgorithmFamily(): Promise<ConsensusAlgorithmFamily> {

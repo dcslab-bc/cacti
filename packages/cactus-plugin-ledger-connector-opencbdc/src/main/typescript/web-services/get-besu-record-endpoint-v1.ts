@@ -45,7 +45,7 @@ export class GetBesuRecordEndpointV1 implements IWebServiceEndpoint {
 
   public getOasPath() {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-besu-record"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-besu-record"
     ];
   }
 

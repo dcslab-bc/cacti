@@ -118,7 +118,7 @@ test(testCase, async (t: Test) => {
   const { address, port } = addressInfo;
   const apiHost = `http://${address}:${port}`;
   t.comment(
-    `Metrics URL: ${apiHost}/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-prometheus-exporter-metrics`,
+    `Metrics URL: ${apiHost}/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-prometheus-exporter-metrics`,
   );
 
   const wsBasePath = apiHost + Constants.SocketIoConnectionPathV1;
