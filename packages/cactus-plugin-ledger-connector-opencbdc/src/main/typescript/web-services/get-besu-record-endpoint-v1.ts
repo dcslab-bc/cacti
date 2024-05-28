@@ -14,7 +14,7 @@ import {
 } from "@hyperledger/cactus-core-api";
 import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 
-import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-besu";
+import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-opencbdc";
 import { GetBesuRecordV1Request } from "../generated/openapi/typescript-axios/api";
 
 import OAS from "../../json/openapi.json";

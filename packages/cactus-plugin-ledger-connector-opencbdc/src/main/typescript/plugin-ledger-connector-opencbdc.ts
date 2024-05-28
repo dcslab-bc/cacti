@@ -136,7 +136,7 @@ export class PluginLedgerConnectorBesu
   private endpoints: IWebServiceEndpoint[] | undefined;
   private httpServer: Server | SecureServer | null = null;
 
-  public static readonly CLASS_NAME = "PluginLedgerConnectorBesu";
+  public static readonly CLASS_NAME = "PluginLedgerOpenCBDC";
 
   public get className(): string {
     return PluginLedgerConnectorBesu.CLASS_NAME;
