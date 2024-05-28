@@ -37,9 +37,9 @@ export class NewContractEndpoint implements IWebServiceEndpoint {
     return NewContractEndpoint.CLASS_NAME;
   }
 
-  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/new-contract"] {
+  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/new-contract"] {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/new-contract"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/new-contract"
     ];
   }
 

@@ -37,9 +37,9 @@ export class RefundEndpoint implements IWebServiceEndpoint {
     return RefundEndpoint.CLASS_NAME;
   }
 
-  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/refund"] {
+  public get oasPath(): typeof OAS.paths["/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/refund"] {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/refund"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/refund"
     ];
   }
 

@@ -6,7 +6,7 @@
     "declarationDir": "dist/lib",
     "resolveJsonModule": true,
     "rootDir": "./src",
-    "tsBuildInfoFile": "../../.build-cache/cactus-plugin-ledger-connector-opencbdc.tsbuildinfo"
+    "tsBuildInfoFile": "../../.build-cache/cactus-plugin-htlc-eth-besu-erc20.tsbuildinfo"
   },
   "include": [
     "./src",

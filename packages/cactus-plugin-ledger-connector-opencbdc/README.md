@@ -1,6 +1,6 @@
-# `@hyperledger/cactus-plugin-ledger-connector-opencbdc`
+# `@hyperledger/cactus-plugin-htlc-eth-besu-erc20`
 
-Allows Cactus nodes to interact with OpenCBDC ledger
+Allows Cactus nodes to interact with HTLC contracts with ERC-20 Tokens
 
 ## Summary
 

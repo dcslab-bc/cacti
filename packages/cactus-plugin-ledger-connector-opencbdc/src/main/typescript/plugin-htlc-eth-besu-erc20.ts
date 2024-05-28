@@ -89,7 +89,7 @@ export class PluginHtlcEthBesuErc20
   }
 
   public getPackageName(): string {
-    return "@hyperledger/cactus-plugin-ledger-connector-opencbdc";
+    return "@hyperledger/cactus-plugin-htlc-eth-besu-erc20";
   }
 
   async registerWebServices(app: Express): Promise<IWebServiceEndpoint[]> {

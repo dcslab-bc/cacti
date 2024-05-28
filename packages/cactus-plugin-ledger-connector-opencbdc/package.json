@@ -1,14 +1,13 @@
 {
-  "name": "@hyperledger/cactus-plugin-ledger-connector-opencbdc",
+  "name": "@hyperledger/cactus-plugin-htlc-eth-besu-erc20",
   "version": "2.0.0-alpha.2",
-  "description": "Allows Cactus nodes to interact with OpenCBDC ledger",
+  "description": "Allows Cactus nodes to interact with HTLC contracts with ERC-20 Tokens",
   "keywords": [
     "Hyperledger",
     "Cactus",
     "Integration",
     "Blockchain",
-    "Distributed Ledger Technology",
-    "OpenCBDC"
+    "Distributed Ledger Technology"
   ],
   "homepage": "https://github.com/hyperledger/cacti#readme",
   "bugs": {
@@ -26,14 +25,9 @@
   },
   "contributors": [
     {
-      "name": "Jihoon Ban",
-      "email": "gogo123058@snu.ac.kr",
-      "url": "http://dcslab.snu.ac.kr"
-    },
-    {
-      "name": "Minji Lee",
-      "email": "leemj410@snu.ac.kr",
-      "url": "http://dcslab.snu.ac.kr"
+      "name": "Please add yourself to the list of contributors",
+      "email": "your.name@example.com",
+      "url": "https://example.com"
     },
     {
       "name": "Peter Somogyvari",
@@ -48,7 +42,7 @@
   ],
   "main": "dist/lib/main/typescript/index.js",
   "module": "dist/lib/main/typescript/index.js",
-  "browser": "dist/cactus-plugin-ledger-connector-opencbdc.web.umd.js",
+  "browser": "dist/cactus-plugin-htlc-eth-besu-erc20.web.umd.js",
   "types": "dist/lib/main/typescript/index.d.ts",
   "files": [
     "dist/*"
@@ -86,8 +80,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "browserMinified": "dist/cactus-plugin-ledger-connector-opencbdc.web.umd.min.js",
-  "mainMinified": "dist/cactus-plugin-ledger-connector-opencbdc.node.umd.min.js",
+  "browserMinified": "dist/cactus-plugin-htlc-eth-besu-erc20.web.umd.min.js",
+  "mainMinified": "dist/cactus-plugin-htlc-eth-besu-erc20.node.umd.min.js",
   "watch": {
     "codegen:openapi": {
       "patterns": [
