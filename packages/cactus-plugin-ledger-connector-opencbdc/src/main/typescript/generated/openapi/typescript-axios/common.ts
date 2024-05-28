@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Hyperledger Cactus Plugin - HTLC ETH BESU ERC20
- * Allows Cactus nodes to interact with HTLC contracts with ERC-20 Tokens
+ * Hyperledger Cactus Plugin - Connector Besu
+ * Can perform basic tasks on a Besu ledger
  *
  * The version of the OpenAPI document: v2.0.0-alpha.1
  * 
