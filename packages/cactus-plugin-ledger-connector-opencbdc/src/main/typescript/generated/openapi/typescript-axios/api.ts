@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Hyperledger Cactus Plugin - Connector Besu
- * Can perform basic tasks on a Besu ledger
+ * Hyperledger Cactus Plugin - Connector OpenCBDC
+ * Can perform basic tasks on an OpenCBDC ledger
  *
  * The version of the OpenAPI document: v2.0.0-alpha.1
  * 
@@ -26,84 +26,84 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
 /**
  * 
  * @export
- * @interface BesuPrivateTransactionConfig
+ * @interface OpenCBDCPrivateTransactionConfig
  */
-export interface BesuPrivateTransactionConfig {
+export interface OpenCBDCPrivateTransactionConfig {
     /**
      * 
      * @type {string}
-     * @memberof BesuPrivateTransactionConfig
+     * @memberof OpenCBDCPrivateTransactionConfig
      */
     'privateFrom': string;
     /**
      * 
      * @type {Array<any>}
-     * @memberof BesuPrivateTransactionConfig
+     * @memberof OpenCBDCPrivateTransactionConfig
      */
     'privateFor': Array<any>;
 }
 /**
  * 
  * @export
- * @interface BesuTransactionConfig
+ * @interface OpenCBDCTransactionConfig
  */
-export interface BesuTransactionConfig {
+export interface OpenCBDCTransactionConfig {
     [key: string]: any;
 
     /**
      * 
      * @type {string}
-     * @memberof BesuTransactionConfig
+     * @memberof OpenCBDCTransactionConfig
      */
     'rawTransaction'?: string;
     /**
      * 
      * @type {Web3BlockHeaderTimestamp}
-     * @memberof BesuTransactionConfig
+     * @memberof OpenCBDCTransactionConfig
      */
     'from'?: Web3BlockHeaderTimestamp;
     /**
      * 
-     * @type {BesuTransactionConfigTo}
-     * @memberof BesuTransactionConfig
+     * @type {OpenCBDCTransactionConfigTo}
+     * @memberof OpenCBDCTransactionConfig
      */
-    'to'?: BesuTransactionConfigTo;
+    'to'?: OpenCBDCTransactionConfigTo;
     /**
      * 
      * @type {Web3BlockHeaderTimestamp}
-     * @memberof BesuTransactionConfig
+     * @memberof OpenCBDCTransactionConfig
      */
     'value'?: Web3BlockHeaderTimestamp;
     /**
      * 
      * @type {Web3BlockHeaderTimestamp}
-     * @memberof BesuTransactionConfig
+     * @memberof OpenCBDCTransactionConfig
      */
     'gas'?: Web3BlockHeaderTimestamp;
     /**
      * 
      * @type {Web3BlockHeaderTimestamp}
-     * @memberof BesuTransactionConfig
+     * @memberof OpenCBDCTransactionConfig
      */
     'gasPrice'?: Web3BlockHeaderTimestamp;
     /**
      * 
      * @type {number}
-     * @memberof BesuTransactionConfig
+     * @memberof OpenCBDCTransactionConfig
      */
     'nonce'?: number;
     /**
      * 
-     * @type {BesuTransactionConfigTo}
-     * @memberof BesuTransactionConfig
+     * @type {OpenCBDCTransactionConfigTo}
+     * @memberof OpenCBDCTransactionConfig
      */
-    'data'?: BesuTransactionConfigTo;
+    'data'?: OpenCBDCTransactionConfigTo;
 }
 /**
- * @type BesuTransactionConfigTo
+ * @type OpenCBDCTransactionConfigTo
  * @export
  */
-export type BesuTransactionConfigTo = string;
+export type OpenCBDCTransactionConfigTo = string;
 
 /**
  * 
@@ -194,10 +194,10 @@ export interface DeployContractSolidityBytecodeV1Request {
     'timeoutMs'?: number;
     /**
      * 
-     * @type {BesuPrivateTransactionConfig}
+     * @type {OpenCBDCPrivateTransactionConfig}
      * @memberof DeployContractSolidityBytecodeV1Request
      */
-    'privateTransactionConfig'?: BesuPrivateTransactionConfig;
+    'privateTransactionConfig'?: OpenCBDCPrivateTransactionConfig;
 }
 /**
  * 
@@ -504,50 +504,50 @@ export interface GetBalanceV1Response {
 /**
  * 
  * @export
- * @interface GetBesuRecordV1Request
+ * @interface GetOpenCBDCRecordV1Request
  */
-export interface GetBesuRecordV1Request {
+export interface GetOpenCBDCRecordV1Request {
     /**
      * 
      * @type {InvokeContractV1Request}
-     * @memberof GetBesuRecordV1Request
+     * @memberof GetOpenCBDCRecordV1Request
      */
     'invokeCall'?: InvokeContractV1Request;
     /**
      * 
      * @type {string}
-     * @memberof GetBesuRecordV1Request
+     * @memberof GetOpenCBDCRecordV1Request
      */
     'transactionHash'?: string;
 }
 /**
  * 
  * @export
- * @interface GetBesuRecordV1Response
+ * @interface GetOpenCBDCRecordV1Response
  */
-export interface GetBesuRecordV1Response {
+export interface GetOpenCBDCRecordV1Response {
     /**
      * 
      * @type {string}
-     * @memberof GetBesuRecordV1Response
+     * @memberof GetOpenCBDCRecordV1Response
      */
     'ledgerId'?: string;
     /**
      * 
      * @type {string}
-     * @memberof GetBesuRecordV1Response
+     * @memberof GetOpenCBDCRecordV1Response
      */
     'stateContract'?: string;
     /**
      * 
      * @type {any}
-     * @memberof GetBesuRecordV1Response
+     * @memberof GetOpenCBDCRecordV1Response
      */
     'transactionInputData'?: any;
     /**
      * 
      * @type {any}
-     * @memberof GetBesuRecordV1Response
+     * @memberof GetOpenCBDCRecordV1Response
      */
     'callOutput'?: any;
 }
@@ -733,10 +733,10 @@ export interface InvokeContractV1Request {
     'keychainId'?: string;
     /**
      * 
-     * @type {BesuPrivateTransactionConfig}
+     * @type {OpenCBDCPrivateTransactionConfig}
      * @memberof InvokeContractV1Request
      */
-    'privateTransactionConfig'?: BesuPrivateTransactionConfig;
+    'privateTransactionConfig'?: OpenCBDCPrivateTransactionConfig;
 }
 
 
@@ -793,10 +793,10 @@ export interface RunTransactionRequest {
     'web3SigningCredential': Web3SigningCredential;
     /**
      * 
-     * @type {BesuTransactionConfig}
+     * @type {OpenCBDCTransactionConfig}
      * @memberof RunTransactionRequest
      */
-    'transactionConfig': BesuTransactionConfig;
+    'transactionConfig': OpenCBDCTransactionConfig;
     /**
      * 
      * @type {ConsistencyStrategy}
@@ -805,10 +805,10 @@ export interface RunTransactionRequest {
     'consistencyStrategy': ConsistencyStrategy;
     /**
      * 
-     * @type {BesuPrivateTransactionConfig}
+     * @type {OpenCBDCPrivateTransactionConfig}
      * @memberof RunTransactionRequest
      */
-    'privateTransactionConfig'?: BesuPrivateTransactionConfig;
+    'privateTransactionConfig'?: OpenCBDCPrivateTransactionConfig;
 }
 /**
  * 
@@ -1000,11 +1000,11 @@ export interface SolidityContractJsonArtifactGasEstimatesCreation {
  */
 
 export const WatchBlocksV1 = {
-    Subscribe: 'org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Subscribe',
-    Next: 'org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Next',
-    Unsubscribe: 'org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Unsubscribe',
-    Error: 'org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Error',
-    Complete: 'org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Complete'
+    Subscribe: 'org.hyperledger.cactus.api.async.opencbdc.WatchBlocksV1.Subscribe',
+    Next: 'org.hyperledger.cactus.api.async.opencbdc.WatchBlocksV1.Next',
+    Unsubscribe: 'org.hyperledger.cactus.api.async.opencbdc.WatchBlocksV1.Unsubscribe',
+    Error: 'org.hyperledger.cactus.api.async.opencbdc.WatchBlocksV1.Error',
+    Complete: 'org.hyperledger.cactus.api.async.opencbdc.WatchBlocksV1.Complete'
 } as const;
 
 export type WatchBlocksV1 = typeof WatchBlocksV1[keyof typeof WatchBlocksV1];
@@ -1358,12 +1358,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
-         * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
+         * @param {GetOpenCBDCRecordV1Request} [getOpenCBDCRecordV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBesuRecordV1: async (getBesuRecordV1Request?: GetBesuRecordV1Request, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-besu-record`;
+        getOpenCBDCRecordV1: async (getOpenCBDCRecordV1Request?: GetOpenCBDCRecordV1Request, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-opencbdc-record`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1382,7 +1382,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(getBesuRecordV1Request, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(getOpenCBDCRecordV1Request, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1519,7 +1519,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Executes a transaction on a besu ledger
+         * @summary Executes a transaction on a OpenCBDC ledger
          * @param {GetTransactionV1Request} [getTransactionV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1553,7 +1553,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Invokes a contract on a besu ledger
+         * @summary Invokes a contract on a OpenCBDC ledger
          * @param {InvokeContractV1Request} [invokeContractV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1587,7 +1587,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Executes a transaction on a besu ledger
+         * @summary Executes a transaction on a OpenCBDC ledger
          * @param {RunTransactionRequest} [runTransactionRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1690,12 +1690,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
-         * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
+         * @param {GetOpenCBDCRecordV1Request} [getOpenCBDCRecordV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getBesuRecordV1(getBesuRecordV1Request?: GetBesuRecordV1Request, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetBesuRecordV1Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getBesuRecordV1(getBesuRecordV1Request, options);
+        async getOpenCBDCRecordV1(getOpenCBDCRecordV1Request?: GetOpenCBDCRecordV1Request, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetOpenCBDCRecordV1Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getOpenCBDCRecordV1(getOpenCBDCRecordV1Request, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1742,7 +1742,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Executes a transaction on a besu ledger
+         * @summary Executes a transaction on a OpenCBDC ledger
          * @param {GetTransactionV1Request} [getTransactionV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1753,7 +1753,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Invokes a contract on a besu ledger
+         * @summary Invokes a contract on a OpenCBDC ledger
          * @param {InvokeContractV1Request} [invokeContractV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1764,7 +1764,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Executes a transaction on a besu ledger
+         * @summary Executes a transaction on a OpenCBDC ledger
          * @param {RunTransactionRequest} [runTransactionRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1817,12 +1817,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
-         * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
+         * @param {GetOpenCBDCRecordV1Request} [getOpenCBDCRecordV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBesuRecordV1(getBesuRecordV1Request?: GetBesuRecordV1Request, options?: any): AxiosPromise<GetBesuRecordV1Response> {
-            return localVarFp.getBesuRecordV1(getBesuRecordV1Request, options).then((request) => request(axios, basePath));
+        getOpenCBDCRecordV1(getOpenCBDCRecordV1Request?: GetOpenCBDCRecordV1Request, options?: any): AxiosPromise<GetOpenCBDCRecordV1Response> {
+            return localVarFp.getOpenCBDCRecordV1(getOpenCBDCRecordV1Request, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1864,7 +1864,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Executes a transaction on a besu ledger
+         * @summary Executes a transaction on a OpenCBDC ledger
          * @param {GetTransactionV1Request} [getTransactionV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1874,7 +1874,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Invokes a contract on a besu ledger
+         * @summary Invokes a contract on a OpenCBDC ledger
          * @param {InvokeContractV1Request} [invokeContractV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1884,7 +1884,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Executes a transaction on a besu ledger
+         * @summary Executes a transaction on a OpenCBDC ledger
          * @param {RunTransactionRequest} [runTransactionRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1939,13 +1939,13 @@ export class DefaultApi extends BaseAPI {
     /**
      * 
      * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
-     * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
+     * @param {GetOpenCBDCRecordV1Request} [getOpenCBDCRecordV1Request] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getBesuRecordV1(getBesuRecordV1Request?: GetBesuRecordV1Request, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getBesuRecordV1(getBesuRecordV1Request, options).then((request) => request(this.axios, this.basePath));
+    public getOpenCBDCRecordV1(getOpenCBDCRecordV1Request?: GetOpenCBDCRecordV1Request, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getOpenCBDCRecordV1(getOpenCBDCRecordV1Request, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1996,7 +1996,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @summary Executes a transaction on a besu ledger
+     * @summary Executes a transaction on a OpenCBDC ledger
      * @param {GetTransactionV1Request} [getTransactionV1Request] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2008,7 +2008,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @summary Invokes a contract on a besu ledger
+     * @summary Invokes a contract on a OpenCBDC ledger
      * @param {InvokeContractV1Request} [invokeContractV1Request] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2020,7 +2020,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @summary Executes a transaction on a besu ledger
+     * @summary Executes a transaction on a OpenCBDC ledger
      * @param {RunTransactionRequest} [runTransactionRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2042,5 +2042,3 @@ export class DefaultApi extends BaseAPI {
         return DefaultApiFp(this.configuration).signTransactionV1(signTransactionRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
-
-

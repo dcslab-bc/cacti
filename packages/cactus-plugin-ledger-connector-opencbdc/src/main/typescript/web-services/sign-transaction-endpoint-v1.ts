@@ -18,24 +18,24 @@ import {
 
 import { SignTransactionRequest } from "../generated/openapi/typescript-axios/api";
 
-import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-opencbdc";
+import { PluginLedgerConnectorOpenCBDC } from "../plugin-ledger-connector-opencbdc";
 import OAS from "../../json/openapi.json";
 
-export interface IBesuSignTransactionEndpointOptions {
-  connector: PluginLedgerConnectorBesu;
+export interface IOpenCBDCSignTransactionEndpointOptions {
+  connector: PluginLedgerConnectorOpenCBDC;
   logLevel?: LogLevelDesc;
 }
 
-export class BesuSignTransactionEndpointV1 implements IWebServiceEndpoint {
+export class OpenCBDCSignTransactionEndpointV1 implements IWebServiceEndpoint {
   private readonly log: Logger;
 
-  constructor(public readonly options: IBesuSignTransactionEndpointOptions) {
-    const fnTag = "BesuSignTransactionEndpointV1#constructor()";
+  constructor(public readonly options: IOpenCBDCSignTransactionEndpointOptions) {
+    const fnTag = "OpenCBDCSignTransactionEndpointV1#constructor()";
 
     Checks.truthy(options, `${fnTag} options`);
     Checks.truthy(options.connector, `${fnTag} options.connector`);
 
-    const label = "besu-sign-transaction-endpoint";
+    const label = "opencbdc-sign-transaction-endpoint";
     const level = options.logLevel || "INFO";
     this.log = LoggerProvider.getOrCreate({ label, level });
   }
@@ -80,7 +80,7 @@ export class BesuSignTransactionEndpointV1 implements IWebServiceEndpoint {
   }
 
   async handleRequest(req: Request, res: Response): Promise<void> {
-    const fnTag = "BesuSignTransactionEndpointV1#handleRequest()";
+    const fnTag = "OpenCBDCSignTransactionEndpointV1#handleRequest()";
     this.log.debug(`POST ${this.getPath()}`);
 
     try {

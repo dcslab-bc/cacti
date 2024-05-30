@@ -18,10 +18,10 @@ import {
   IAsyncProvider,
 } from "@hyperledger/cactus-common";
 
-import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-opencbdc";
+import { PluginLedgerConnectorOpenCBDC } from "../plugin-ledger-connector-opencbdc";
 
 export interface IGetPrometheusExporterMetricsEndpointV1Options {
-  connector: PluginLedgerConnectorBesu;
+  connector: PluginLedgerConnectorOpenCBDC;
   logLevel?: LogLevelDesc;
 }
 

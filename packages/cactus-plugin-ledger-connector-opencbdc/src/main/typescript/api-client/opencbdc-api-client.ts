@@ -11,26 +11,26 @@ import {
 } from "../generated/openapi/typescript-axios";
 import { Configuration } from "../generated/openapi/typescript-axios/configuration";
 
-export class BesuApiClientOptions extends Configuration {
+export class OpenCBDCApiClientOptions extends Configuration {
   readonly logLevel?: LogLevelDesc;
   readonly wsApiHost?: string;
   readonly wsApiPath?: string;
 }
 
-export class BesuApiClient
+export class OpenCBDCApiClient
   extends DefaultApi
   implements ISocketApiClient<WatchBlocksV1Progress> {
-  public static readonly CLASS_NAME = "BesuApiClient";
+  public static readonly CLASS_NAME = "OpenCBDCApiClient";
 
   private readonly log: Logger;
   private readonly wsApiHost: string;
   private readonly wsApiPath: string;
 
   public get className(): string {
-    return BesuApiClient.CLASS_NAME;
+    return OpenCBDCApiClient.CLASS_NAME;
   }
 
-  constructor(public readonly options: BesuApiClientOptions) {
+  constructor(public readonly options: OpenCBDCApiClientOptions) {
     super(options);
     const fnTag = `${this.className}#constructor()`;
     Checks.truthy(options, `${fnTag} arg options`);
