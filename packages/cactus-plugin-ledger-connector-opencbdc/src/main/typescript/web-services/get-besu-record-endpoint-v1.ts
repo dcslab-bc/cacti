@@ -14,26 +14,26 @@ import {
 } from "@hyperledger/cactus-core-api";
 import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 
-import { PluginLedgerConnectorOpenCBDC } from "../plugin-ledger-connector-opencbdc";
-import { GetOpenCBDCRecordV1Request } from "../generated/openapi/typescript-axios/api";
+import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-opencbdc";
+import { GetBesuRecordV1Request } from "../generated/openapi/typescript-axios/api";
 
 import OAS from "../../json/openapi.json";
 
-export interface IGetOpenCBDCRecordEndpointV1Options {
+export interface IGetBesuRecordEndpointV1Options {
   logLevel?: LogLevelDesc;
-  connector: PluginLedgerConnectorOpenCBDC;
+  connector: PluginLedgerConnectorBesu;
 }
 
-export class GetOpenCBDCRecordEndpointV1 implements IWebServiceEndpoint {
-  public static readonly CLASS_NAME = "GetOpenCBDCRecordEndpointV1";
+export class GetBesuRecordEndpointV1 implements IWebServiceEndpoint {
+  public static readonly CLASS_NAME = "GetBesuRecordEndpointV1";
 
   private readonly log: Logger;
 
   public get className(): string {
-    return GetOpenCBDCRecordEndpointV1.CLASS_NAME;
+    return GetBesuRecordEndpointV1.CLASS_NAME;
   }
 
-  constructor(public readonly options: IGetOpenCBDCRecordEndpointV1Options) {
+  constructor(public readonly options: IGetBesuRecordEndpointV1Options) {
     const fnTag = `${this.className}#constructor()`;
     Checks.truthy(options, `${fnTag} arg options`);
     Checks.truthy(options.connector, `${fnTag} arg options.connector`);
@@ -45,7 +45,7 @@ export class GetOpenCBDCRecordEndpointV1 implements IWebServiceEndpoint {
 
   public getOasPath() {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-opencbdc-record"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-besu-record"
     ];
   }
 
@@ -88,8 +88,8 @@ export class GetOpenCBDCRecordEndpointV1 implements IWebServiceEndpoint {
     const reqTag = `${this.getVerbLowerCase()} - ${this.getPath()}`;
     this.log.debug(reqTag);
     try {
-      const reqBody: GetOpenCBDCRecordV1Request = req.body as GetOpenCBDCRecordV1Request;
-      const resBody = await this.options.connector.getOpenCBDCRecord(reqBody);
+      const reqBody: GetBesuRecordV1Request = req.body as GetBesuRecordV1Request;
+      const resBody = await this.options.connector.getBesuRecord(reqBody);
       res.json(resBody);
     } catch (ex) {
       this.log.error(`Crash while serving ${reqTag}`, ex);

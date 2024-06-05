@@ -1,7 +1,7 @@
 export {
   E_KEYCHAIN_NOT_FOUND,
-  IPluginLedgerConnectorOpenCBDCOptions,
-  PluginLedgerConnectorOpenCBDC,
+  IPluginLedgerConnectorBesuOptions,
+  PluginLedgerConnectorBesu,
 } from "./plugin-ledger-connector-opencbdc";
 export { PluginFactoryLedgerConnector } from "./plugin-factory-ledger-connector";
 
@@ -9,9 +9,9 @@ import { IPluginFactoryOptions } from "@hyperledger/cactus-core-api";
 import { PluginFactoryLedgerConnector } from "./plugin-factory-ledger-connector";
 
 export {
-  OpenCBDCApiClient,
-  OpenCBDCApiClientOptions,
-} from "./api-client/opencbdc-api-client";
+  BesuApiClient,
+  BesuApiClientOptions,
+} from "./api-client/besu-api-client";
 
 export * from "./generated/openapi/typescript-axios/api";
 

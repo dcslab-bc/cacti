@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Hyperledger Cactus Plugin - Connector OpenCBDC",
-    "description": "Can perform basic tasks on an OpenCBDC ledger",
+    "title": "Hyperledger Cactus Plugin - Connector Besu",
+    "description": "Can perform basic tasks on a Besu ledger",
     "version": "v2.0.0-alpha.2",
     "license": {
       "name": "Apache-2.0",
@@ -226,11 +226,11 @@
       "WatchBlocksV1": {
         "type": "string",
         "enum": [
-          "org.hyperledger.cactus.api.async.opencbdc.WatchBlocksV1.Subscribe",
-          "org.hyperledger.cactus.api.async.opencbdc.WatchBlocksV1.Next",
-          "org.hyperledger.cactus.api.async.opencbdc.WatchBlocksV1.Unsubscribe",
-          "org.hyperledger.cactus.api.async.opencbdc.WatchBlocksV1.Error",
-          "org.hyperledger.cactus.api.async.opencbdc.WatchBlocksV1.Complete"
+          "org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Subscribe",
+          "org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Next",
+          "org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Unsubscribe",
+          "org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Error",
+          "org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Complete"
         ],
         "x-enum-varnames": [
           "Subscribe",
@@ -511,7 +511,7 @@
           }
         }
       },
-      "OpenCBDCTransactionConfig": {
+      "BesuTransactionConfig": {
         "type": "object",
         "additionalProperties": true,
         "properties": {
@@ -578,7 +578,7 @@
           }
         }
       },
-      "OpenCBDCPrivateTransactionConfig": {
+      "BesuPrivateTransactionConfig": {
         "type": "object",
         "required": ["privateFrom", "privateFor"],
         "properties": {
@@ -664,14 +664,14 @@
             "nullable": false
           },
           "transactionConfig": {
-            "$ref": "#/components/schemas/OpenCBDCTransactionConfig",
+            "$ref": "#/components/schemas/BesuTransactionConfig",
             "nullable": false
           },
           "consistencyStrategy": {
             "$ref": "#/components/schemas/ConsistencyStrategy"
           },
           "privateTransactionConfig": {
-            "$ref": "#/components/schemas/OpenCBDCPrivateTransactionConfig"
+            "$ref": "#/components/schemas/BesuPrivateTransactionConfig"
           }
         }
       },
@@ -748,7 +748,7 @@
             "nullable": false
           },
           "privateTransactionConfig": {
-            "$ref": "#/components/schemas/OpenCBDCPrivateTransactionConfig"
+            "$ref": "#/components/schemas/BesuPrivateTransactionConfig"
           }
         }
       },
@@ -856,7 +856,7 @@
             "maxLength": 100
           },
           "privateTransactionConfig": {
-            "$ref": "#/components/schemas/OpenCBDCPrivateTransactionConfig"
+            "$ref": "#/components/schemas/BesuPrivateTransactionConfig"
           }
         }
       },
@@ -917,7 +917,7 @@
         "type": "string",
         "nullable": false
       },
-      "GetOpenCBDCRecordV1Request": {
+      "GetBesuRecordV1Request": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -932,7 +932,7 @@
           }
         }
       },
-      "GetOpenCBDCRecordV1Response": {
+      "GetBesuRecordV1Response": {
         "type": "object",
         "properties": {
           "ledgerId": {
@@ -1084,7 +1084,7 @@
           }
         },
         "operationId": "runTransactionV1",
-        "summary": "Executes a transaction on an OpenCBDC ledger",
+        "summary": "Executes a transaction on a besu ledger",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -1118,7 +1118,7 @@
           }
         },
         "operationId": "getTransactionV1",
-        "summary": "Executes a transaction on an OpenCBDC ledger",
+        "summary": "Executes a transaction on a besu ledger",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -1186,7 +1186,7 @@
           }
         },
         "operationId": "invokeContractV1",
-        "summary": "Invokes a contract on an OpenCBDC ledger",
+        "summary": "Invokes a contract on a besu ledger",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -1275,22 +1275,22 @@
         }
       }
     },
-    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-opencbdc-record": {
+    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-besu-record": {
       "post": {
         "x-hyperledger-cactus": {
           "http": {
             "verbLowerCase": "post",
-            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-opencbdc-record"
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-besu-record"
           }
         },
-        "operationId": "getOpenCBDCRecordV1",
+        "operationId": "getBesuRecordV1",
         "summary": "Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.",
         "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetOpenCBDCRecordV1Request"
+                "$ref": "#/components/schemas/GetBesuRecordV1Request"
               }
             }
           }
@@ -1301,7 +1301,7 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetOpenCBDCRecordV1Response"
+                  "$ref": "#/components/schemas/GetBesuRecordV1Response"
                 }
               }
             }

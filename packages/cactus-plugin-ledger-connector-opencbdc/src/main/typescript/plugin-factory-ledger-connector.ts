@@ -3,18 +3,18 @@ import {
   PluginFactory,
 } from "@hyperledger/cactus-core-api";
 import {
-  IPluginLedgerConnectorOpenCBDCOptions,
-  PluginLedgerConnectorOpenCBDC,
+  IPluginLedgerConnectorBesuOptions,
+  PluginLedgerConnectorBesu,
 } from "./plugin-ledger-connector-opencbdc";
 
 export class PluginFactoryLedgerConnector extends PluginFactory<
-  PluginLedgerConnectorOpenCBDC,
-  IPluginLedgerConnectorOpenCBDCOptions,
+  PluginLedgerConnectorBesu,
+  IPluginLedgerConnectorBesuOptions,
   IPluginFactoryOptions
 > {
   async create(
-    pluginOptions: IPluginLedgerConnectorOpenCBDCOptions,
-  ): Promise<PluginLedgerConnectorOpenCBDC> {
-    return new PluginLedgerConnectorOpenCBDC(pluginOptions);
+    pluginOptions: IPluginLedgerConnectorBesuOptions,
+  ): Promise<PluginLedgerConnectorBesu> {
+    return new PluginLedgerConnectorBesu(pluginOptions);
   }
 }

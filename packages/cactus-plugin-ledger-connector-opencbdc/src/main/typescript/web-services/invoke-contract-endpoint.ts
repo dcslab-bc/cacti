@@ -14,14 +14,14 @@ import {
 } from "@hyperledger/cactus-core-api";
 import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 
-import { PluginLedgerConnectorOpenCBDC } from "../plugin-ledger-connector-opencbdc";
+import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-opencbdc";
 
 import OAS from "../../json/openapi.json";
 import { InvokeContractV1Request } from "../generated/openapi/typescript-axios";
 
 export interface IInvokeContractEndpointOptions {
   logLevel?: LogLevelDesc;
-  connector: PluginLedgerConnectorOpenCBDC;
+  connector: PluginLedgerConnectorBesu;
 }
 
 export class InvokeContractEndpoint implements IWebServiceEndpoint {

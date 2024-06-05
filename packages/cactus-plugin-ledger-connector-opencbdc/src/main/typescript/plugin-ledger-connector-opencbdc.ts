@@ -74,13 +74,13 @@ import {
   GetTransactionV1Response,
   GetBlockV1Request,
   GetBlockV1Response,
-  GetOpenCBDCRecordV1Request,
-  GetOpenCBDCRecordV1Response,
+  GetBesuRecordV1Request,
+  GetBesuRecordV1Response,
 } from "./generated/openapi/typescript-axios";
 
 import { InvokeContractEndpoint } from "./web-services/invoke-contract-endpoint";
 import { isWeb3SigningCredentialNone } from "./model-type-guards";
-import { OpenCBDCSignTransactionEndpointV1 } from "./web-services/sign-transaction-endpoint-v1";
+import { BesuSignTransactionEndpointV1 } from "./web-services/sign-transaction-endpoint-v1";
 import { PrometheusExporter } from "./prometheus-exporter/prometheus-exporter";
 import {
   GetPrometheusExporterMetricsEndpointV1,
@@ -92,17 +92,17 @@ import { GetBalanceEndpoint } from "./web-services/get-balance-endpoint";
 import { GetTransactionEndpoint } from "./web-services/get-transaction-endpoint";
 import { GetPastLogsEndpoint } from "./web-services/get-past-logs-endpoint";
 import { RunTransactionEndpoint } from "./web-services/run-transaction-endpoint";
-import { GetBlockEndpoint } from "./web-services/get-block-v1-endpoint";
-import { GetOpenCBDCRecordEndpointV1 } from "./web-services/get-opencbdc-record-endpoint-v1";
+import { GetBlockEndpoint } from "./web-services/get-block-v1-endpoint-";
+import { GetBesuRecordEndpointV1 } from "./web-services/get-besu-record-endpoint-v1";
 import { AbiItem } from "web3-utils";
 import {
   GetOpenApiSpecV1Endpoint,
   IGetOpenApiSpecV1EndpointOptions,
 } from "./web-services/get-open-api-spec-v1-endpoint";
 
-export const E_KEYCHAIN_NOT_FOUND = "cactus.connector.opencbdc.keychain_not_found";
+export const E_KEYCHAIN_NOT_FOUND = "cactus.connector.besu.keychain_not_found";
 
-export interface IPluginLedgerConnectorOpenCBDCOptions
+export interface IPluginLedgerConnectorBesuOptions
   extends ICactusPluginOptions {
   rpcApiHttpHost: string;
   rpcApiWsHost: string;
@@ -111,7 +111,7 @@ export interface IPluginLedgerConnectorOpenCBDCOptions
   logLevel?: LogLevelDesc;
 }
 
-export class PluginLedgerConnectorOpenCBDC
+export class PluginLedgerConnectorBesu
   implements
     IPluginLedgerConnector<
       DeployContractSolidityBytecodeV1Request,
@@ -136,13 +136,13 @@ export class PluginLedgerConnectorOpenCBDC
   private endpoints: IWebServiceEndpoint[] | undefined;
   private httpServer: Server | SecureServer | null = null;
 
-  public static readonly CLASS_NAME = "PluginLedgerConnectorOpenCBDC";
+  public static readonly CLASS_NAME = "PluginLedgerOpenCBDC";
 
   public get className(): string {
-    return PluginLedgerConnectorOpenCBDC.CLASS_NAME;
+    return PluginLedgerConnectorBesu.CLASS_NAME;
   }
 
-  constructor(public readonly options: IPluginLedgerConnectorOpenCBDCOptions) {
+  constructor(public readonly options: IPluginLedgerConnectorBesuOptions) {
     const fnTag = `${this.className}#constructor()`;
     Checks.truthy(options, `${fnTag} arg options`);
     Checks.truthy(options.rpcApiHttpHost, `${fnTag} options.rpcApiHttpHost`);
@@ -272,14 +272,14 @@ export class PluginLedgerConnectorOpenCBDC
       endpoints.push(endpoint);
     }
     {
-      const endpoint = new OpenCBDCSignTransactionEndpointV1({
+      const endpoint = new BesuSignTransactionEndpointV1({
         connector: this,
         logLevel: this.options.logLevel,
       });
       endpoints.push(endpoint);
     }
     {
-      const endpoint = new GetOpenCBDCRecordEndpointV1({
+      const endpoint = new GetBesuRecordEndpointV1({
         connector: this,
         logLevel: this.options.logLevel,
       });
@@ -614,7 +614,7 @@ export class PluginLedgerConnectorOpenCBDC
   ): Promise<RunTransactionResponse> {
     const fnTag = `${this.className}#getTxReceipt()`;
 
-    this.log.debug("Received preliminary receipt from OpenCBDC node.");
+    this.log.debug("Received preliminary receipt from Besu node.");
 
     if (txPoolReceipt instanceof Error) {
       this.log.debug(`${fnTag} sendSignedTransaction failed`, txPoolReceipt);
@@ -983,13 +983,13 @@ export class PluginLedgerConnectorOpenCBDC
     const block = await this.web3.eth.getBlock(request.blockHashOrBlockNumber);
     return { block };
   }
-  public async getOpenCBDCRecord(
-    request: GetOpenCBDCRecordV1Request,
-  ): Promise<GetOpenCBDCRecordV1Response> {
-    const fnTag = `${this.className}#getOpenCBDCRecord()`;
+  public async getBesuRecord(
+    request: GetBesuRecordV1Request,
+  ): Promise<GetBesuRecordV1Response> {
+    const fnTag = `${this.className}#getBesuRecord()`;
     //////////////////////////////////////////////
     let abi: AbiItem[] | AbiItem = [];
-    const resp: GetOpenCBDCRecordV1Response = {};
+    const resp: GetBesuRecordV1Response = {};
     const txHash = request.transactionHash;
 
     if (txHash) {
@@ -1034,7 +1034,7 @@ export class PluginLedgerConnectorOpenCBDC
         request.invokeCall.invocationType === EthContractInvocationType.Call
       ) {
         const callOutput = await (method as any).call();
-        const res: GetOpenCBDCRecordV1Response = {
+        const res: GetBesuRecordV1Response = {
           callOutput,
         };
         return res;
