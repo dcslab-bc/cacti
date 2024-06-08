@@ -1,0 +1,62 @@
+{
+  "name": "@hyperledger/cactus-api-server-runner",
+  "version": "2.0.0-alpha.2",
+  "description": "An example application running Cactus API Server",
+  "keywords": [
+    "Hyperledger",
+    "Cactus",
+    "API Server",
+    "OpenCBDC"
+  ],
+  "homepage": "https://github.com/hyperledger/cacti#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyperledger/cacti.git"
+  },
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Hyperledger Cactus Contributors",
+    "email": "cactus@lists.hyperledger.org",
+    "url": "https://www.hyperledger.org/use/cacti"
+  },
+  "contributors": [
+    {
+      "name": "Hyojin Song",
+      "email": "fun@snu.ac.kr",
+      "url": "http://dcslab.snu.ac.kr"
+    }
+  ],
+  "main": "dist/lib/main/typescript/index.js",
+  "module": "dist/lib/main/typescript/index.js",
+  "browser": "dist/cactus-api-server-runner.web.umd.js",
+  "types": "dist/lib/main/typescript/index.d.ts",
+  "files": [
+    "dist/*"
+  ],
+  "scripts": {
+    "configure": "yarn install",
+    "build": "tsc --build --verbose",
+    "start": "node ./dist/lib/runner.js",
+    "watch": "npm-watch",
+    "webpack": "npm-run-all webpack:dev",
+    "webpack:dev": "npm-run-all webpack:dev:node webpack:dev:web",
+    "webpack:dev:node": "webpack --env=dev --target=node --config ../../webpack.config.js",
+    "webpack:dev:web": "webpack --env=dev --target=web --config ../../webpack.config.js"
+  },
+  "dependencies": {
+    "@hyperledger/cactus-cmd-api-server": "2.0.0-alpha.2",
+    "@hyperledger/cactus-common": "2.0.0-alpha.2",
+    "@hyperledger/cactus-core-api": "2.0.0-alpha.2",
+    "@hyperledger/cactus-plugin-ledger-connector-opencbdc": "2.0.0-alpha.2"
+  },
+  "engines": {
+    "node": ">=10",
+    "npm": ">=6"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "browserMinified": "dist/cactus-api-server-runner.web.umd.min.js",
+  "mainMinified": "dist/cactus-api-server-runner.node.umd.min.js",
+  "watch": {}
+}
