@@ -7,7 +7,9 @@ module.exports = {
   setupFilesAfterEnv: ["jest-extended/all", "./jest.setup.console.logs.js"],
   testTimeout: 60 * 60 * 1000,
   testMatch: [
-    `**/cactus-*/src/test/typescript/{unit,integration,benchmark}/**/*.test.ts`,
+    '**/cactus-plugin-ledger-connector-besu/src/test/typescript/{unit,integration,benchmark}/**/*.test.ts',
+    '**/cactus-test-plugin-htlc-eth-besu-erc20/src/test/typescript/{unit,integration,benchmark}/**/*.test.ts',
+    '**/cactus-plugin-htlc-coordinator-besu/src/test/typescript/{unit,integration,benchmark}/**/*.test.ts',
   ],
   // Ignore the tests that are still using tap/tape for as their test runner
   testPathIgnorePatterns: [

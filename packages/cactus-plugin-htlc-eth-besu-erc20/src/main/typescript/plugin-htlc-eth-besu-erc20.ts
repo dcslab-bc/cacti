@@ -32,6 +32,7 @@ import {
   GetSingleStatusRequest,
 } from "./generated/openapi/typescript-axios";
 import { Optional } from "typescript-optional";
+import axios from "axios";
 
 export interface IPluginHtlcEthBesuErc20Options extends ICactusPluginOptions {
   keychainId?: string;
@@ -242,21 +243,48 @@ export class PluginHtlcEthBesuErc20
 
   public async getSingleStatus(
     req: GetSingleStatusRequest,
-  ): Promise<InvokeContractV1Response> {
+  ): Promise<any> { // Change the return type to 'any' or adjust it as needed
+    /*
     const connector = this.pluginRegistry.plugins.find(
       (plugin) => plugin.getInstanceId() == req.connectorId,
     ) as PluginLedgerConnectorBesu;
+    */
+  
+    try {
+      const res = await axios.post('http://147.46.240.226:8765/api/opencbdc/getsinglestatus', {
+        contractName: HashTimeLockJSON.contractName,
+        signingCredential: req.web3SigningCredential,
+        invocationType: EthContractInvocationType.Call,
+        methodName: "getSingleStatus",
+        params: [req.id],
+        keychainId: req.keychainId,
+      });
+  
+      console.log("==========================");
+      console.log("* Response Status: " + res.status + "(" + res.statusText + ")");
+      console.log("\n* Request URL: " + res.config.url);
+      console.log("\n* Response Data: " + res.data);
+      console.log("\n* Request Data:");
+      console.log(res.config.data);
+      console.log("==========================");
 
-    const result = await connector.invokeContract({
-      contractName: HashTimeLockJSON.contractName,
-      signingCredential: req.web3SigningCredential,
-      invocationType: EthContractInvocationType.Call,
-      methodName: "getSingleStatus",
-      params: [req.id],
-      keychainId: req.keychainId,
-    });
-    return result;
+      //console.log("res : ",res);
+  
+      return {
+        success: true,
+        data: res.data
+      }
+    } catch (error) {
+      console.error(error);
+  
+      // Return a dummy error response (if needed)
+      return {
+        success: false,
+        error: error.message
+      };
+    }
   }
+  
 
   public async getStatus(
     req: GetStatusRequest,

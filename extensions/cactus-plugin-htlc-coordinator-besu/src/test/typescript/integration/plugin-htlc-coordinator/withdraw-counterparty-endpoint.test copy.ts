@@ -85,8 +85,6 @@ test(testCase, async (t: Test) => {
     await besuTestLedger.destroy();
   });
 
-  // 0. plugin setting
-
   const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
   const rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
   const keychainId = uuidv4();
@@ -175,8 +173,6 @@ test(testCase, async (t: Test) => {
   await connector.getOrCreateWebServices();
   await connector.registerWebServices(expressApp, besuWsApi as any);
 
-  // 1. deploy contract
-
   t.comment("Deploys TestToken via .json file on deployContract function");
   const deployOutToken = await connector.deployContract({
     contractName: TestTokenJSON.contractName,
@@ -215,8 +211,6 @@ test(testCase, async (t: Test) => {
     "approve() transactionReceipt.status is true OK",
   );
 
-  // 2. check balance of contract
-
   t.comment("Get account balance");
   const responseBalance = await besuConnectorApi.invokeContractV1({
     contractName: TestTokenJSON.contractName,
@@ -232,8 +226,6 @@ test(testCase, async (t: Test) => {
     "balance of account is 100 OK",
   );
 
-  // 3. check allowance status ok and amount
-
   t.comment("Get HashTimeLock contract and account allowance");
   const allowanceOutput = await besuConnectorApi.invokeContractV1({
     contractName: TestTokenJSON.contractName,
@@ -245,8 +237,6 @@ test(testCase, async (t: Test) => {
   });
   t.equal(allowanceOutput.status, 200, "allowance status is 200 OK");
   t.equal(allowanceOutput.data.callOutput, "10", "allowance amount is 10 OK");
-
-  // 4. create and initialize HTLC
 
   t.comment("Create and initialize own HTLC");
   const ownHTLCRequest: OwnHTLCRequest = {
@@ -266,8 +256,6 @@ test(testCase, async (t: Test) => {
     gas: estimatedGas,
   };
 
-  // 5. check HTLC response OK
-
   const response = await htlcCoordinatorBesuApi.ownHtlcV1(ownHTLCRequest);
   t.equal(response.status, 200, "response status is 200 OK");
   t.equal(response.data.success, true, "response success is true");
@@ -279,8 +267,6 @@ test(testCase, async (t: Test) => {
     response.data.out.transactionReceipt,
     "pluginHTLCCoordinatorBesu.ownHtlcV1() output.transactionReceipt is truthy OK",
   );
-
-  // 6. get HTLC ID
 
   t.comment("Get HTLC id");
   const responseTxId = await besuConnectorApi.invokeContractV1({
@@ -300,8 +286,6 @@ test(testCase, async (t: Test) => {
     gas: estimatedGas,
   });
 
-  // 생략
-
   t.comment("Get counterparty HTLC");
   const counterpartyHTLCRequest: CounterpartyHTLCRequest = {
     htlcPackage: HtlcPackage.BesuErc20,
@@ -312,32 +296,12 @@ test(testCase, async (t: Test) => {
     gas: estimatedGas,
   };
 
-  // 7. check Besu1 HTLC response OK, 5번과 동일
-
-  // 8. plugin setting
-
-  // 9. deploy contract
-
-  // 10. check balance of contract
-
-  // 11. check allowance status ok and amount
-
-  // 12. create and initialize HTLC
-
-  // 13. check HTLC response OK
-
-  // 14. get HTLC ID
-
-  // 15. check Besu2 HTLC response
-
   const response2 = await htlcCoordinatorBesuApi.counterpartyHtlcV1(
     counterpartyHTLCRequest,
   );
   t.equal(response2.status, 200, "response status is 200 OK");
   t.equal(response2.data.success, true, "response success is true");
   t.equal(response2.data.callOutput, "1", "the contract status is 1 - Active");
-
-  // 16. request withdraw Besu2 HTLC
 
   t.comment("Get counterparty HTLC");
   const withdrawCounterparty: WithdrawCounterpartyRequest = {
@@ -350,15 +314,11 @@ test(testCase, async (t: Test) => {
     gas: estimatedGas,
   };
 
-  // 17. check withdraw Besu2 OK
-
   const response3 = await htlcCoordinatorBesuApi.withdrawCounterpartyV1(
     withdrawCounterparty,
   );
   t.equal(response3.status, 200, "response status is 200 OK");
   t.equal(response3.data.success, true, "response success is true");
-
-  // 18. Besu2 sender/receiver account 잔액 확인
 
   t.comment("Get balance of sender account");
   const responseFinalBalanceSender = await connector.invokeContract({
@@ -390,14 +350,6 @@ test(testCase, async (t: Test) => {
     "balance of receiver account is 10 OK",
   );
   t.end();
-
-  // 19. check Besu1 HTLC response OK
-
-  // 20. request withdraw Besu HTLC
-
-  // 21. check Besu HTLC response OK
-
-  // 22. Besu1 sender/receiver account 잔액확인
 });
 
 test("AFTER " + testCase, async (t: Test) => {
