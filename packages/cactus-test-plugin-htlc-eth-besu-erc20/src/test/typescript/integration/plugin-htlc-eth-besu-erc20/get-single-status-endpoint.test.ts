@@ -263,7 +263,7 @@ describe(testCase, () => {
     const plugin = new PluginHtlcOpenCBDC();
 
     const res = await plugin.getSingleStatus({
-      HTLCid: "abcdefg",
+      HTLCId: "abcdefg",
       contractAddress: "0xC89Ce4735882C9F0f0FE26686c53074E09B0D550",
       keychainId: "fb21e089-7030-449b-a95d-65c82ed9e506",
       web3SigningCredential: {"ethAccount":"0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1","secret":"0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d","type":"PRIVATE_KEY_HEX"},
