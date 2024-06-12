@@ -25,6 +25,6 @@ describe(testCase, () => {
     expect(res.status).toEqual(200);
     expect(res.data).toEqual(111);
     //expect(res.data.success).toEqual(true);
-    //expect(res.data.HTLCId).toEqual('abcdefg');
+    //expect(res.data.HTLCId).toEqual("abcdefg");
   });
 });

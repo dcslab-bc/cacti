@@ -46,6 +46,10 @@ import HashTimeLockJSON from "@hyperledger/cactus-plugin-htlc-eth-besu-erc20/src
 import TestTokenJSON from "@hyperledger/cactus-test-plugin-htlc-eth-besu-erc20/src/test/solidity/token-erc20-contract/Test_Token.json";
 import DemoHelperJSON from "@hyperledger/cactus-test-plugin-htlc-eth-besu-erc20/src/test/solidity/token-erc20-contract/DemoHelpers.json";
 
+import {
+  PluginHtlcOpenCBDC
+} from "../../../../../../../packages/cactus-plugin-htlc-eth-besu-erc20/src/main/typescript/plugin-htlc-opencbdc";
+
 const logLevel: LogLevelDesc = "DEBUG";
 const estimatedGas = 6721975;
 const expiration = 2147483648;
@@ -85,7 +89,7 @@ test(testCase, async (t: Test) => {
     await besuTestLedger.destroy();
   });
 
-  // 0. plugin setting
+  // Bob Besu - 0. plugin setting
 
   const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
   const rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
@@ -175,7 +179,7 @@ test(testCase, async (t: Test) => {
   await connector.getOrCreateWebServices();
   await connector.registerWebServices(expressApp, besuWsApi as any);
 
-  // 1. deploy contract
+  // Bob Besu - 1. deploy contract
 
   t.comment("Deploys TestToken via .json file on deployContract function");
   const deployOutToken = await connector.deployContract({
@@ -215,7 +219,7 @@ test(testCase, async (t: Test) => {
     "approve() transactionReceipt.status is true OK",
   );
 
-  // 2. check balance of contract
+  // Bob Besu - 2. check balance of contract
 
   t.comment("Get account balance");
   const responseBalance = await besuConnectorApi.invokeContractV1({
@@ -232,7 +236,7 @@ test(testCase, async (t: Test) => {
     "balance of account is 100 OK",
   );
 
-  // 3. check allowance status ok and amount
+  // Bob Besu - 3. check HTLC contract allowance status and amount
 
   t.comment("Get HashTimeLock contract and account allowance");
   const allowanceOutput = await besuConnectorApi.invokeContractV1({
@@ -246,7 +250,7 @@ test(testCase, async (t: Test) => {
   t.equal(allowanceOutput.status, 200, "allowance status is 200 OK");
   t.equal(allowanceOutput.data.callOutput, "10", "allowance amount is 10 OK");
 
-  // 4. create and initialize HTLC
+  // Bob Besu - 4. new Besu HTLC
 
   t.comment("Create and initialize own HTLC");
   const ownHTLCRequest: OwnHTLCRequest = {
@@ -266,8 +270,6 @@ test(testCase, async (t: Test) => {
     gas: estimatedGas,
   };
 
-  // 5. check HTLC response OK
-
   const response = await htlcCoordinatorBesuApi.ownHtlcV1(ownHTLCRequest);
   t.equal(response.status, 200, "response status is 200 OK");
   t.equal(response.data.success, true, "response success is true");
@@ -280,7 +282,7 @@ test(testCase, async (t: Test) => {
     "pluginHTLCCoordinatorBesu.ownHtlcV1() output.transactionReceipt is truthy OK",
   );
 
-  // 6. get HTLC ID
+  // Bob Besu - 5. get HTLC ID
 
   t.comment("Get HTLC id");
   const responseTxId = await besuConnectorApi.invokeContractV1({
@@ -300,7 +302,13 @@ test(testCase, async (t: Test) => {
     gas: estimatedGas,
   });
 
-  // 생략
+  // Bob - 6. Alice한테 Besu HTLC id 전달
+
+  // Alice OpenCBDC - 0. OpenCBDC plugin setting
+
+  const openCBDCplugin = new PluginHtlcOpenCBDC();
+  
+  // Alice Besu - 1. check Besu HTLC status
 
   t.comment("Get counterparty HTLC");
   const counterpartyHTLCRequest: CounterpartyHTLCRequest = {
@@ -312,24 +320,6 @@ test(testCase, async (t: Test) => {
     gas: estimatedGas,
   };
 
-  // 7. check Besu1 HTLC response OK, 5번과 동일
-
-  // 8. plugin setting
-
-  // 9. deploy contract
-
-  // 10. check balance of contract
-
-  // 11. check allowance status ok and amount
-
-  // 12. create and initialize HTLC
-
-  // 13. check HTLC response OK
-
-  // 14. get HTLC ID
-
-  // 15. check Besu2 HTLC response
-
   const response2 = await htlcCoordinatorBesuApi.counterpartyHtlcV1(
     counterpartyHTLCRequest,
   );
@@ -337,7 +327,63 @@ test(testCase, async (t: Test) => {
   t.equal(response2.data.success, true, "response success is true");
   t.equal(response2.data.callOutput, "1", "the contract status is 1 - Active");
 
-  // 16. request withdraw Besu2 HTLC
+  // Alice OpenCBDC - 2. new OpenCBDC HTLC
+
+  const openCBDCHTLCresult = await openCBDCplugin.newContract({
+    contractAddress: "0xC89Ce4735882C9F0f0FE26686c53074E09B0D550",
+    keychainId: "fb21e089-7030-449b-a95d-65c82ed9e506",
+    web3SigningCredential: {"ethAccount":"0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1","secret":"0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d","type":"PRIVATE_KEY_HEX"},
+    inputAmount: 10,
+    outputAmount: 1,
+    receiver: "0x627306090abaB3A6e1400e9345bC60c78a8BEf57",
+    expiration: 2147483648,
+    hashLock: "0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d",
+    outputNetwork: "Besu",
+    outputAddress: "1AcVYm7M3kkJQH28FXAvyBFQzFRL6xPKu8",      
+  });
+  t.equal(openCBDCHTLCresult.status,200);
+  t.equal(openCBDCHTLCresult.data,111);
+  //t.equal(openCBDCHTLCresult.data.success,true);
+  //t.equal(openCBDCHTLCresult.data.HTLCId,"abcdefg");
+
+  // Alice - 3. Bob한테 OpenCBDC HTLC id, secret 전달
+
+  // Bob OpenCBDC - 7. check OpenCBDC HTLC status
+
+  const res = await openCBDCplugin.getSingleStatus({
+    HTLCId: "abcdefg",
+    contractAddress: "0xC89Ce4735882C9F0f0FE26686c53074E09B0D550",
+    keychainId: "fb21e089-7030-449b-a95d-65c82ed9e506",
+    web3SigningCredential: {"ethAccount":"0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1","secret":"0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d","type":"PRIVATE_KEY_HEX"},
+    inputAmount: 10,
+    receiver: "0x627306090abaB3A6e1400e9345bC60c78a8BEf57",
+    hashLock: "0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d",
+    expiration: 2147483648,
+  });
+
+  t.equal(res.status,200);
+  t.equal(res.data,333);
+  //t.equal(res.data,1);
+
+  // Bob OpenCBDC - 8. OpenCBDC HTLC withdraw
+
+  const resWithdraw = await openCBDCplugin.withdraw( {
+    id: '0x632a02d785a0886745d01c095d001522b4eb3283bff5e6fe53c500c45aa0c0fb',
+    secret: '0x3853485acd2bfc3c632026ee365279743af107a30492e3ceaa7aefc30c2a048a',
+    web3SigningCredential: {
+      ethAccount: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1',
+      secret: '0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d',
+      type: 'PRIVATE_KEY_HEX'
+    },
+    connectorId: 'ff74336f-6533-429e-b8a3-10764dbff304',
+    keychainId: '8ce20052-3768-4035-a974-749805228b2c'
+  });
+
+  t.equal(resWithdraw.data,555);
+
+  // Bob - 9. Alice한테 Besu secret 전달
+
+  // Alice Besu - 4. Besu HTLC withdraw
 
   t.comment("Get counterparty HTLC");
   const withdrawCounterparty: WithdrawCounterpartyRequest = {
@@ -350,15 +396,13 @@ test(testCase, async (t: Test) => {
     gas: estimatedGas,
   };
 
-  // 17. check withdraw Besu2 OK
-
   const response3 = await htlcCoordinatorBesuApi.withdrawCounterpartyV1(
     withdrawCounterparty,
   );
   t.equal(response3.status, 200, "response status is 200 OK");
   t.equal(response3.data.success, true, "response success is true");
 
-  // 18. Besu2 sender/receiver account 잔액 확인
+  // Besu sender/receiver account 잔액 확인
 
   t.comment("Get balance of sender account");
   const responseFinalBalanceSender = await connector.invokeContract({
@@ -390,14 +434,6 @@ test(testCase, async (t: Test) => {
     "balance of receiver account is 10 OK",
   );
   t.end();
-
-  // 19. check Besu1 HTLC response OK
-
-  // 20. request withdraw Besu HTLC
-
-  // 21. check Besu HTLC response OK
-
-  // 22. Besu1 sender/receiver account 잔액확인
 });
 
 test("AFTER " + testCase, async (t: Test) => {
