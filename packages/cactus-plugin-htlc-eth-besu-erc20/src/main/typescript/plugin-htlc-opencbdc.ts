@@ -72,9 +72,9 @@ export class PluginHtlcOpenCBDC {
           signingCredential: newContractRequest.web3SigningCredential,
           inputAmount: newContractRequest.inputAmount,
           outputAmount: newContractRequest.outputAmount,
+          receiver: newContractRequest.receiver,
           expiration: newContractRequest.expiration,
           hashLock: newContractRequest.hashLock,
-          receiver: newContractRequest.receiver,
           outputNetwork: newContractRequest.outputNetwork,
           outputAddress: newContractRequest.outputAddress,
         });
