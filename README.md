@@ -1,4 +1,20 @@
- [![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc)](https://open.vscode.dev/hyperledger/cactus)
+## ※ 프로젝트 구조
+## [Common]
+* examples/cactus-example-scenario-AB-local-inter -> HTLC Demo App
+* examples/cactus-bok-htlc-cactus-node -> Cactus API Server
+
+## [Besu]
+* extensions/cactus-plugin-htlc-coordinator-besu
+* packages/cactus-plugin-htlc-eth-besu-erc20
+* packages/cactus-plugin-ledger-connector-besu
+
+## [Parsec]
+* extensions/cactus-plugin-htlc-coordinator-parsec
+* packages/cactus-plugin-htlc-eth-parsec-erc20
+* packages/cactus-plugin-ledger-connector-parsec
+<hr>
+
+[![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc)](https://open.vscode.dev/hyperledger/cactus)
  ![license](https://img.shields.io/github/license/hyperledger/cactus) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4089/badge)](https://bestpractices.coreinfrastructure.org/projects/4089)
  ![GitHub issues](https://img.shields.io/github/issues/hyperledger/cactus)
 
