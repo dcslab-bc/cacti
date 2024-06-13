@@ -35,6 +35,9 @@
       "path": "./packages/cactus-plugin-htlc-eth-besu-erc20/tsconfig.json"
     },
     {
+      "path": "./packages/cactus-plugin-htlc-eth-parsec-erc20/tsconfig.json"
+    },
+    {
       "path": "./packages/cactus-plugin-keychain-aws-sm/tsconfig.json"
     },
     {
@@ -59,10 +62,16 @@
       "path": "./packages/cactus-plugin-ledger-connector-besu/tsconfig.json"
     },
     {
+      "path": "./packages/cactus-plugin-ledger-connector-parsec/tsconfig.json"
+    },
+    {
       "path": "./packages/cactus-plugin-ledger-connector-polkadot/tsconfig.json"
     },
     {
       "path": "./packages/cactus-plugin-ledger-connector-corda/tsconfig.json"
+    },
+    {
+      "path": "./packages/cacti-plugin-ledger-connector-stellar/tsconfig.json"
     },
     {
       "path": "./packages/cactus-plugin-ledger-connector-ethereum/tsconfig.json"
@@ -107,13 +116,22 @@
       "path": "./packages/cactus-test-plugin-htlc-eth-besu/tsconfig.json"
     },
     {
+      "path": "./packages/cactus-test-plugin-htlc-eth-parsec/tsconfig.json"
+    },
+    {
       "path": "./packages/cactus-test-plugin-htlc-eth-besu-erc20/tsconfig.json"
+    },
+    {
+      "path": "./packages/cactus-test-plugin-htlc-eth-parsec-erc20/tsconfig.json"
     },
     {
       "path": "./packages/cactus-test-plugin-keychain-memory/tsconfig.json"
     },
     {
       "path": "./packages/cactus-test-plugin-ledger-connector-besu/tsconfig.json"
+    },
+    {
+      "path": "./packages/cactus-test-plugin-ledger-connector-parsec/tsconfig.json"
     },
     {
       "path": "./packages/cactus-test-plugin-ledger-connector-ethereum/tsconfig.json"
@@ -131,49 +149,19 @@
       "path": "./packages/cactus-test-verifier-client/tsconfig.json"
     },
     {
-      "path": "./examples/cactus-example-carbon-accounting-backend/tsconfig.json"
-    },
-    {
-      "path": "./examples/cactus-example-carbon-accounting-business-logic-plugin/tsconfig.json"
-    },
-    {
-      "path": "./examples/cactus-example-carbon-accounting-frontend/tsconfig.json"
-    },
-    {
-      "path": "./examples/cactus-example-supply-chain-backend/tsconfig.json"
-    },
-    {
-      "path": "./examples/cactus-example-supply-chain-business-logic-plugin/tsconfig.json"
-    },
-    {
-      "path": "./examples/cactus-example-supply-chain-frontend/tsconfig.json"
-    },
-    {
-      "path": "./examples/cactus-example-tcs-huawei/tsconfig.json"
-    },
-    {
       "path": "./packages/cactus-plugin-satp-hermes/tsconfig.json"
     },
     {
-      "path": "./examples/cactus-example-electricity-trade/tsconfig.json"
-    },
-    {
-      "path": "./examples/cactus-example-discounted-asset-trade/tsconfig.json"
-    },
-    {
-      "path": "./examples/cactus-example-discounted-asset-trade-client/tsconfig.json"
-    },
-    {
-      "path": "./examples/cactus-example-cbdc-bridging-backend/tsconfig.json"
-    },
-    {
-      "path": "./examples/cactus-example-cbdc-bridging-frontend/tsconfig.json"
+      "path": "./examples/cactus-example-bok-htlc-cactus-node/tsconfig.json"
     },
     {
       "path": "./extensions/cactus-plugin-object-store-ipfs/tsconfig.json"
     },
     {
       "path": "./extensions/cactus-plugin-htlc-coordinator-besu/tsconfig.json"
+    },
+    {
+      "path": "./extensions/cactus-plugin-htlc-coordinator-parsec/tsconfig.json"
     },
     {
       "path": "./packages/cactus-plugin-persistence-fabric/tsconfig.json"

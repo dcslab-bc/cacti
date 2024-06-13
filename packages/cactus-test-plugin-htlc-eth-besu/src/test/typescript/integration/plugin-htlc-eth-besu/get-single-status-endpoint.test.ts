@@ -47,6 +47,7 @@ test("BEFORE " + testCase, async (t: Test) => {
 });
 
 test(testCase, async (t: Test) => {
+  t.comment("KWANG SOO~!!! Fighting~!");
   t.comment("Starting Besu Test Ledger");
   const besuTestLedger = new BesuTestLedger({ logLevel });
 

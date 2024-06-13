@@ -722,7 +722,7 @@
             "type": "string",
             "nullable": false,
             "minLength": 1,
-            "maxLength": 24576,
+            "maxLength": 245760,
             "description": "See https://ethereum.stackexchange.com/a/47556 regarding the maximum length of the bytecode"
           },
           "keychainId": {

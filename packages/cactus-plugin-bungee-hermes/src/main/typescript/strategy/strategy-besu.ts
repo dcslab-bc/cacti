@@ -1,5 +1,6 @@
 import { NetworkDetails, ObtainLedgerStrategy } from "./obtain-ledger-strategy";
 import {
+  Checks,
   LogLevelDesc,
   Logger,
   LoggerProvider,
@@ -22,7 +23,6 @@ import { Transaction } from "../view-creation/transaction";
 import Web3 from "web3";
 import { Proof } from "../view-creation/proof";
 import { TransactionProof } from "../view-creation/transaction-proof";
-
 export interface BesuNetworkDetails extends NetworkDetails {
   signingCredential: Web3SigningCredential;
   keychainId: string;
@@ -40,21 +40,22 @@ export class StrategyBesu implements ObtainLedgerStrategy {
       level,
     });
   }
-
   public async generateLedgerStates(
     stateIds: string[],
     networkDetails: BesuNetworkDetails,
   ): Promise<Map<string, State>> {
+    const fnTag = `${StrategyBesu.CLASS_NAME}#generateLedgerStates()`;
     this.log.debug(`Generating ledger snapshot`);
+    Checks.truthy(networkDetails, `${fnTag} networkDetails`);
+
     const config = new Configuration({
       basePath: networkDetails.connectorApiPath,
     });
     const besuApi = new BesuApi(config);
-
     const ledgerStates = new Map<string, State>();
     const assetsKey =
       stateIds.length == 0
-        ? ((await this.getAllAssetsKey(networkDetails, besuApi)) as string[])
+        ? await this.getAllAssetsKey(networkDetails, besuApi)
         : stateIds;
     this.log.debug("Current assets detected to capture: " + assetsKey);
     for (const assetKey of assetsKey) {
@@ -83,7 +84,7 @@ export class StrategyBesu implements ObtainLedgerStrategy {
           blockSigners: [], // FIXME: query blocksigners (blockchain specific)
         });
       }
-      state.setStateProof([]);
+      state.setStateProof([stateProof]);
       ledgerStates.set(assetKey, state);
     }
     return ledgerStates;
@@ -92,7 +93,7 @@ export class StrategyBesu implements ObtainLedgerStrategy {
   async getAllAssetsKey(
     networkDetails: BesuNetworkDetails,
     api: BesuApi,
-  ): Promise<string | string[]> {
+  ): Promise<string[]> {
     const parameters = {
       contractName: networkDetails.contractName,
       keychainId: networkDetails.keychainId,
@@ -105,11 +106,20 @@ export class StrategyBesu implements ObtainLedgerStrategy {
     const response = await api.invokeContractV1(
       parameters as InvokeContractV1Request,
     );
-    if (response != undefined) {
-      return response.data.callOutput;
-    }
 
-    return "response undefined";
+    if (response.status >= 200 && response.status < 300) {
+      if (response.data.callOutput) {
+        return response.data.callOutput as string[];
+      } else {
+        throw new Error(
+          `${StrategyBesu.CLASS_NAME}#getAllAssetsKey: contract ${networkDetails.contractName} method getAllAssetsIDs output is falsy`,
+        );
+      }
+    }
+    throw new Error(
+      `${StrategyBesu.CLASS_NAME}#getAllAssetsKey: BesuAPI error with status ${response.status}: ` +
+        response.data,
+    );
   }
 
   async getAllInfoByKey(
@@ -122,17 +132,24 @@ export class StrategyBesu implements ObtainLedgerStrategy {
     blocks: Map<string, EvmBlock>;
   }> {
     const req = {
+      fromBlock: "earliest",
+      toBlock: "latest",
       address: networkDetails.contractAddress,
       topics: [[null], [Web3.utils.keccak256(key)]], //filter logs by asset key
     };
     const response = await api.getPastLogsV1(req as GetPastLogsV1Request);
-    if (response == undefined) {
-      return {
-        transactions: [],
-        values: [],
-        blocks: new Map<string, EvmBlock>(),
-      };
+    if (response.status < 200 || response.status >= 300) {
+      throw new Error(
+        `${StrategyBesu.CLASS_NAME}#getAllInfoByKey: BesuAPI getPastLogsV1 error with status ${response.status}: ` +
+          response.data,
+      );
     }
+    if (!response.data.logs) {
+      throw new Error(
+        `${StrategyBesu.CLASS_NAME}#getAllInfoByKey: BesuAPI getPastLogsV1 API call successfull but output data is falsy`,
+      );
+    }
+
     const decoded = response.data.logs as EvmLog[];
     const transactions: Transaction[] = [];
     const blocks: Map<string, EvmBlock> = new Map<string, EvmBlock>();
@@ -144,19 +161,34 @@ export class StrategyBesu implements ObtainLedgerStrategy {
         transactionHash: log.transactionHash,
       } as GetTransactionV1Request);
 
+      if (txTx.status < 200 || txTx.status >= 300) {
+        throw new Error(
+          `${StrategyBesu.CLASS_NAME}#getAllInfoByKey: BesuAPI getTransactionV1 error with status ${txTx.status}: ` +
+            txTx.data,
+        );
+      }
+      if (!txTx.data.transaction) {
+        throw new Error(
+          `${StrategyBesu.CLASS_NAME}#getAllInfoByKey: BesuAPI getTransactionV1 call successfull but output data is falsy`,
+        );
+      }
+
       const txBlock = await api.getBlockV1({
         blockHashOrBlockNumber: log.blockHash,
       } as GetBlockV1Request);
-      if (txTx == undefined || txBlock == undefined) {
-        this.log.debug(
-          "some error occurred fetching transaction or block info in ",
+
+      if (txBlock.status < 200 || txBlock.status >= 300) {
+        throw new Error(
+          `${StrategyBesu.CLASS_NAME}#getAllInfoByKey: BesuAPI getBlockV1 error with status ${txBlock.status}: ` +
+            txBlock.data,
         );
-        return {
-          transactions: [],
-          values: [],
-          blocks: new Map<string, EvmBlock>(),
-        };
       }
+      if (!txBlock.data.block) {
+        throw new Error(
+          `${StrategyBesu.CLASS_NAME}#getAllInfoByKey: BesuAPI getBlockV1 call successfull but output data is falsy`,
+        );
+      }
+
       this.log.debug(
         "Transaction: " +
           log.transactionHash +
@@ -170,7 +202,7 @@ export class StrategyBesu implements ObtainLedgerStrategy {
       const transaction: Transaction = new Transaction(
         log.transactionHash,
         txBlock.data.block.timestamp,
-        new TransactionProof(proof),
+        new TransactionProof(proof, log.transactionHash),
       );
       transaction.setStateId(key);
       transaction.setTarget(networkDetails.contractAddress as string);

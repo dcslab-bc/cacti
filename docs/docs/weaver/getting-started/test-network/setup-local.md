@@ -51,6 +51,11 @@ Before starting, make sure you have the following software installed on your hos
       go install google.golang.org/protobuf/cmd/protoc-gen-go
       go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
       ```
+- SQLite3 Library:
+    * Sample instruction for Ubuntu:
+      ```
+      apt-get install sqlite3 libsqlite3-dev
+      ```
 
       | Notes |
       |:------|
@@ -799,7 +804,7 @@ Run a Corda driver as follows:
   ```
 - Run the following to start Corda driver for `Corda_Network2`:
   ```bash
-  DRIVER_PORT=9098 ./build/install/corda-driver/bin/corda-driver
+  DRIVER_PORT=9098 ./build/install/driver-corda/bin/driver-corda
   ```
   If the driver starts successfully, it should log the following message on your terminal:
   ```
