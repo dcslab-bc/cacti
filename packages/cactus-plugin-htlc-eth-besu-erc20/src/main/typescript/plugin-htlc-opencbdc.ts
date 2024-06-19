@@ -21,12 +21,21 @@ export class PluginHtlcOpenCBDC {
   }
 
   public async refund(refundRequest: any): Promise<any> {
-
     const result = await axios.post('http://147.46.240.226:8765/api/opencbdc/refund', {
       HTLCId: refundRequest.HTLCId,
       keychainId: refundRequest.keychainId,
       signingCredential: refundRequest.web3SigningCredential,
       connectorId: refundRequest.connectorId,
+    });
+    return result;
+  }
+
+  public async getBalance(getBalanceRequest: any): Promise<any> {
+    const result = await axios.post('http://147.46.240.226:8765/api/opencbdc/refund', {
+      keychainId: getBalanceRequest.keychainId,
+      connectorId: getBalanceRequest.connectorId,
+      address: getBalanceRequest.address,
+      //defaultBlock: getBalanceRequest.defaultBlock,
     });
     return result;
   }
