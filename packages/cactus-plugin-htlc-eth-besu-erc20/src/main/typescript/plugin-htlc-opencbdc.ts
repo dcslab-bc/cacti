@@ -9,6 +9,37 @@ import HashTimeLockJSON from "../solidity/contracts/HashedTimeLockContract.json"
 
 export class PluginHtlcOpenCBDC {
 
+  public async newContract(newContractRequest: any,): Promise<any> {
+    const result = await axios.post('http://147.46.240.226:8765/api/opencbdc/newcontract',{
+      contractAddress: newContractRequest.contractAddress,
+      keychainId: newContractRequest.keychainId,
+      signingCredential: newContractRequest.web3SigningCredential,
+      inputAmount: newContractRequest.inputAmount,
+      outputAmount: newContractRequest.outputAmount,
+      receiver: newContractRequest.receiver,
+      expiration: newContractRequest.expiration,
+      hashLock: newContractRequest.hashLock,
+      outputNetwork: newContractRequest.outputNetwork,
+      outputAddress: newContractRequest.outputAddress,
+    });
+
+    return result;
+  } 
+  
+  public async getSingleStatus(getSingleStatusRequest: any,): Promise<any> {
+    const result = await axios.post('http://147.46.240.226:8765/api/opencbdc/getsinglestatus', {
+      HTLCId: getSingleStatusRequest.HTLCId,
+      contractAddress: getSingleStatusRequest.contractAddress,
+      keychainId: getSingleStatusRequest.keychainId,
+      signingCredential: getSingleStatusRequest.web3SigningCredential,
+      inputAmount: getSingleStatusRequest.inputAmount,
+      receiver: getSingleStatusRequest.receiver,
+      hashLock: getSingleStatusRequest.hashLock,
+      expiration: getSingleStatusRequest.expiration,
+    });
+
+    return result;
+  }
 
   public async withdraw(withdrawRequest: any): Promise<any> {
     const result = await axios.post('http://147.46.240.226:8765/api/opencbdc/withdraw', {
