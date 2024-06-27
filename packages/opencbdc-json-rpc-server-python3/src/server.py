@@ -13,45 +13,113 @@ def opencbdc():
     return jsonify({
         'message': 'Please send a post message as one of the following URLs.',
         'initialize': '/api/opencbdc/initialize',
-        'newContract': '/api/opencbdc/newContract',
-        'getSingleStatus': '/api/opencbdc/getSingleStatus',
+        'newcontract': '/api/opencbdc/newcontract',
+        'getsinglestatus': '/api/opencbdc/getsinglestatus',
         'withdraw': '/api/opencbdc/withdraw',
         'refund': '/api/opencbdc/refund',
-        'getBalance': '/api/opencbdc/getBalance'
+        'getbalance': '/api/opencbdc/getbalance'
     })
 
 @app.route('/api/opencbdc/initialize', methods=['POST'])
 def initialize():
+    print(request)
     log_request(request)
     return '', 204
 
-@app.route('/api/opencbdc/newContract', methods=['POST'])
+@app.route('/api/opencbdc/newcontract', methods=['POST'])
 def new_contract():
+    data = request.get_json()
+
+    contract_address = data.get('contractAddress')
+    keychain_id = data.get('keychainId')
+    signing_credential = data.get('signingCredential')
+    input_amount = data.get('inputAmount')
+    output_amount = data.get('outputAmount')
+    receiver = data.get('receiver')
+    expiration = data.get('expiration')
+    hash_lock = data.get('hashLock')
+    output_network = data.get('outputNetwork')
+    output_address = data.get('outputAddress')
+
+    print("ContractAddress:", contract_address)
+    print("KeychainId:", keychain_id)
+    print("SigningCredential:", signing_credential)
+    print("InputAmount:", input_amount)
+    print("OutputAmount:", output_amount)
+    print("Receiver:", receiver)
+    print("Expiration:", expiration)
+    print("HashLock:", hash_lock)
+    print("OutputNetwork:", output_network)
+    print("OutputAddress:", output_address)
+
     log_request(request)
     return '', 204
 
-@app.route('/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/get-single-status', methods=['POST'])
-def cactus_get_single_status():
-    log_request(request)
-    return jsonify(77)
-
-@app.route('/api/opencbdc/getSingleStatus', methods=['POST'])
+@app.route('/api/opencbdc/getsinglestatus', methods=['POST'])
 def get_single_status():
+    data = request.get_json()
+
+    htlc_id = data.get('HTLCId')
+    contract_address = data.get('contractAddress')
+    keychain_id = data.get('keychainId')
+    signing_credential = data.get('signingCredential')
+    input_amount = data.get('inputAmount')
+    receiver = data.get('receiver')
+    hash_lock = data.get('hashLock')
+    expiration = data.get('expiration')
+
+    print("HTLCId:", htlc_id)
+    print("ContractAddress:", contract_address)
+    print("KeychainId:", keychain_id)
+    print("SigningCredential:", signing_credential)
+    print("InputAmount:", input_amount)
+    print("Receiver:", receiver)
+    print("HashLock:", hash_lock)
+    print("Expiration:", expiration) 
+
     log_request(request)
     return jsonify(33)
 
 @app.route('/api/opencbdc/withdraw', methods=['POST'])
 def withdraw():
+    data = request.get_json()
+
+    htlc_id = data.get('HTLCId')
+    keychain_id = data.get('keychainId')
+    signing_credential = data.get('signingCredential')
+    
+    print("HTLCId:", htlc_id)
+    print("KeychainId:", keychain_id)
+    print("SigningCredential:", signing_credential)
+
     log_request(request)
     return jsonify(55)
 
 @app.route('/api/opencbdc/refund', methods=['POST'])
 def refund():
+    data = request.get_json()
+    
+    htlc_id = data.get('HTLCId')
+    keychain_id = data.get('keychainId')
+    signing_credential = data.get('signingCredential')
+
+    print("HTLCId:", htlc_id)
+    print("KeychainId:", keychain_id)
+    print("SigningCredential:", signing_credential)
+
     log_request(request)
     return '', 204
 
-@app.route('/api/opencbdc/getBalance', methods=['POST'])
+@app.route('/api/opencbdc/getbalance', methods=['POST'])
 def get_balance():
+    data = request.get_json()
+
+    keychain_id = data.get('keychainId')
+    address = data.get('address')
+
+    print("KeychainId:", keychain_id)
+    print("Address:", address)
+
     log_request(request)
     return '', 204
 

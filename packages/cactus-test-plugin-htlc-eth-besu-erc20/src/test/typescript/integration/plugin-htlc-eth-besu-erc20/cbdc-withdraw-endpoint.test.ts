@@ -21,7 +21,6 @@ describe(testCase, () => {
         secret: '0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d',
         type: 'PRIVATE_KEY_HEX'
       },
-      connectorId: 'ff74336f-6533-429e-b8a3-10764dbff304',
       keychainId: '8ce20052-3768-4035-a974-749805228b2c'
     };
     const resWithdraw = await plugin.withdraw(withdrawRequest);

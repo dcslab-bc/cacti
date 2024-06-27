@@ -315,8 +315,12 @@ test(testCase, async (t: Test) => {
     connectorId,
     keychainId,
   };
+  console.log("refund request@");
+  console.log(refundRequest);
   const resRefund = await api.refundV1(refundRequest);
   t.equal(resRefund.status, 200, "response status is 200 OK");
+  console.log("refund response");
+  console.log(resRefund);
 
   t.comment("Get account balance");
   const responseFinalBalance = await connector.invokeContract({

@@ -211,19 +211,19 @@ describe(testCase, () => {
     expect(callOutput).toEqual("10");
 
     const request: NewContractRequest = {
-      contractAddress: hashTimeLockAddress,
+      contractAddress: hashTimeLockAddress, //왜 하드코딩으로 바꿈?
       inputAmount: 10,
       outputAmount: 1,
       expiration,
       hashLock,
-      tokenAddress,
+      tokenAddress, // 지움
       receiver,
       outputNetwork: "BTC",
       outputAddress: "1AcVYm7M3kkJQH28FXAvyBFQzFRL6xPKu8",
       connectorId,
       keychainId,
       web3SigningCredential,
-      gas: estimatedGas,
+      gas: estimatedGas, // 지움
     };
     const res = await api.newContractV1(request);
     expect(res.status).toEqual(200);

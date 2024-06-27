@@ -167,6 +167,8 @@ test(testCase, async (t: Test) => {
 
   // Test for 200 valid response test case
   const res = await api.getBalanceV1(request);
+  console.log("~~~~~~~~~~~~~~res");
+  console.log(res);
   t.ok(res, "API response object is truthy");
   t.true(typeof res.data.balance === "string", "Response is String ok");
 });

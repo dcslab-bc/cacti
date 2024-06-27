@@ -260,6 +260,8 @@ describe(testCase, () => {
       connectorId,
       keychainId,
     });
+    console.log("++++++++++++++++++++++++++++++++++++++");
+    console.log(res);
     expect(res.status).toEqual(200);
     expect(res.data).toEqual(1);
   });
