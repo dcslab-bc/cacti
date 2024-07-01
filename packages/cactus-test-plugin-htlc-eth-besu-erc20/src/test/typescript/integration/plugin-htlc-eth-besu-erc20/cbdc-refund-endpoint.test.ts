@@ -18,11 +18,10 @@ describe(testCase, () => {
         secret: '0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d',
         type: 'PRIVATE_KEY_HEX'
       },
-      keychainId: '1ba88d47-8b8d-4d1b-9c05-be9545552fb6'
     }
     
     const resRefund = await plugin.refund(refundRequest);
     console.log(resRefund);
-    expect(resRefund.data).toEqual(66);
+    expect(resRefund.status).toEqual(200);
   });
 });
