@@ -11,8 +11,6 @@ export class PluginHtlcOpenCBDC {
 
   public async newContract(newContractRequest: any,): Promise<any> {
     const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/newcontract',{
-      contractAddress: newContractRequest.contractAddress,
-      keychainId: newContractRequest.keychainId,
       signingCredential: newContractRequest.web3SigningCredential,
       inputAmount: newContractRequest.inputAmount,
       outputAmount: newContractRequest.outputAmount,
@@ -29,8 +27,6 @@ export class PluginHtlcOpenCBDC {
   public async getSingleStatus(getSingleStatusRequest: any,): Promise<any> {
     const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/getsinglestatus', {
       HTLCId: getSingleStatusRequest.HTLCId,
-      contractAddress: getSingleStatusRequest.contractAddress,
-      keychainId: getSingleStatusRequest.keychainId,
       signingCredential: getSingleStatusRequest.web3SigningCredential,
       inputAmount: getSingleStatusRequest.inputAmount,
       receiver: getSingleStatusRequest.receiver,
@@ -44,27 +40,26 @@ export class PluginHtlcOpenCBDC {
   public async withdraw(withdrawRequest: any): Promise<any> {
     const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/withdraw', {
       HTLCId: withdrawRequest.HTLCId,
-      keychainId: withdrawRequest.keychainId,
       signingCredential: withdrawRequest.web3SigningCredential,
     });
+
     return result;
   }
 
   public async refund(refundRequest: any): Promise<any> {
     const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/refund', {
       HTLCId: refundRequest.HTLCId,
-      keychainId: refundRequest.keychainId,
       signingCredential: refundRequest.web3SigningCredential,
     });
+
     return result;
   }
 
   public async getBalance(getBalanceRequest: any): Promise<any> {
     const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/getbalance', {
-      keychainId: getBalanceRequest.keychainId,
       address: getBalanceRequest.address,
-      //defaultBlock: getBalanceRequest.defaultBlock,
     });
+    
     return result;
   }
 }
