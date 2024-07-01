@@ -9,7 +9,7 @@ import HashTimeLockJSON from "../solidity/contracts/HashedTimeLockContract.json"
 
 export class PluginHtlcOpenCBDC {
 
-  public async newHTLC(newContractRequest: any,): Promise<any> {
+  public async deposit(newContractRequest: any,): Promise<any> {
     const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/newcontract',{
       signingCredential: newContractRequest.signingCredential,
       inputAmount: newContractRequest.inputAmount,

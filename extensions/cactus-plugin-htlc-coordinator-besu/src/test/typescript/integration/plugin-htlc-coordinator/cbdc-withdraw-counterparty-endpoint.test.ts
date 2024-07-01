@@ -329,7 +329,7 @@ test(testCase, async (t: Test) => {
 
   // Alice OpenCBDC - 2. new OpenCBDC HTLC
 
-  const openCBDCHTLCresult = await openCBDCplugin.newHTLC({
+  const openCBDCHTLCresult = await openCBDCplugin.deposit({
     signingCredential: {"cbdcAccount":"0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1","secret":"0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d","type":"PRIVATE_KEY_HEX"},
     inputAmount: 10,
     outputAmount: 1,
