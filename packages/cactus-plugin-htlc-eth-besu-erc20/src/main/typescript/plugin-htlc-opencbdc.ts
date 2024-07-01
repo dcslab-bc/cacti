@@ -9,9 +9,9 @@ import HashTimeLockJSON from "../solidity/contracts/HashedTimeLockContract.json"
 
 export class PluginHtlcOpenCBDC {
 
-  public async newContract(newContractRequest: any,): Promise<any> {
+  public async newHTLC(newContractRequest: any,): Promise<any> {
     const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/newcontract',{
-      signingCredential: newContractRequest.web3SigningCredential,
+      signingCredential: newContractRequest.signingCredential,
       inputAmount: newContractRequest.inputAmount,
       outputAmount: newContractRequest.outputAmount,
       receiver: newContractRequest.receiver,
@@ -27,7 +27,7 @@ export class PluginHtlcOpenCBDC {
   public async getSingleStatus(getSingleStatusRequest: any,): Promise<any> {
     const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/getsinglestatus', {
       HTLCId: getSingleStatusRequest.HTLCId,
-      signingCredential: getSingleStatusRequest.web3SigningCredential,
+      signingCredential: getSingleStatusRequest.signingCredential,
       inputAmount: getSingleStatusRequest.inputAmount,
       receiver: getSingleStatusRequest.receiver,
       hashLock: getSingleStatusRequest.hashLock,
@@ -40,7 +40,7 @@ export class PluginHtlcOpenCBDC {
   public async withdraw(withdrawRequest: any): Promise<any> {
     const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/withdraw', {
       HTLCId: withdrawRequest.HTLCId,
-      signingCredential: withdrawRequest.web3SigningCredential,
+      signingCredential: withdrawRequest.signingCredential,
     });
 
     return result;
@@ -49,7 +49,7 @@ export class PluginHtlcOpenCBDC {
   public async refund(refundRequest: any): Promise<any> {
     const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/refund', {
       HTLCId: refundRequest.HTLCId,
-      signingCredential: refundRequest.web3SigningCredential,
+      signingCredential: refundRequest.signingCredential,
     });
 
     return result;
