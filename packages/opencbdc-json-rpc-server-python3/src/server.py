@@ -11,23 +11,19 @@ def log_request(req):
 @app.route('/api/opencbdc', methods=['GET'])
 def opencbdc():
     return jsonify({
-        'message': 'Please send a post message as one of the following URLs.',
-        'initialize': '/api/opencbdc/initialize',
-        'newcontract': '/api/opencbdc/newcontract',
+        'deposit': '/api/opencbdc/deposit',
         'getsinglestatus': '/api/opencbdc/getsinglestatus',
         'withdraw': '/api/opencbdc/withdraw',
         'refund': '/api/opencbdc/refund',
         'getbalance': '/api/opencbdc/getbalance'
     })
 
-@app.route('/api/opencbdc/newcontract', methods=['POST'])
+@app.route('/api/opencbdc/deposit', methods=['POST'])
 def new_contract():
     data = request.get_json()
 
-    contract_address = data.get('contractAddress')
-    keychain_id = data.get('keychainId')
     signing_credential = data.get('signingCredential')
-    eth_account = signing_credential.get('ethAccount')
+    opencbdc_account = signing_credential.get('opencbdcAccount')
     secret = signing_credential.get('secret')
     credential_type = signing_credential.get('type')
     input_amount = data.get('inputAmount')
@@ -38,10 +34,8 @@ def new_contract():
     output_network = data.get('outputNetwork')
     output_address = data.get('outputAddress')
 
-    print("ContractAddress:", contract_address)
-    print("KeychainId:", keychain_id)
     print("SigningCredential:", signing_credential)
-    print("  EthAccount:", eth_account)
+    print("  OpencbdcAccount:", opencbdc_account)
     print("  Secret:", secret)
     print("  Type:", credential_type)
     print("InputAmount:", input_amount)
@@ -52,8 +46,13 @@ def new_contract():
     print("OutputNetwork:", output_network)
     print("OutputAddress:", output_address)
 
+    response = {
+        "success": True,
+        "HTLCId": "abcdefg"
+    }
+
     log_request(request)
-    return '', 204
+    return jsonify(response), 200
 
 @app.route('/api/opencbdc/getsinglestatus', methods=['POST'])
 def get_single_status():
@@ -63,7 +62,7 @@ def get_single_status():
     contract_address = data.get('contractAddress')
     keychain_id = data.get('keychainId')
     signing_credential = data.get('signingCredential')
-    eth_account = signing_credential.get('ethAccount')
+    opencbdc_account = signing_credential.get('opencbdcAccount')
     secret = signing_credential.get('secret')
     credential_type = signing_credential.get('type')
     input_amount = data.get('inputAmount')
@@ -75,7 +74,7 @@ def get_single_status():
     print("ContractAddress:", contract_address)
     print("KeychainId:", keychain_id)
     print("SigningCredential:", signing_credential)
-    print("  EthAccount:", eth_account)
+    print("  OpencbdcAccount:", opencbdc_account)
     print("  Secret:", secret)
     print("  Type:", credential_type)
     print("InputAmount:", input_amount)
@@ -91,16 +90,14 @@ def withdraw():
     data = request.get_json()
 
     htlc_id = data.get('HTLCId')
-    keychain_id = data.get('keychainId')
     signing_credential = data.get('signingCredential')
-    eth_account = signing_credential.get('ethAccount')
+    opencbdc_account = signing_credential.get('opencbdcAccount')
     secret = signing_credential.get('secret')
     credential_type = signing_credential.get('type')
     
     print("HTLCId:", htlc_id)
-    print("KeychainId:", keychain_id)
     print("SigningCredential:", signing_credential)
-    print("  EthAccount:", eth_account)
+    print("  OpencbdcAccount:", opencbdc_account)
     print("  Secret:", secret)
     print("  Type:", credential_type)
 
@@ -116,16 +113,14 @@ def refund():
     data = request.get_json()
     
     htlc_id = data.get('HTLCId')
-    keychain_id = data.get('keychainId')
     signing_credential = data.get('signingCredential')
-    eth_account = signing_credential.get('ethAccount')
+    opencbdc_account = signing_credential.get('opencbdcAccount')
     secret = signing_credential.get('secret')
     credential_type = signing_credential.get('type')
 
     print("HTLCId:", htlc_id)
-    print("KeychainId:", keychain_id)
     print("SigningCredential:", signing_credential)
-    print("  EthAccount:", eth_account)
+    print("  OpencbdcAccount:", opencbdc_account)
     print("  Secret:", secret)
     print("  Type:", credential_type)
 
@@ -140,10 +135,8 @@ def refund():
 def get_balance():
     data = request.get_json()
 
-    keychain_id = data.get('keychainId')
     address = data.get('address')
 
-    print("KeychainId:", keychain_id)
     print("Address:", address)
 
     log_request(request)
