@@ -88,7 +88,7 @@ describe(testCase, () => {
     expressApp.use(bodyParser.json({ limit: "250mb" }));
     server = http.createServer(expressApp);
     const listenOptions: IListenOptions = {
-      hostname: "0.0.0.0",
+      hostname: "127.0.0.1",
       port: 0,
       server,
     };
@@ -102,13 +102,7 @@ describe(testCase, () => {
   test(testCase, async () => {
     await besuTestLedger.start();
     const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
-    console.log("11111111111111111111111");
-    console.log(rpcApiHttpHost);
-    console.log("11111111111111111111111");
     const rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
-    console.log("22222222222222222222222");
-    console.log(rpcApiWsHost);
-    console.log("22222222222222222222222");
     const keychainId = uuidv4();
     const keychainPlugin = new PluginKeychainMemory({
       instanceId: uuidv4(),
@@ -129,9 +123,6 @@ describe(testCase, () => {
       HashTimeLockJSON.contractName,
       JSON.stringify(HashTimeLockJSON),
     );
-    console.log("3333333333333333333333333");
-    console.log(keychainPlugin);
-    console.log("3333333333333333333333333");
     const factory = new PluginFactoryLedgerConnector({
       pluginImportType: PluginImportType.Local,
     });
@@ -168,9 +159,6 @@ describe(testCase, () => {
       gas: estimatedGas,
     };
     const deployOut = await pluginHtlc.initialize(initRequest);
-    console.log("4444444444444444444444444");
-    console.log(deployOut);
-    console.log("4444444444444444444444444");
     expect(deployOut).toBeTruthy();
     expect(deployOut.transactionReceipt).toBeTruthy();
     expect(deployOut.transactionReceipt.contractAddress).toBeTruthy();
@@ -187,9 +175,6 @@ describe(testCase, () => {
       constructorArgs: ["100", "token", "2", "TKN"],
       gas: estimatedGas,
     });
-    console.log("5555555555555555555555555");
-    console.log(deployOutToken);
-    console.log("5555555555555555555555555");
     expect(deployOutToken).toBeTruthy();
     expect(deployOutToken.transactionReceipt).toBeTruthy();
     expect(deployOutToken.transactionReceipt.contractAddress).toBeTruthy();
@@ -205,9 +190,6 @@ describe(testCase, () => {
       constructorArgs: [],
       gas: estimatedGas,
     });
-    console.log("6666666666666666666666666");
-    console.log(deployOutDemo);
-    console.log("6666666666666666666666666");
     expect(deployOutDemo).toBeTruthy();
     expect(deployOutDemo.transactionReceipt).toBeTruthy();
     expect(deployOutDemo.transactionReceipt.contractAddress).toBeTruthy();
@@ -221,9 +203,6 @@ describe(testCase, () => {
       gas: estimatedGas,
     });
     expect(success).toBeTruthy();
-    console.log("7777777777777777777777777");
-    console.log(success);
-    console.log("7777777777777777777777777");
 
     const { callOutput } = await connector.invokeContract({
       contractName: TestTokenJSON.contractName,
@@ -233,10 +212,6 @@ describe(testCase, () => {
       methodName: "balanceOf",
       params: [firstHighNetWorthAccount],
     });
-    console.log("8888888888888888888888888");
-    console.log(callOutput);
-    console.log("8888888888888888888888888");
-
     expect(callOutput).toEqual("100");
 
     const responseAllowance = await connector.invokeContract({
@@ -247,9 +222,6 @@ describe(testCase, () => {
       methodName: "allowance",
       params: [firstHighNetWorthAccount, hashTimeLockAddress],
     });
-    console.log("9999999999999999999999999");
-    console.log(responseAllowance);
-    console.log("9999999999999999999999999");
     expect(responseAllowance.callOutput).toEqual("10");
 
     const secretEthAbiEncoded = encodeParameter("uint256", secret);
