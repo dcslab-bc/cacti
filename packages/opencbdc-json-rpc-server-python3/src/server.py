@@ -47,7 +47,7 @@ def new_contract():
     print("OutputAddress:", output_address)
 
     response = {
-        "success": True,
+        "status": True,
         "HTLCId": "abcdefg"
     }
 
