@@ -20,12 +20,6 @@ def opencbdc():
         'getbalance': '/api/opencbdc/getbalance'
     })
 
-@app.route('/api/opencbdc/initialize', methods=['POST'])
-def initialize():
-    print(request)
-    log_request(request)
-    return '', 204
-
 @app.route('/api/opencbdc/newcontract', methods=['POST'])
 def new_contract():
     data = request.get_json()
@@ -110,8 +104,12 @@ def withdraw():
     print("  Secret:", secret)
     print("  Type:", credential_type)
 
+    response = {
+        "transactionReceipt": {}
+    }
+
     log_request(request)
-    return jsonify(55)
+    return jsonify(response), 200
 
 @app.route('/api/opencbdc/refund', methods=['POST'])
 def refund():
@@ -131,10 +129,12 @@ def refund():
     print("  Secret:", secret)
     print("  Type:", credential_type)
 
-    
+    response = {
+        "transactionReceipt": {}
+    }
 
     log_request(request)
-    return '', 204
+    return jsonify(response), 200
 
 @app.route('/api/opencbdc/getbalance', methods=['POST'])
 def get_balance():

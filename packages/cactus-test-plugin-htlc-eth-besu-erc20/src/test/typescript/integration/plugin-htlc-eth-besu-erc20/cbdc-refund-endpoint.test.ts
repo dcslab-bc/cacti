@@ -23,5 +23,6 @@ describe(testCase, () => {
     const resRefund = await plugin.refund(refundRequest);
     console.log(resRefund);
     expect(resRefund.status).toEqual(200);
+    expect(resRefund.data.transactionReceipt).toEqual({});
   });
 });

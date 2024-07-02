@@ -25,5 +25,6 @@ describe(testCase, () => {
     const resWithdraw = await plugin.withdraw(withdrawRequest);
     console.log(resWithdraw);
     expect(resWithdraw.status).toEqual(200);
+    expect(resWithdraw.data.transactionReceipt).toEqual({});
   });
 });
