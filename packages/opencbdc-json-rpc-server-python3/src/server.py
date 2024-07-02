@@ -83,7 +83,7 @@ def get_single_status():
     print("Expiration:", expiration) 
 
     log_request(request)
-    return jsonify(33)
+    return jsonify(1), 200
 
 @app.route('/api/opencbdc/withdraw', methods=['POST'])
 def withdraw():
