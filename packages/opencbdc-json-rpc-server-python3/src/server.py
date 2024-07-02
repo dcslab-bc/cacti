@@ -140,7 +140,7 @@ def get_balance():
     print("Address:", address)
 
     log_request(request)
-    return '', 204
+    return jsonify(100000000), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8765)

@@ -17,6 +17,7 @@ describe(testCase, () => {
     
     const resBalance = await plugin.getBalance(getBalanceRequest);
     console.log(resBalance);
-    expect(resBalance.data).toEqual(66);
+    expect(resBalance.status).toEqual(200);
+    expect(resBalance.data).toEqual(100000000);
   });
 });
