@@ -47,7 +47,7 @@ def new_contract():
     print("OutputAddress:", output_address)
 
     response = {
-        "status": True,
+        "success": True,
         "HTLCId": "abcdefg"
     }
 
@@ -102,7 +102,8 @@ def withdraw():
     print("  Type:", credential_type)
 
     response = {
-        "transactionReceipt": {}
+        "success": True,
+        "HTLCId": "abcdefg"
     }
 
     log_request(request)
@@ -125,7 +126,8 @@ def refund():
     print("  Type:", credential_type)
 
     response = {
-        "transactionReceipt": {}
+        "success": True,
+        "HTLCId": "abcdefg"
     }
 
     log_request(request)
@@ -139,8 +141,12 @@ def get_balance():
 
     print("Address:", address)
 
+    response = {
+        "balance": 100000000,
+    }
+
     log_request(request)
-    return jsonify(100000000), 200
+    return jsonify(response), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8765)

@@ -23,6 +23,7 @@ describe(testCase, () => {
     const resRefund = await plugin.refund(refundRequest);
     console.log(resRefund);
     expect(resRefund.status).toEqual(200);
-    expect(resRefund.data.transactionReceipt).toEqual({});
+    expect(resRefund.data.success).toEqual(true);
+    expect(resRefund.data.HTLCId).toEqual("abcdefg");
   });
 });

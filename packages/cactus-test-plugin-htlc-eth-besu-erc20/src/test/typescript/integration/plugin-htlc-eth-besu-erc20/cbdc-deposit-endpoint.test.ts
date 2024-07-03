@@ -21,7 +21,7 @@ describe(testCase, () => {
     };
     const res = await plugin.deposit(request);
     expect(res.status).toEqual(200);
-    expect(res.data.status).toEqual(true);
+    expect(res.data.success).toEqual(true);
     expect(res.data.HTLCId).toEqual("abcdefg");
   });
 });

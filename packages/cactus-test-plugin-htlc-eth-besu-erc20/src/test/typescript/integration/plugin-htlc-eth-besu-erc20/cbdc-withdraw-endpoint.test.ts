@@ -25,6 +25,7 @@ describe(testCase, () => {
     const resWithdraw = await plugin.withdraw(withdrawRequest);
     console.log(resWithdraw);
     expect(resWithdraw.status).toEqual(200);
-    expect(resWithdraw.data.transactionReceipt).toEqual({});
+    expect(resWithdraw.data.success).toEqual(true);
+    expect(resWithdraw.data.HTLCId).toEqual("abcdefg");
   });
 });
