@@ -26,84 +26,84 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
 /**
  * 
  * @export
- * @interface BesuPrivateTransactionConfig
+ * @interface OpenCBDCPrivateTransactionConfig
  */
-export interface BesuPrivateTransactionConfig {
+export interface OpenCBDCPrivateTransactionConfig {
     /**
      * 
      * @type {string}
-     * @memberof BesuPrivateTransactionConfig
+     * @memberof OpenCBDCPrivateTransactionConfig
      */
     'privateFrom': string;
     /**
      * 
      * @type {Array<any>}
-     * @memberof BesuPrivateTransactionConfig
+     * @memberof OpenCBDCPrivateTransactionConfig
      */
     'privateFor': Array<any>;
 }
 /**
  * 
  * @export
- * @interface BesuTransactionConfig
+ * @interface OpenCBDCTransactionConfig
  */
-export interface BesuTransactionConfig {
+export interface OpenCBDCTransactionConfig {
     [key: string]: any;
 
     /**
      * 
      * @type {string}
-     * @memberof BesuTransactionConfig
+     * @memberof OpenCBDCTransactionConfig
      */
     'rawTransaction'?: string;
     /**
      * 
      * @type {Web3BlockHeaderTimestamp}
-     * @memberof BesuTransactionConfig
+     * @memberof OpenCBDCTransactionConfig
      */
     'from'?: Web3BlockHeaderTimestamp;
     /**
      * 
-     * @type {BesuTransactionConfigTo}
-     * @memberof BesuTransactionConfig
+     * @type {OpenCBDCTransactionConfigTo}
+     * @memberof OpenCBDCTransactionConfig
      */
-    'to'?: BesuTransactionConfigTo;
+    'to'?: OpenCBDCTransactionConfigTo;
     /**
      * 
      * @type {Web3BlockHeaderTimestamp}
-     * @memberof BesuTransactionConfig
+     * @memberof OpenCBDCTransactionConfig
      */
     'value'?: Web3BlockHeaderTimestamp;
     /**
      * 
      * @type {Web3BlockHeaderTimestamp}
-     * @memberof BesuTransactionConfig
+     * @memberof OpenCBDCTransactionConfig
      */
     'gas'?: Web3BlockHeaderTimestamp;
     /**
      * 
      * @type {Web3BlockHeaderTimestamp}
-     * @memberof BesuTransactionConfig
+     * @memberof OpenCBDCTransactionConfig
      */
     'gasPrice'?: Web3BlockHeaderTimestamp;
     /**
      * 
      * @type {number}
-     * @memberof BesuTransactionConfig
+     * @memberof OpenCBDCTransactionConfig
      */
     'nonce'?: number;
     /**
      * 
-     * @type {BesuTransactionConfigTo}
-     * @memberof BesuTransactionConfig
+     * @type {OpenCBDCTransactionConfigTo}
+     * @memberof OpenCBDCTransactionConfig
      */
-    'data'?: BesuTransactionConfigTo;
+    'data'?: OpenCBDCTransactionConfigTo;
 }
 /**
- * @type BesuTransactionConfigTo
+ * @type OpenCBDCTransactionConfigTo
  * @export
  */
-export type BesuTransactionConfigTo = string;
+export type OpenCBDCTransactionConfigTo = string;
 
 /**
  * 
@@ -194,10 +194,10 @@ export interface DeployContractSolidityBytecodeV1Request {
     'timeoutMs'?: number;
     /**
      * 
-     * @type {BesuPrivateTransactionConfig}
+     * @type {OpenCBDCPrivateTransactionConfig}
      * @memberof DeployContractSolidityBytecodeV1Request
      */
-    'privateTransactionConfig'?: BesuPrivateTransactionConfig;
+    'privateTransactionConfig'?: OpenCBDCPrivateTransactionConfig;
 }
 /**
  * 
@@ -733,10 +733,10 @@ export interface InvokeContractV1Request {
     'keychainId'?: string;
     /**
      * 
-     * @type {BesuPrivateTransactionConfig}
+     * @type {OpenCBDCPrivateTransactionConfig}
      * @memberof InvokeContractV1Request
      */
-    'privateTransactionConfig'?: BesuPrivateTransactionConfig;
+    'privateTransactionConfig'?: OpenCBDCPrivateTransactionConfig;
 }
 
 
@@ -793,10 +793,10 @@ export interface RunTransactionRequest {
     'web3SigningCredential': Web3SigningCredential;
     /**
      * 
-     * @type {BesuTransactionConfig}
+     * @type {OpenCBDCTransactionConfig}
      * @memberof RunTransactionRequest
      */
-    'transactionConfig': BesuTransactionConfig;
+    'transactionConfig': OpenCBDCTransactionConfig;
     /**
      * 
      * @type {ConsistencyStrategy}
@@ -805,10 +805,10 @@ export interface RunTransactionRequest {
     'consistencyStrategy': ConsistencyStrategy;
     /**
      * 
-     * @type {BesuPrivateTransactionConfig}
+     * @type {OpenCBDCPrivateTransactionConfig}
      * @memberof RunTransactionRequest
      */
-    'privateTransactionConfig'?: BesuPrivateTransactionConfig;
+    'privateTransactionConfig'?: OpenCBDCPrivateTransactionConfig;
 }
 /**
  * 
@@ -1363,7 +1363,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @throws {RequiredError}
          */
         getOpenCBDCRecordV1: async (GetOpenCBDCRecordV1Request?: GetOpenCBDCRecordV1Request, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-besu-record`;
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-openCBDC-record`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;

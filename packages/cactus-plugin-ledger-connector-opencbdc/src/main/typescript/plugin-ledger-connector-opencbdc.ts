@@ -614,7 +614,7 @@ export class PluginLedgerConnectorOpenCBDC
   ): Promise<RunTransactionResponse> {
     const fnTag = `${this.className}#getTxReceipt()`;
 
-    this.log.debug("Received preliminary receipt from Besu node.");
+    this.log.debug("Received preliminary receipt from OpenCBDC node.");
 
     if (txPoolReceipt instanceof Error) {
       this.log.debug(`${fnTag} sendSignedTransaction failed`, txPoolReceipt);

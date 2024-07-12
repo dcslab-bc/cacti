@@ -58,7 +58,7 @@ test(testCase, async (t: Test) => {
    * @see https://github.com/hyperledger/besu/blob/1.5.1/config/src/main/resources/dev.json
    */
   const firstHighNetWorthAccount = besuTestLedger.getGenesisAccountPubKey();
-  const besuKeyPair = {
+  const openCBDCKeyPair = {
     privateKey: besuTestLedger.getGenesisAccountPrivKey(),
   };
 
@@ -116,8 +116,8 @@ test(testCase, async (t: Test) => {
 
   const wsBasePath = apiHost + Constants.SocketIoConnectionPathV1;
   t.comment("WS base path: " + wsBasePath);
-  const besuApiClientOptions = new OpenCBDCApiClientOptions({ basePath: apiHost });
-  const api = new OpenCBDCApiClient(besuApiClientOptions);
+  const openCBDCApiClientOptions = new OpenCBDCApiClientOptions({ basePath: apiHost });
+  const api = new OpenCBDCApiClient(openCBDCApiClientOptions);
 
   await connector.getOrCreateWebServices();
   await connector.registerWebServices(expressApp, wsApi);
