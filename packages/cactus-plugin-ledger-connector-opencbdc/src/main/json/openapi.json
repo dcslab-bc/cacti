@@ -917,7 +917,7 @@
         "type": "string",
         "nullable": false
       },
-      "GetBesuRecordV1Request": {
+      "GetOpenCBDCRecordV1Request": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -932,7 +932,7 @@
           }
         }
       },
-      "GetBesuRecordV1Response": {
+      "GetOpenCBDCRecordV1Response": {
         "type": "object",
         "properties": {
           "ledgerId": {
@@ -1275,12 +1275,12 @@
         }
       }
     },
-    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-besu-record": {
+    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-opencbdc-record": {
       "post": {
         "x-hyperledger-cactus": {
           "http": {
             "verbLowerCase": "post",
-            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-besu-record"
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-opencbdc-record"
           }
         },
         "operationId": "getBesuRecordV1",
@@ -1290,7 +1290,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetBesuRecordV1Request"
+                "$ref": "#/components/schemas/GetOpenCBDCRecordV1Request"
               }
             }
           }
@@ -1301,7 +1301,7 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetBesuRecordV1Response"
+                  "$ref": "#/components/schemas/GetOpenCBDCRecordV1Response"
                 }
               }
             }
