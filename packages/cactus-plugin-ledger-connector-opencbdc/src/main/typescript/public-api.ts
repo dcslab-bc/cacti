@@ -9,9 +9,9 @@ import { IPluginFactoryOptions } from "@hyperledger/cactus-core-api";
 import { PluginFactoryLedgerConnector } from "./plugin-factory-ledger-connector";
 
 export {
-  BesuApiClient,
-  BesuApiClientOptions,
-} from "./api-client/besu-api-client";
+  OpenCBDCApiClient,
+  OpenCBDCApiClientOptions,
+} from "./api-client/openCBDC-api-client";
 
 export * from "./generated/openapi/typescript-axios/api";
 

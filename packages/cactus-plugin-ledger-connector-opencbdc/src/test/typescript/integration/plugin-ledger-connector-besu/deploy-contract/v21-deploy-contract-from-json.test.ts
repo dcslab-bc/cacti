@@ -9,7 +9,7 @@ import {
   PluginFactoryLedgerConnector,
   Web3SigningCredentialCactusKeychainRef,
   ReceiptType,
-  BesuApiClient,
+  OpenCBDCApiClient,
   WatchBlocksV1Progress,
   Web3BlockHeader,
 } from "../../../../../main/typescript/public-api";
@@ -31,7 +31,7 @@ import bodyParser from "body-parser";
 import http from "http";
 import { AddressInfo } from "net";
 import { K_CACTUS_BESU_TOTAL_TX_COUNT } from "../../../../../main/typescript/prometheus-exporter/metrics";
-import { BesuApiClientOptions } from "../../../../../main/typescript/api-client/besu-api-client";
+import { OpenCBDCApiClientOptions } from "../../../../../main/typescript/api-client/openCBDC-api-client";
 
 const testCase = "deploys contract via .json file";
 const logLevel: LogLevelDesc = "TRACE";
@@ -123,8 +123,8 @@ test(testCase, async (t: Test) => {
 
   const wsBasePath = apiHost + Constants.SocketIoConnectionPathV1;
   t.comment("WS base path: " + wsBasePath);
-  const besuApiClientOptions = new BesuApiClientOptions({ basePath: apiHost });
-  const apiClient = new BesuApiClient(besuApiClientOptions);
+  const openCBDCApiClientOptions = new OpenCBDCApiClientOptions({ basePath: apiHost });
+  const apiClient = new OpenCBDCApiClient(openCBDCApiClientOptions);
 
   await connector.getOrCreateWebServices();
   await connector.registerWebServices(expressApp, wsApi);

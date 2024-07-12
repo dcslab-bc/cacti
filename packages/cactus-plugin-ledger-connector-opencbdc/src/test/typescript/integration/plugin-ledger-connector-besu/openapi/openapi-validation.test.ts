@@ -5,7 +5,7 @@ import { PluginRegistry } from "@hyperledger/cactus-core";
 import {
   Web3SigningCredentialType,
   PluginLedgerConnectorOpenCBDC,
-  BesuApiClient,
+  OpenCBDCApiClient,
   IPluginLedgerConnectorOpenCBDCOptions,
   ReceiptType,
   RunTransactionRequest,
@@ -37,13 +37,13 @@ import bodyParser from "body-parser";
 import http from "http";
 import HelloWorldContractJson from "../../../../solidity/hello-world-contract/HelloWorld.json";
 import { AddressInfo } from "net";
-import { BesuApiClientOptions } from "../../../../../main/typescript/api-client/besu-api-client";
+import { OpenCBDCApiClientOptions } from "../../../../../main/typescript/api-client/openCBDC-api-client";
 
 import { installOpenapiValidationMiddleware } from "@hyperledger/cactus-core";
 import OAS from "../../../../../main/json/openapi.json";
 
 const logLevel: LogLevelDesc = "TRACE";
-const testCase = "Besu API";
+const testCase = "OpenCBDC API";
 
 test("BEFORE " + testCase, async (t: Test) => {
   const pruning = pruneDockerAllIfGithubAction({ logLevel });
@@ -133,8 +133,8 @@ test(testCase, async (t: Test) => {
 
   const wsBasePath = apiHost + Constants.SocketIoConnectionPathV1;
   t.comment("WS base path: " + wsBasePath);
-  const besuApiClientOptions = new BesuApiClientOptions({ basePath: apiHost });
-  const apiClient = new BesuApiClient(besuApiClientOptions);
+  const openCBDCApiClientOptions = new OpenCBDCApiClientOptions({ basePath: apiHost });
+  const apiClient = new OpenCBDCApiClient(openCBDCApiClientOptions);
 
   await installOpenapiValidationMiddleware({
     logLevel,

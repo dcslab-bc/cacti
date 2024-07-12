@@ -8,8 +8,8 @@ import {
   PluginFactoryLedgerConnector,
   ReceiptType,
   InvokeContractV1Request,
-  BesuApiClientOptions,
-  BesuApiClient,
+  OpenCBDCApiClientOptions,
+  OpenCBDCApiClient,
   GetOpenCBDCRecordV1Request,
 } from "../../../../../main/typescript/public-api";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
@@ -116,8 +116,8 @@ test(testCase, async (t: Test) => {
 
   const wsBasePath = apiHost + Constants.SocketIoConnectionPathV1;
   t.comment("WS base path: " + wsBasePath);
-  const besuApiClientOptions = new BesuApiClientOptions({ basePath: apiHost });
-  const api = new BesuApiClient(besuApiClientOptions);
+  const besuApiClientOptions = new OpenCBDCApiClientOptions({ basePath: apiHost });
+  const api = new OpenCBDCApiClient(besuApiClientOptions);
 
   await connector.getOrCreateWebServices();
   await connector.registerWebServices(expressApp, wsApi);

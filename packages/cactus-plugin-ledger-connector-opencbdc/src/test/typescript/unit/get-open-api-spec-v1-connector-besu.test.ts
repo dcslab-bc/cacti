@@ -14,8 +14,8 @@ import { AddressInfo } from "net";
 import { Server as SocketIoServer } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
 import {
-  BesuApiClient,
-  BesuApiClientOptions,
+  OpenCBDCApiClient,
+  OpenCBDCApiClientOptions,
   PluginFactoryLedgerConnector,
   PluginLedgerConnectorOpenCBDC,
 } from "../../../main/typescript/public-api";
@@ -34,7 +34,7 @@ describe(__filename, () => {
   const expressApp = express();
   expressApp.use(bodyParser.json({ limit: "250mb" }));
   const server = http.createServer(expressApp);
-  let apiClient: BesuApiClient;
+  let apiClient: OpenCBDCApiClient;
 
   afterAll(async () => {
     await Servers.shutdown(server);
@@ -68,11 +68,11 @@ describe(__filename, () => {
     const { address, port } = addressInfo;
     const apiHost = `http://${address}:${port}`;
 
-    const besuApiClientOptions = new BesuApiClientOptions({
+    const openCBDCApiClientOptions = new OpenCBDCApiClientOptions({
       basePath: apiHost,
     });
-    apiClient = new BesuApiClient(besuApiClientOptions);
-    log.debug("Instantiated BesuApiClient OK");
+    apiClient = new OpenCBDCApiClient(openCBDCApiClientOptions);
+    log.debug("Instantiated OpenCBDCApiClient OK");
   });
 
   it("Returns a JSON document containing the Open API specification of the plugin.", async () => {
