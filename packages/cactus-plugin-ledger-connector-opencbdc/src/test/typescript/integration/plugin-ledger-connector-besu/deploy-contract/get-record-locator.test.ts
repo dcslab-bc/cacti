@@ -58,7 +58,7 @@ test(testCase, async (t: Test) => {
    * @see https://github.com/hyperledger/besu/blob/1.5.1/config/src/main/resources/dev.json
    */
   const firstHighNetWorthAccount = besuTestLedger.getGenesisAccountPubKey();
-  const openCBDCKeyPair = {
+  const besuKeyPair = {
     privateKey: besuTestLedger.getGenesisAccountPrivKey(),
   };
 
