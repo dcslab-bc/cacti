@@ -31,7 +31,7 @@ import bodyParser from "body-parser";
 import http from "http";
 import { AddressInfo } from "net";
 import { K_CACTUS_BESU_TOTAL_TX_COUNT } from "../../../../../main/typescript/prometheus-exporter/metrics";
-import { OpenCBDCApiClientOptions } from "../../../../../main/typescript/api-client/openCBDC-api-client";
+import { OpenCBDCApiClientOptions } from "../../../../../main/typescript/api-client/opencbdc-api-client";
 
 const testCase = "deploys contract via .json file";
 const logLevel: LogLevelDesc = "TRACE";

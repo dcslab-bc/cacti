@@ -11,7 +11,7 @@ import { PluginFactoryLedgerConnector } from "./plugin-factory-ledger-connector"
 export {
   OpenCBDCApiClient,
   OpenCBDCApiClientOptions,
-} from "./api-client/openCBDC-api-client";
+} from "./api-client/opencbdc-api-client";
 
 export * from "./generated/openapi/typescript-axios/api";
 

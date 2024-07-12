@@ -37,7 +37,7 @@ import bodyParser from "body-parser";
 import http from "http";
 import HelloWorldContractJson from "../../../../solidity/hello-world-contract/HelloWorld.json";
 import { AddressInfo } from "net";
-import { OpenCBDCApiClientOptions } from "../../../../../main/typescript/api-client/openCBDC-api-client";
+import { OpenCBDCApiClientOptions } from "../../../../../main/typescript/api-client/opencbdc-api-client";
 
 import { installOpenapiValidationMiddleware } from "@hyperledger/cactus-core";
 import OAS from "../../../../../main/json/openapi.json";
