@@ -14,26 +14,26 @@ import {
 } from "@hyperledger/cactus-core-api";
 import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 
-import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-opencbdc";
-import { GetBesuRecordV1Request } from "../generated/openapi/typescript-axios/api";
+import { PluginLedgerConnectorOpenCBDC } from "../plugin-ledger-connector-opencbdc";
+import { GetOpenCBDCRecordV1Request } from "../generated/openapi/typescript-axios/api";
 
 import OAS from "../../json/openapi.json";
 
-export interface IGetBesuRecordEndpointV1Options {
+export interface IGetOpenCBDCRecordEndpointV1Options {
   logLevel?: LogLevelDesc;
-  connector: PluginLedgerConnectorBesu;
+  connector: PluginLedgerConnectorOpenCBDC;
 }
 
-export class GetBesuRecordEndpointV1 implements IWebServiceEndpoint {
-  public static readonly CLASS_NAME = "GetBesuRecordEndpointV1";
+export class GetOpenCBDCRecordEndpointV1 implements IWebServiceEndpoint {
+  public static readonly CLASS_NAME = "GetOpenCBDCRecordEndpointV1";
 
   private readonly log: Logger;
 
   public get className(): string {
-    return GetBesuRecordEndpointV1.CLASS_NAME;
+    return GetOpenCBDCRecordEndpointV1.CLASS_NAME;
   }
 
-  constructor(public readonly options: IGetBesuRecordEndpointV1Options) {
+  constructor(public readonly options: IGetOpenCBDCRecordEndpointV1Options) {
     const fnTag = `${this.className}#constructor()`;
     Checks.truthy(options, `${fnTag} arg options`);
     Checks.truthy(options.connector, `${fnTag} arg options.connector`);
@@ -88,8 +88,8 @@ export class GetBesuRecordEndpointV1 implements IWebServiceEndpoint {
     const reqTag = `${this.getVerbLowerCase()} - ${this.getPath()}`;
     this.log.debug(reqTag);
     try {
-      const reqBody: GetBesuRecordV1Request = req.body as GetBesuRecordV1Request;
-      const resBody = await this.options.connector.getBesuRecord(reqBody);
+      const reqBody: GetOpenCBDCRecordV1Request = req.body as GetOpenCBDCRecordV1Request;
+      const resBody = await this.options.connector.getOpenCBDCRecord(reqBody);
       res.json(resBody);
     } catch (ex) {
       this.log.error(`Crash while serving ${reqTag}`, ex);

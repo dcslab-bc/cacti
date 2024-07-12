@@ -2,7 +2,7 @@ import test, { Test } from "tape";
 import { v4 as uuidv4 } from "uuid";
 import { PluginRegistry } from "@hyperledger/cactus-core";
 import {
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorOpenCBDC,
   PluginFactoryLedgerConnector,
   GetPastLogsV1Request,
 } from "../../../../../main/typescript/public-api";
@@ -59,7 +59,7 @@ test("can get past logs of an account", async (t: Test) => {
     pluginImportType: PluginImportType.Local,
   });
 
-  const connector: PluginLedgerConnectorBesu = await factory.create({
+  const connector: PluginLedgerConnectorOpenCBDC = await factory.create({
     rpcApiHttpHost,
     rpcApiWsHost,
     instanceId: uuidv4(),

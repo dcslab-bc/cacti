@@ -3,7 +3,7 @@ import { PluginRegistry } from "@hyperledger/cactus-core";
 import "jest-extended";
 
 import {
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorOpenCBDC,
   PluginFactoryLedgerConnector,
   ReceiptType,
   Web3SigningCredentialType,
@@ -16,7 +16,7 @@ import Web3 from "web3";
 import { PluginImportType } from "@hyperledger/cactus-core-api";
 import { GetTransactionV1Request } from "../../../../main/typescript/generated/openapi/typescript-axios/api";
 
-const testCase = "PluginLedgerConnectorBesu";
+const testCase = "PluginLedgerConnectorOpenCBDC";
 describe(testCase, () => {
   const logLevel: LogLevelDesc = "TRACE";
   const besuTestLedger = new BesuTestLedger();
@@ -62,7 +62,7 @@ describe(testCase, () => {
       pluginImportType: PluginImportType.Local,
     });
 
-    const connector: PluginLedgerConnectorBesu = await factory.create({
+    const connector: PluginLedgerConnectorOpenCBDC = await factory.create({
       rpcApiHttpHost,
       rpcApiWsHost,
       instanceId: uuidv4(),

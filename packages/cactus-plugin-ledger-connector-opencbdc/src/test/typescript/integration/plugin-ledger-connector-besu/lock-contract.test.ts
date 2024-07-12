@@ -4,7 +4,7 @@ import { PluginRegistry } from "@hyperledger/cactus-core";
 import {
   EthContractInvocationType,
   Web3SigningCredentialType,
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorOpenCBDC,
   PluginFactoryLedgerConnector,
   //Web3SigningCredentialCactusKeychainRef,
   ReceiptType,
@@ -63,7 +63,7 @@ test("deploys contract via .json file", async (t: Test) => {
   const factory = new PluginFactoryLedgerConnector({
     pluginImportType: PluginImportType.Local,
   });
-  const connector: PluginLedgerConnectorBesu = await factory.create({
+  const connector: PluginLedgerConnectorOpenCBDC = await factory.create({
     rpcApiHttpHost,
     rpcApiWsHost,
     instanceId: uuidv4(),

@@ -1,7 +1,7 @@
 export {
   E_KEYCHAIN_NOT_FOUND,
-  IPluginLedgerConnectorBesuOptions,
-  PluginLedgerConnectorBesu,
+  IPluginLedgerConnectorOpenCBDCOptions,
+  PluginLedgerConnectorOpenCBDC,
 } from "./plugin-ledger-connector-opencbdc";
 export { PluginFactoryLedgerConnector } from "./plugin-factory-ledger-connector";
 

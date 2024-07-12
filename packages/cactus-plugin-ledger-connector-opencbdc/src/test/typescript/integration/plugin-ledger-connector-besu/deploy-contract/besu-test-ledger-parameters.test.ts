@@ -1,7 +1,7 @@
 import { BesuTestLedger } from "@hyperledger/cactus-test-tooling";
 import "jest-extended";
 
-const testCase = "PluginLedgerConnectorBesu:deploy-contract";
+const testCase = "PluginLedgerConnectorOpenCBDC:deploy-contract";
 
 describe(testCase, () => {
   test("constructor does not throw with the default config", async () => {

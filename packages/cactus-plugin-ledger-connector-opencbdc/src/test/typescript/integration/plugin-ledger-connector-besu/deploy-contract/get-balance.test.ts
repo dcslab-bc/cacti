@@ -3,7 +3,7 @@ import "jest-extended";
 import { Account } from "web3-core";
 import { PluginRegistry } from "@hyperledger/cactus-core";
 import {
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorOpenCBDC,
   PluginFactoryLedgerConnector,
   GetBalanceV1Request,
 } from "../../../../../main/typescript/public-api";
@@ -66,7 +66,7 @@ describe(testcase, () => {
     const factory = new PluginFactoryLedgerConnector({
       pluginImportType: PluginImportType.Local,
     });
-    const connector: PluginLedgerConnectorBesu = await factory.create({
+    const connector: PluginLedgerConnectorOpenCBDC = await factory.create({
       rpcApiHttpHost,
       rpcApiWsHost,
       instanceId: uuidv4(),

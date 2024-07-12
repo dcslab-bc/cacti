@@ -4,13 +4,13 @@ import { PluginRegistry } from "@hyperledger/cactus-core";
 import {
   EthContractInvocationType,
   Web3SigningCredentialType,
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorOpenCBDC,
   PluginFactoryLedgerConnector,
   ReceiptType,
   InvokeContractV1Request,
   BesuApiClientOptions,
   BesuApiClient,
-  GetBesuRecordV1Request,
+  GetOpenCBDCRecordV1Request,
 } from "../../../../../main/typescript/public-api";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
 import {
@@ -88,7 +88,7 @@ test(testCase, async (t: Test) => {
     pluginImportType: PluginImportType.Local,
   });
 
-  const connector: PluginLedgerConnectorBesu = await factory.create({
+  const connector: PluginLedgerConnectorOpenCBDC = await factory.create({
     rpcApiHttpHost,
     rpcApiWsHost,
     logLevel,
@@ -198,7 +198,7 @@ test(testCase, async (t: Test) => {
     );
   });
 
-  test("getBesuRecord test 1", async (t2: Test) => {
+  test("getOpenCBDCRecord test 1", async (t2: Test) => {
     const testEthAccount2 = web3.eth.accounts.create(uuidv4());
 
     const { rawTransaction } = await web3.eth.accounts.signTransaction(
@@ -224,15 +224,15 @@ test(testCase, async (t: Test) => {
       },
     });
 
-    const request: GetBesuRecordV1Request = {
+    const request: GetOpenCBDCRecordV1Request = {
       transactionHash: transactionReceipt.transactionReceipt.transactionHash,
     };
-    const getInputData = await api.getBesuRecordV1(request);
+    const getInputData = await api.getOpenCBDCRecordV1(request);
     t2.ok(getInputData, "API response object is truthy");
     t2.end();
   });
 
-  test("getBesuRecord test 2", async (t2: Test) => {
+  test("getOpenCBDCRecord test 2", async (t2: Test) => {
     const newName = `DrCactus${uuidv4()}`;
     const setNameOut = await connector.invokeContract({
       contractName: HelloWorldContractJson.contractName,
@@ -288,7 +288,7 @@ test(testCase, async (t: Test) => {
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
     };
-    const { callOutput: getNameOut } = await connector.getBesuRecord({
+    const { callOutput: getNameOut } = await connector.getOpenCBDCRecord({
       invokeCall: req,
     });
     t2.equal(getNameOut, newName, `getName() output reflects the update OK`);
@@ -325,7 +325,7 @@ test(testCase, async (t: Test) => {
       },
     };
 
-    const { callOutput } = await connector.getBesuRecord({ invokeCall: req2 });
+    const { callOutput } = await connector.getOpenCBDCRecord({ invokeCall: req2 });
     t2.equal(
       callOutput,
       newName,

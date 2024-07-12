@@ -16,13 +16,13 @@ import {
 
 import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 
-import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-opencbdc";
+import { PluginLedgerConnectorOpenCBDC } from "../plugin-ledger-connector-opencbdc";
 import { DeployContractSolidityBytecodeV1Request } from "../generated/openapi/typescript-axios";
 import OAS from "../../json/openapi.json";
 
 export interface IDeployContractSolidityBytecodeOptions {
   logLevel?: LogLevelDesc;
-  connector: PluginLedgerConnectorBesu;
+  connector: PluginLedgerConnectorOpenCBDC;
 }
 
 export class DeployContractSolidityBytecodeEndpoint

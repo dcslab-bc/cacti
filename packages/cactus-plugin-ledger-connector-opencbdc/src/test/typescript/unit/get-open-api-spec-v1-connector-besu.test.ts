@@ -17,7 +17,7 @@ import {
   BesuApiClient,
   BesuApiClientOptions,
   PluginFactoryLedgerConnector,
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorOpenCBDC,
 } from "../../../main/typescript/public-api";
 
 describe(__filename, () => {
@@ -45,7 +45,7 @@ describe(__filename, () => {
       pluginImportType: PluginImportType.Local,
     });
 
-    const connector: PluginLedgerConnectorBesu = await factory.create({
+    const connector: PluginLedgerConnectorOpenCBDC = await factory.create({
       rpcApiHttpHost,
       rpcApiWsHost,
       logLevel,

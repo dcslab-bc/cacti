@@ -4,9 +4,9 @@ import { Server as SocketIoServer } from "socket.io";
 import { PluginRegistry } from "@hyperledger/cactus-core";
 import {
   Web3SigningCredentialType,
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorOpenCBDC,
   BesuApiClient,
-  IPluginLedgerConnectorBesuOptions,
+  IPluginLedgerConnectorOpenCBDCOptions,
   ReceiptType,
   RunTransactionRequest,
   InvokeContractV1Request,
@@ -16,7 +16,7 @@ import {
   GetBalanceV1Request,
   GetPastLogsV1Request,
   GetBlockV1Request,
-  GetBesuRecordV1Request,
+  GetOpenCBDCRecordV1Request,
 } from "../../../../../main/typescript/public-api";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
 import {
@@ -100,14 +100,14 @@ test(testCase, async (t: Test) => {
     plugins: [signedKeychainPlugin, unsignedKeychainPlugin],
   });
 
-  const options: IPluginLedgerConnectorBesuOptions = {
+  const options: IPluginLedgerConnectorOpenCBDCOptions = {
     instanceId: uuidv4(),
     rpcApiHttpHost,
     rpcApiWsHost,
     pluginRegistry,
     logLevel,
   };
-  const connector = new PluginLedgerConnectorBesu(options);
+  const connector = new PluginLedgerConnectorOpenCBDC(options);
   pluginRegistry.add(connector);
 
   const expressApp = express();
@@ -152,7 +152,7 @@ test(testCase, async (t: Test) => {
   const fBalance = "getBalanceV1";
   const fBlock = "getBlockV1";
   const fPastLogs = "getPastLogsV1";
-  const fRecord = "getBesuRecordV1";
+  const fRecord = "getOpenCBDCRecordV1";
   const cOk = "without bad request error";
   const cWithoutParams = "not sending all required parameters";
   const cInvalidParams = "sending invalid parameters";
@@ -821,8 +821,8 @@ test(testCase, async (t: Test) => {
       transactionHash: (runTxRes.data as any).data.transactionReceipt
         .transactionHash,
     };
-    const res = await apiClient.getBesuRecordV1(
-      parameters as GetBesuRecordV1Request,
+    const res = await apiClient.getOpenCBDCRecordV1(
+      parameters as GetOpenCBDCRecordV1Request,
     );
     t2.equal(
       res.status,
@@ -837,7 +837,7 @@ test(testCase, async (t: Test) => {
   test(`${testCase} - ${fRecord} - ${cWithoutParams}`, async (t2: Test) => {
     try {
       const parameters = {};
-      await apiClient.getBesuRecordV1(parameters as GetBesuRecordV1Request);
+      await apiClient.getOpenCBDCRecordV1(parameters as GetOpenCBDCRecordV1Request);
     } catch (e) {
       t2.equal(
         e.response.status,
@@ -862,7 +862,7 @@ test(testCase, async (t: Test) => {
         transactionHash: "",
         fake: 5,
       };
-      await apiClient.getBesuRecordV1(parameters as GetBesuRecordV1Request);
+      await apiClient.getOpenCBDCRecordV1(parameters as GetOpenCBDCRecordV1Request);
     } catch (e) {
       t2.equal(
         e.response.status,

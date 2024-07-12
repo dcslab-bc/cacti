@@ -504,50 +504,50 @@ export interface GetBalanceV1Response {
 /**
  * 
  * @export
- * @interface GetBesuRecordV1Request
+ * @interface GetOpenCBDCRecordV1Request
  */
-export interface GetBesuRecordV1Request {
+export interface GetOpenCBDCRecordV1Request {
     /**
      * 
      * @type {InvokeContractV1Request}
-     * @memberof GetBesuRecordV1Request
+     * @memberof GetOpenCBDCRecordV1Request
      */
     'invokeCall'?: InvokeContractV1Request;
     /**
      * 
      * @type {string}
-     * @memberof GetBesuRecordV1Request
+     * @memberof GetOpenCBDCRecordV1Request
      */
     'transactionHash'?: string;
 }
 /**
  * 
  * @export
- * @interface GetBesuRecordV1Response
+ * @interface GetOpenCBDCRecordV1Response
  */
-export interface GetBesuRecordV1Response {
+export interface GetOpenCBDCRecordV1Response {
     /**
      * 
      * @type {string}
-     * @memberof GetBesuRecordV1Response
+     * @memberof GetOpenCBDCRecordV1Response
      */
     'ledgerId'?: string;
     /**
      * 
      * @type {string}
-     * @memberof GetBesuRecordV1Response
+     * @memberof GetOpenCBDCRecordV1Response
      */
     'stateContract'?: string;
     /**
      * 
      * @type {any}
-     * @memberof GetBesuRecordV1Response
+     * @memberof GetOpenCBDCRecordV1Response
      */
     'transactionInputData'?: any;
     /**
      * 
      * @type {any}
-     * @memberof GetBesuRecordV1Response
+     * @memberof GetOpenCBDCRecordV1Response
      */
     'callOutput'?: any;
 }
@@ -1358,11 +1358,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
-         * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
+         * @param {GetOpenCBDCRecordV1Request} [GetOpenCBDCRecordV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBesuRecordV1: async (getBesuRecordV1Request?: GetBesuRecordV1Request, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getOpenCBDCRecordV1: async (GetOpenCBDCRecordV1Request?: GetOpenCBDCRecordV1Request, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-opencbdc/get-besu-record`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1382,7 +1382,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(getBesuRecordV1Request, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(GetOpenCBDCRecordV1Request, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1690,12 +1690,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
-         * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
+         * @param {GetOpenCBDCRecordV1Request} [GetOpenCBDCRecordV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getBesuRecordV1(getBesuRecordV1Request?: GetBesuRecordV1Request, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetBesuRecordV1Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getBesuRecordV1(getBesuRecordV1Request, options);
+        async getOpenCBDCRecordV1(GetOpenCBDCRecordV1Request?: GetOpenCBDCRecordV1Request, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetOpenCBDCRecordV1Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getOpenCBDCRecordV1(GetOpenCBDCRecordV1Request, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1817,12 +1817,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
-         * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
+         * @param {GetOpenCBDCRecordV1Request} [GetOpenCBDCRecordV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBesuRecordV1(getBesuRecordV1Request?: GetBesuRecordV1Request, options?: any): AxiosPromise<GetBesuRecordV1Response> {
-            return localVarFp.getBesuRecordV1(getBesuRecordV1Request, options).then((request) => request(axios, basePath));
+        getOpenCBDCRecordV1(GetOpenCBDCRecordV1Request?: GetOpenCBDCRecordV1Request, options?: any): AxiosPromise<GetOpenCBDCRecordV1Response> {
+            return localVarFp.getOpenCBDCRecordV1(GetOpenCBDCRecordV1Request, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1939,13 +1939,13 @@ export class DefaultApi extends BaseAPI {
     /**
      * 
      * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
-     * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
+     * @param {GetOpenCBDCRecordV1Request} [GetOpenCBDCRecordV1Request] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getBesuRecordV1(getBesuRecordV1Request?: GetBesuRecordV1Request, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getBesuRecordV1(getBesuRecordV1Request, options).then((request) => request(this.axios, this.basePath));
+    public getOpenCBDCRecordV1(GetOpenCBDCRecordV1Request?: GetOpenCBDCRecordV1Request, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getOpenCBDCRecordV1(GetOpenCBDCRecordV1Request, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
