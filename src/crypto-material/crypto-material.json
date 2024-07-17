@@ -1,0 +1,78 @@
+{
+  "info": {
+    "description": "this file contains data to be used for testing purposes only."
+  },
+  "ledger": {
+    "besu": {
+      "id": "a101caa5-9a23-4ed1-bd03-903ae3415c31"
+    },
+    "parsec": {
+      "id": "7401362b-4b39-4826-9fdc-625699ceb98f"
+    },
+    "opencbdc": {
+      "id": "ba954d60-2f88-4d2e-84ea-57f6471d509d"
+    }
+  },
+  "keychains": {
+    "node": {
+      "id": "b1975fb9-f83b-405b-8d84-8e1eebf1fadf"
+    },
+    "besu": {
+      "id": "df05d3c2-ddd5-4074-aae3-526564217459"
+    },
+    "parsec": {
+      "id": "d741fb4a-c95c-4205-8afa-758a9423234f"
+    },
+    "opencbdc": {
+      "id": "bee97a8b-9b00-4569-8b77-b59bfef9d76d"
+    }
+  },
+  "demoApps": {
+    "besu": {
+      "deploy": {
+        "address": "0xfa5ac2d9bcb1ed40844ec265f52d852f06a51da9",
+        "privateKey": "0xe6c327b928a5b6802cb859b297813ca4fe20e27af4ead95132dc5d60cfa750b3"
+      }
+    },
+    "parsec": {
+      "deploy": {
+        "address": "0xfa5ac2d9bcb1ed40844ec265f52d852f06a51da9",
+        "privateKey": "0xe6c327b928a5b6802cb859b297813ca4fe20e27af4ead95132dc5d60cfa750b3"
+      }
+    },
+    "scenarioAB": {
+      "besu": {
+        "hana": {
+          "address": "0x5bcffe4ae08979bf2d9cfa07ef4608d0d81259a2",
+          "privateKey": "0x6b7c9fba43e127b754754b3d864857a0d5e53644ba7fa3629634aef501a1b389"
+        },
+        "localInter": {
+          "hana": {
+            "address": "0x811ba207076ede22656a9e9c114525f2be64107b",
+            "privateKey": "0x841b59625cad027d7deadb52d178bcc578a804a4db017cf7dbb706543bd4ebc4"
+          },
+          "boa": {
+            "address": "0x08e756af5c60bac45ab547f6a91eba2c7125dece",
+            "privateKey": "0x86fabf732ebea80fbe9134e0940b638f8001715757307d051562a300474fdee1"
+          }
+        }
+      },
+      "parsec": {
+        "boa": {
+          "address": "0xb0ad607aba940378b1c2fbbae518cacc43cb6f85",
+          "privateKey": "0x50216399786df46d2dd627774101951f5dcd8d4b9dd4dadfa125320af1a2ab12"
+        },
+        "foreignInter": {
+          "boa": {
+            "address": "0x053a3ca0da7dad1200f848be3c24091d89a1395d",
+            "privateKey": "0x4bab2789f760d4f2f437225e6bf18e1b78709f7fa057f11bb93f60d0fd331faa"
+          },
+          "hana": {
+            "address": "0x09ad7f7e212eb67fbfe7cc28428f03795a10f6ea",
+            "privateKey": "0xbf858af31c1f5290057fa26aeec9091c9c6e0832626b0bb4ec590b151de2e268"
+          }
+        }
+      }
+    }
+  }
+}
