@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Hyperledger Cactus Plugin - Connector Besu
- * Can perform basic tasks on a Besu ledger
+ * Hyperledger Cactus Plugin - Connector Parsec
+ * Can perform basic tasks on a Parsec ledger
  *
  * The version of the OpenAPI document: v2.0.0-alpha.2
  * 

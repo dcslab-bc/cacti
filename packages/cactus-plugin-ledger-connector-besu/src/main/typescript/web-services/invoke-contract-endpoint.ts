@@ -14,14 +14,14 @@ import {
 } from "@hyperledger/cactus-core-api";
 import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 
-import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-besu";
+import { PluginLedgerConnectorParsec } from "../plugin-ledger-connector-parsec";
 
 import OAS from "../../json/openapi.json";
 import { InvokeContractV1Request } from "../generated/openapi/typescript-axios";
 
 export interface IInvokeContractEndpointOptions {
   logLevel?: LogLevelDesc;
-  connector: PluginLedgerConnectorBesu;
+  connector: PluginLedgerConnectorParsec;
 }
 
 export class InvokeContractEndpoint implements IWebServiceEndpoint {
@@ -43,9 +43,9 @@ export class InvokeContractEndpoint implements IWebServiceEndpoint {
     this.log = LoggerProvider.getOrCreate({ level, label });
   }
 
-  public get oasPath(): (typeof OAS.paths)["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/invoke-contract"] {
+  public get oasPath(): (typeof OAS.paths)["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/invoke-contract"] {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/invoke-contract"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/invoke-contract"
     ];
   }
 

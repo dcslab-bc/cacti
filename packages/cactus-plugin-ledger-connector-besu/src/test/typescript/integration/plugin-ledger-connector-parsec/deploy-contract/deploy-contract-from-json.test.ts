@@ -5,17 +5,17 @@ import { PluginRegistry } from "@hyperledger/cactus-core";
 import {
   EthContractInvocationType,
   Web3SigningCredentialType,
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorParsec,
   PluginFactoryLedgerConnector,
   Web3SigningCredentialCactusKeychainRef,
   ReceiptType,
-  BesuApiClient,
+  ParsecApiClient,
   WatchBlocksV1Progress,
   Web3BlockHeader,
 } from "../../../../../main/typescript/public-api";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
 import {
-  BesuTestLedger,
+  ParsecTestLedger,
   pruneDockerAllIfGithubAction,
 } from "@hyperledger/cactus-test-tooling";
 import {
@@ -30,8 +30,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import http from "http";
 import { AddressInfo } from "net";
-import { K_CACTUS_BESU_TOTAL_TX_COUNT } from "../../../../../main/typescript/prometheus-exporter/metrics";
-import { BesuApiClientOptions } from "../../../../../main/typescript/api-client/besu-api-client";
+import { K_CACTUS_PARSEC_TOTAL_TX_COUNT } from "../../../../../main/typescript/prometheus-exporter/metrics";
+import { ParsecApiClientOptions } from "../../../../../main/typescript/api-client/parsec-api-client";
 
 const testCase = "deploys contract via .json file";
 const logLevel: LogLevelDesc = "TRACE";
@@ -43,31 +43,27 @@ test("BEFORE " + testCase, async (t: Test) => {
 });
 
 test(testCase, async (t: Test) => {
-  const containerImageVersion = "2021-08-24--feat-1244";
-  const containerImageName =
-    "ghcr.io/hyperledger/cactus-besu-21-1-6-all-in-one";
-  const besuOptions = { containerImageName, containerImageVersion };
-  const besuTestLedger = new BesuTestLedger(besuOptions);
-  await besuTestLedger.start();
+  const parsecTestLedger = new ParsecTestLedger();
+  await parsecTestLedger.start();
 
   test.onFinish(async () => {
-    await besuTestLedger.stop();
-    await besuTestLedger.destroy();
+    await parsecTestLedger.stop();
+    await parsecTestLedger.destroy();
     await pruneDockerAllIfGithubAction({ logLevel });
   });
 
-  const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
-  const rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
+  const rpcApiHttpHost = await parsecTestLedger.getRpcApiHttpHost();
+  const rpcApiWsHost = await parsecTestLedger.getRpcApiWsHost();
 
   /**
-   * Constant defining the standard 'dev' Besu genesis.json contents.
+   * Constant defining the standard 'dev' Parsec genesis.json contents.
    *
-   * @see https://github.com/hyperledger/besu/blob/21.1.6/config/src/main/resources/dev.json
+   * @see https://github.com/hyperledger/parsec/blob/1.5.1/config/src/main/resources/dev.json
    */
 
-  const firstHighNetWorthAccount = besuTestLedger.getGenesisAccountPubKey();
-  const besuKeyPair = {
-    privateKey: besuTestLedger.getGenesisAccountPrivKey(),
+  const firstHighNetWorthAccount = parsecTestLedger.getGenesisAccountPubKey();
+  const parsecKeyPair = {
+    privateKey: parsecTestLedger.getGenesisAccountPrivKey(),
   };
 
   const web3 = new Web3(rpcApiHttpHost);
@@ -92,13 +88,14 @@ test(testCase, async (t: Test) => {
     pluginImportType: PluginImportType.Local,
   });
 
-  const connector: PluginLedgerConnectorBesu = await factory.create({
+  const connector: PluginLedgerConnectorParsec = await factory.create({
     rpcApiHttpHost,
     rpcApiWsHost,
     logLevel,
     instanceId: uuidv4(),
     pluginRegistry: new PluginRegistry({ plugins: [keychainPlugin] }),
   });
+  await connector.onPluginInit();
 
   const expressApp = express();
   expressApp.use(bodyParser.json({ limit: "250mb" }));
@@ -118,13 +115,15 @@ test(testCase, async (t: Test) => {
   const { address, port } = addressInfo;
   const apiHost = `http://${address}:${port}`;
   t.comment(
-    `Metrics URL: ${apiHost}/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-prometheus-exporter-metrics`,
+    `Metrics URL: ${apiHost}/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-prometheus-exporter-metrics`,
   );
 
   const wsBasePath = apiHost + Constants.SocketIoConnectionPathV1;
   t.comment("WS base path: " + wsBasePath);
-  const besuApiClientOptions = new BesuApiClientOptions({ basePath: apiHost });
-  const apiClient = new BesuApiClient(besuApiClientOptions);
+  const parsecApiClientOptions = new ParsecApiClientOptions({
+    basePath: apiHost,
+  });
+  const apiClient = new ParsecApiClient(parsecApiClientOptions);
 
   await connector.getOrCreateWebServices();
   await connector.registerWebServices(expressApp, wsApi);
@@ -132,7 +131,7 @@ test(testCase, async (t: Test) => {
   await connector.transact({
     web3SigningCredential: {
       ethAccount: firstHighNetWorthAccount,
-      secret: besuKeyPair.privateKey,
+      secret: parsecKeyPair.privateKey,
       type: Web3SigningCredentialType.PrivateKeyHex,
     },
     transactionConfig: {
@@ -180,7 +179,7 @@ test(testCase, async (t: Test) => {
       constructorArgs: [],
       web3SigningCredential: {
         ethAccount: firstHighNetWorthAccount,
-        secret: besuKeyPair.privateKey,
+        secret: parsecKeyPair.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
       bytecode: HelloWorldContractJson.bytecode,
@@ -211,7 +210,7 @@ test(testCase, async (t: Test) => {
       params: [],
       signingCredential: {
         ethAccount: firstHighNetWorthAccount,
-        secret: besuKeyPair.privateKey,
+        secret: parsecKeyPair.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
     });
@@ -473,14 +472,14 @@ test(testCase, async (t: Test) => {
     const res = await apiClient.getPrometheusMetricsV1();
     const promMetricsOutput =
       "# HELP " +
-      K_CACTUS_BESU_TOTAL_TX_COUNT +
+      K_CACTUS_PARSEC_TOTAL_TX_COUNT +
       " Total transactions executed\n" +
       "# TYPE " +
-      K_CACTUS_BESU_TOTAL_TX_COUNT +
+      K_CACTUS_PARSEC_TOTAL_TX_COUNT +
       " gauge\n" +
-      K_CACTUS_BESU_TOTAL_TX_COUNT +
+      K_CACTUS_PARSEC_TOTAL_TX_COUNT +
       '{type="' +
-      K_CACTUS_BESU_TOTAL_TX_COUNT +
+      K_CACTUS_PARSEC_TOTAL_TX_COUNT +
       '"} 9';
     t2.ok(res, "Response truthy OK");
     t2.ok(res.data);

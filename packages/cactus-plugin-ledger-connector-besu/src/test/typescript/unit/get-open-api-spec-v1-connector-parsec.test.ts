@@ -14,10 +14,10 @@ import { AddressInfo } from "net";
 import { Server as SocketIoServer } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
 import {
-  BesuApiClient,
-  BesuApiClientOptions,
+  ParsecApiClient,
+  ParsecApiClientOptions,
   PluginFactoryLedgerConnector,
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorParsec,
 } from "../../../main/typescript/public-api";
 
 describe(__filename, () => {
@@ -34,7 +34,7 @@ describe(__filename, () => {
   const expressApp = express();
   expressApp.use(bodyParser.json({ limit: "250mb" }));
   const server = http.createServer(expressApp);
-  let apiClient: BesuApiClient;
+  let apiClient: ParsecApiClient;
 
   afterAll(async () => {
     await Servers.shutdown(server);
@@ -45,7 +45,7 @@ describe(__filename, () => {
       pluginImportType: PluginImportType.Local,
     });
 
-    const connector: PluginLedgerConnectorBesu = await factory.create({
+    const connector: PluginLedgerConnectorParsec = await factory.create({
       rpcApiHttpHost,
       rpcApiWsHost,
       logLevel,
@@ -68,11 +68,11 @@ describe(__filename, () => {
     const { address, port } = addressInfo;
     const apiHost = `http://${address}:${port}`;
 
-    const besuApiClientOptions = new BesuApiClientOptions({
+    const parsecApiClientOptions = new ParsecApiClientOptions({
       basePath: apiHost,
     });
-    apiClient = new BesuApiClient(besuApiClientOptions);
-    log.debug("Instantiated BesuApiClient OK");
+    apiClient = new ParsecApiClient(parsecApiClientOptions);
+    log.debug("Instantiated ParsecApiClient OK");
   });
 
   it("Returns a JSON document containing the Open API specification of the plugin.", async () => {

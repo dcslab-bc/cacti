@@ -2,32 +2,44 @@ import "jest-extended";
 import { v4 as uuidv4 } from "uuid";
 import { PluginRegistry } from "@hyperledger/cactus-core";
 import {
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorParsec,
   PluginFactoryLedgerConnector,
-  GetBlockV1Request,
+  GetBalanceV1Request,
 } from "../../../../../main/typescript/public-api";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
-import { BesuTestLedger } from "@hyperledger/cactus-test-tooling";
-import { LogLevelDesc, LoggerProvider } from "@hyperledger/cactus-common";
+import { ParsecTestLedger } from "@hyperledger/cactus-test-tooling";
+import { LogLevelDesc } from "@hyperledger/cactus-common";
 import HelloWorldContractJson from "../../../../solidity/hello-world-contract/HelloWorld.json";
 import Web3 from "web3";
 import { PluginImportType } from "@hyperledger/cactus-core-api";
 
-describe("PluginLedgerConnectorBesu", () => {
-  const logLevel: LogLevelDesc = "INFO";
-  const log = LoggerProvider.getOrCreate({
-    label: "besu-get-block-test.ts",
-    level: logLevel,
-  });
-  const besuTestLedger = new BesuTestLedger();
-  let connector: PluginLedgerConnectorBesu;
+describe("PluginLedgerConnectorParsec", () => {
+  const logLevel: LogLevelDesc = "TRACE";
+  const containerImageVersion = "2021-08-24--feat-1244";
+  const containerImageName =
+    "ghcr.io/hyperledger/cactus-parsec-21-1-6-all-in-one";
+  const parsecOptions = { containerImageName, containerImageVersion };
+  const parsecTestLedger = new ParsecTestLedger(parsecOptions);
 
   beforeAll(async () => {
-    const omitContainerImagePull = false;
-    await besuTestLedger.start(omitContainerImagePull);
+    await parsecTestLedger.start();
+  });
 
-    const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
-    const rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
+  afterAll(async () => {
+    await parsecTestLedger.stop();
+    await parsecTestLedger.destroy();
+  });
+
+  test("can get balance of an ETH account", async () => {
+    const rpcApiHttpHost = await parsecTestLedger.getRpcApiHttpHost();
+    const rpcApiWsHost = await parsecTestLedger.getRpcApiWsHost();
+
+    /**
+     * Constant defining the standard 'dev' Parsec genesis.json contents.
+     *
+     * @see https://github.com/hyperledger/parsec/blob/21.1.6/config/src/main/resources/dev.json
+     */
+    const firstHighNetWorthAccount = parsecTestLedger.getGenesisAccountPubKey();
     const web3 = new Web3(rpcApiHttpHost);
     const testEthAccount = web3.eth.accounts.create(uuidv4());
 
@@ -49,27 +61,17 @@ describe("PluginLedgerConnectorBesu", () => {
     const factory = new PluginFactoryLedgerConnector({
       pluginImportType: PluginImportType.Local,
     });
-    connector = await factory.create({
+    const connector: PluginLedgerConnectorParsec = await factory.create({
       rpcApiHttpHost,
       rpcApiWsHost,
       instanceId: uuidv4(),
       pluginRegistry: new PluginRegistry({ plugins: [keychainPlugin] }),
     });
-    await connector.onPluginInit();
-  });
 
-  afterAll(async () => {
-    await besuTestLedger.stop();
-    await besuTestLedger.destroy();
-  });
-
-  it("can get block from blockchain", async () => {
-    const request: GetBlockV1Request = { blockHashOrBlockNumber: 0 };
-    const currentBlock = await connector.getBlock(request);
-    log.debug("Current Block=%o", currentBlock);
-    //makes the information in to string
-    expect(currentBlock).toBeTruthy();
-    expect(currentBlock).toBeObject();
-    expect(currentBlock).not.toBeEmptyObject();
+    const req: GetBalanceV1Request = { address: firstHighNetWorthAccount };
+    const currentBalance = await connector.getBalance(req);
+    expect(currentBalance).toBeTruthy();
+    expect(currentBalance).toBeObject();
+    expect(currentBalance).not.toBeEmptyObject();
   });
 });

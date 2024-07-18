@@ -16,31 +16,31 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [2.0.0-alpha.1](https://github.com/hyperledger/cacti/compare/v2.0.0-alpha-prerelease...v2.0.0-alpha.1) (2023-05-19)
 
-**Note:** Version bump only for package @hyperledger/cactus-plugin-htlc-coordinator-besu
+**Note:** Version bump only for package @hyperledger/cactus-plugin-htlc-coordinator-parsec
 
 # [2.0.0-alpha-prerelease](https://github.com/hyperledger/cacti/compare/v1.2.0...v2.0.0-alpha-prerelease) (2023-05-11)
 
-**Note:** Version bump only for package @hyperledger/cactus-plugin-htlc-coordinator-besu
+**Note:** Version bump only for package @hyperledger/cactus-plugin-htlc-coordinator-parsec
 
 # [1.2.0](https://github.com/hyperledger/cactus/compare/v1.1.3...v1.2.0) (2023-03-28)
 
-**Note:** Version bump only for package @hyperledger/cactus-plugin-htlc-coordinator-besu
+**Note:** Version bump only for package @hyperledger/cactus-plugin-htlc-coordinator-parsec
 
 ## [1.1.3](https://github.com/hyperledger/cactus/compare/v1.1.2...v1.1.3) (2022-12-08)
 
-**Note:** Version bump only for package @hyperledger/cactus-plugin-htlc-coordinator-besu
+**Note:** Version bump only for package @hyperledger/cactus-plugin-htlc-coordinator-parsec
 
 ## [1.1.2](https://github.com/hyperledger/cactus/compare/v1.1.1...v1.1.2) (2022-11-11)
 
-**Note:** Version bump only for package @hyperledger/cactus-plugin-htlc-coordinator-besu
+**Note:** Version bump only for package @hyperledger/cactus-plugin-htlc-coordinator-parsec
 
 ## [1.1.1](https://github.com/hyperledger/cactus/compare/v1.1.0...v1.1.1) (2022-11-03)
 
-**Note:** Version bump only for package @hyperledger/cactus-plugin-htlc-coordinator-besu
+**Note:** Version bump only for package @hyperledger/cactus-plugin-htlc-coordinator-parsec
 
 # [1.1.0](https://github.com/hyperledger/cactus/compare/v1.0.0...v1.1.0) (2022-10-17)
 
-**Note:** Version bump only for package @hyperledger/cactus-plugin-htlc-coordinator-besu
+**Note:** Version bump only for package @hyperledger/cactus-plugin-htlc-coordinator-parsec
 
 # [1.0.0](https://github.com/hyperledger/cactus/compare/v1.0.0-rc.3...v1.0.0) (2022-03-16)
 

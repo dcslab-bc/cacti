@@ -12,7 +12,7 @@ import OAS from "../json/openapi.json";
 
 import Web3 from "web3";
 
-import type { WebsocketProvider } from "web3-core";
+import { HttpProvider, WebsocketProvider } from "web3-core";
 //import EEAClient, { ICallOptions, IWeb3InstanceExtended } from "web3-eea";
 import Web3JsQuorum, { IWeb3Quorum } from "web3js-quorum";
 
@@ -76,35 +76,35 @@ import {
   GetTransactionV1Response,
   GetBlockV1Request,
   GetBlockV1Response,
-  GetBesuRecordV1Request,
-  GetBesuRecordV1Response,
+  GetParsecRecordV1Request,
+  GetParsecRecordV1Response,
 } from "./generated/openapi/typescript-axios";
 
 import { InvokeContractEndpoint } from "./web-services/invoke-contract-endpoint";
 import { isWeb3SigningCredentialNone } from "./model-type-guards";
-import { BesuSignTransactionEndpointV1 } from "./web-services/sign-transaction-endpoint-v1";
+import { ParsecSignTransactionEndpointV1 } from "./web-services/sign-transaction-endpoint-v1";
 import { PrometheusExporter } from "./prometheus-exporter/prometheus-exporter";
 import {
   GetPrometheusExporterMetricsEndpointV1,
   IGetPrometheusExporterMetricsEndpointV1Options,
 } from "./web-services/get-prometheus-exporter-metrics-endpoint-v1";
 import { WatchBlocksV1Endpoint } from "./web-services/watch-blocks-v1-endpoint";
-import { RuntimeError } from "run-time-error-cjs";
+import { RuntimeError } from "run-time-error";
 import { GetBalanceEndpoint } from "./web-services/get-balance-endpoint";
 import { GetTransactionEndpoint } from "./web-services/get-transaction-endpoint";
 import { GetPastLogsEndpoint } from "./web-services/get-past-logs-endpoint";
 import { RunTransactionEndpoint } from "./web-services/run-transaction-endpoint";
 import { GetBlockEndpoint } from "./web-services/get-block-v1-endpoint-";
-import { GetBesuRecordEndpointV1 } from "./web-services/get-besu-record-endpoint-v1";
+import { GetParsecRecordEndpointV1 } from "./web-services/get-parsec-record-endpoint-v1";
 import { AbiItem } from "web3-utils";
 import {
   GetOpenApiSpecV1Endpoint,
   IGetOpenApiSpecV1EndpointOptions,
 } from "./web-services/get-open-api-spec-v1-endpoint";
 
-export const E_KEYCHAIN_NOT_FOUND = "cactus.connector.besu.keychain_not_found";
+export const E_KEYCHAIN_NOT_FOUND = "cactus.connector.parsec.keychain_not_found";
 
-export interface IPluginLedgerConnectorBesuOptions
+export interface IPluginLedgerConnectorParsecOptions
   extends ICactusPluginOptions {
   rpcApiHttpHost: string;
   rpcApiWsHost: string;
@@ -113,7 +113,7 @@ export interface IPluginLedgerConnectorBesuOptions
   logLevel?: LogLevelDesc;
 }
 
-export class PluginLedgerConnectorBesu
+export class PluginLedgerConnectorParsec
   implements
     IPluginLedgerConnector<
       DeployContractSolidityBytecodeV1Request,
@@ -127,7 +127,8 @@ export class PluginLedgerConnectorBesu
   private readonly instanceId: string;
   public prometheusExporter: PrometheusExporter;
   private readonly log: Logger;
-  private readonly web3Provider: WebsocketProvider;
+  private readonly web3WSProvider!: WebsocketProvider;
+  private readonly web3HTTPProvider!: HttpProvider;
   private readonly web3: Web3;
   private web3Quorum: IWeb3Quorum | undefined;
   private readonly pluginRegistry: PluginRegistry;
@@ -138,13 +139,13 @@ export class PluginLedgerConnectorBesu
   private endpoints: IWebServiceEndpoint[] | undefined;
   private httpServer: Server | SecureServer | null = null;
 
-  public static readonly CLASS_NAME = "PluginLedgerConnectorBesu";
+  public static readonly CLASS_NAME = "PluginLedgerConnectorParsec";
 
   public get className(): string {
-    return PluginLedgerConnectorBesu.CLASS_NAME;
+    return PluginLedgerConnectorParsec.CLASS_NAME;
   }
 
-  constructor(public readonly options: IPluginLedgerConnectorBesuOptions) {
+  constructor(public readonly options: IPluginLedgerConnectorParsecOptions) {
     const fnTag = `${this.className}#constructor()`;
     Checks.truthy(options, `${fnTag} arg options`);
     Checks.truthy(options.rpcApiHttpHost, `${fnTag} options.rpcApiHttpHost`);
@@ -156,10 +157,17 @@ export class PluginLedgerConnectorBesu
     const label = this.className;
     this.log = LoggerProvider.getOrCreate({ level, label });
 
-    this.web3Provider = new Web3.providers.WebsocketProvider(
-      this.options.rpcApiWsHost,
-    );
-    this.web3 = new Web3(this.web3Provider);
+    if (this.options.rpcApiHttpHost) {
+      this.web3HTTPProvider = new Web3.providers.HttpProvider(
+        this.options.rpcApiHttpHost,
+      );
+      this.web3 = new Web3(this.web3HTTPProvider);
+    } else {
+      this.web3WSProvider = new Web3.providers.WebsocketProvider(
+        this.options.rpcApiWsHost,
+      );
+      this.web3 = new Web3(this.web3WSProvider);
+    }
     this.instanceId = options.instanceId;
     this.pluginRegistry = options.pluginRegistry;
     this.prometheusExporter =
@@ -200,6 +208,25 @@ export class PluginLedgerConnectorBesu
   }
 
   async registerWebServices(
+    app: Express,
+    wsApi: SocketIoServer,
+  ): Promise<IWebServiceEndpoint[]> {
+    const { web3 } = this;
+    const { logLevel } = this.options;
+    const webServices = await this.getOrCreateWebServices();
+    await Promise.all(webServices.map((ws) => ws.registerExpress(app)));
+
+    wsApi.on("connection", (socket: SocketIoSocket) => {
+      this.log.debug(`New Socket connected. ID=${socket.id}`);
+
+      socket.on(WatchBlocksV1.Subscribe, () => {
+        new WatchBlocksV1Endpoint({ web3, socket, logLevel }).subscribe();
+      });
+    });
+    return webServices;
+  }
+
+  async registerWebServicesExt(
     app: Express,
     wsApi: SocketIoServer,
   ): Promise<IWebServiceEndpoint[]> {
@@ -274,14 +301,14 @@ export class PluginLedgerConnectorBesu
       endpoints.push(endpoint);
     }
     {
-      const endpoint = new BesuSignTransactionEndpointV1({
+      const endpoint = new ParsecSignTransactionEndpointV1({
         connector: this,
         logLevel: this.options.logLevel,
       });
       endpoints.push(endpoint);
     }
     {
-      const endpoint = new GetBesuRecordEndpointV1({
+      const endpoint = new GetParsecRecordEndpointV1({
         connector: this,
         logLevel: this.options.logLevel,
       });
@@ -298,7 +325,7 @@ export class PluginLedgerConnectorBesu
     {
       const oasPath =
         OAS.paths[
-          "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-open-api-spec"
+          "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-open-api-spec"
         ];
 
       const operationId = oasPath.get.operationId;
@@ -320,7 +347,7 @@ export class PluginLedgerConnectorBesu
   }
 
   public getPackageName(): string {
-    return `@hyperledger/cactus-plugin-ledger-connector-besu`;
+    return `@hyperledger/cactus-plugin-ledger-connector-parsec`;
   }
 
   public async getConsensusAlgorithmFamily(): Promise<ConsensusAlgorithmFamily> {
@@ -469,45 +496,49 @@ export class PluginLedgerConnectorBesu
     if (req.invocationType === EthContractInvocationType.Call) {
       let callOutput;
       let success = false;
+
+      // disable private TX
+      // CHECKCHECK
       if (req.privateTransactionConfig) {
-        const data = method.encodeABI();
-        let privKey: string;
 
-        if (
-          req.signingCredential.type ==
-          Web3SigningCredentialType.CactusKeychainRef
-        ) {
-          const { keychainEntryKey, keychainId } =
-            req.signingCredential as Web3SigningCredentialCactusKeychainRef;
+        //         const data = method.encodeABI();
+        //         let privKey: string;
 
-          const keychainPlugin =
-            this.pluginRegistry.findOneByKeychainId(keychainId);
-          privKey = await keychainPlugin?.get(keychainEntryKey);
-        } else {
-          privKey = (
-            req.signingCredential as Web3SigningCredentialPrivateKeyHex
-          ).secret;
-        }
+        //         if (
+        //           req.signingCredential.type ==
+        //           Web3SigningCredentialType.CactusKeychainRef
+        //         ) {
+        //           const { keychainEntryKey, keychainId } =
+        //             req.signingCredential as Web3SigningCredentialCactusKeychainRef;
 
-        const fnParams = {
-          to: contractInstance.options.address,
-          data,
-          privateFrom: req.privateTransactionConfig.privateFrom,
-          privateKey: privKey,
-          privateFor: req.privateTransactionConfig.privateFor,
-        };
-        if (!this.web3Quorum) {
-          throw new RuntimeError(`InvalidState: web3Quorum not initialized.`);
-        }
+        //           const keychainPlugin =
+        //             this.pluginRegistry.findOneByKeychainId(keychainId);
+        //           privKey = await keychainPlugin?.get(keychainEntryKey);
+        //         } else {
+        //           privKey = (
+        //             req.signingCredential as Web3SigningCredentialPrivateKeyHex
+        //           ).secret;
+        //         }
 
-        const privacyGroupId =
-          this.web3Quorum.utils.generatePrivacyGroup(fnParams);
-        this.log.debug("Generated privacyGroupId: ", privacyGroupId);
-        callOutput = await this.web3Quorum.priv.call(privacyGroupId, {
-          to: contractInstance.options.address,
-          data,
-          // TODO: Update the "from" property of ICallOptions to be optional
-        });
+        //         const fnParams = {
+        //           to: contractInstance.options.address,
+        //           data,
+        //           privateFrom: req.privateTransactionConfig.privateFrom,
+        //           privateKey: privKey,
+        //           privateFor: req.privateTransactionConfig.privateFor,
+        //         };
+        //         if (!this.web3Quorum) {
+        //           throw new RuntimeError(`InvalidState: web3Quorum not initialized.`);
+        //         }
+
+        //         const privacyGroupId =
+        //           this.web3Quorum.utils.generatePrivacyGroup(fnParams);
+        //         this.log.debug("Generated privacyGroupId: ", privacyGroupId);
+        //         callOutput = await this.web3Quorum.priv.call(privacyGroupId, {
+        //           to: contractInstance.options.address,
+        //           data,
+        //           // TODO: Update the "from" property of ICallOptions to be optional
+        //         });
 
         success = true;
         this.log.debug(`Web3 EEA Call output: `, callOutput);
@@ -516,7 +547,9 @@ export class PluginLedgerConnectorBesu
         success = true;
       }
       return { success, callOutput };
+      
     } else if (req.invocationType === EthContractInvocationType.Send) {
+
       if (isWeb3SigningCredentialNone(req.signingCredential)) {
         throw new Error(`${fnTag} Cannot deploy contract with pre-signed TX`);
       }
@@ -561,9 +594,9 @@ export class PluginLedgerConnectorBesu
     const fnTag = `${this.className}#transact()`;
 
     switch (req.web3SigningCredential.type) {
-      // Web3SigningCredentialType.GETHKEYCHAINPASSWORD is removed as Hyperledger Besu doesn't support the PERSONAL api
+      // Web3SigningCredentialType.GETHKEYCHAINPASSWORD is removed as Hyperledger Parsec doesn't support the PERSONAL api
       // for --rpc-http-api as per the discussion mentioned here
-      // https://chat.hyperledger.org/channel/besu-contributors?msg=GqQXfW3k79ygRtx5Q
+      // https://chat.hyperledger.org/channel/parsec-contributors?msg=GqQXfW3k79ygRtx5Q
       case Web3SigningCredentialType.CactusKeychainRef: {
         return this.transactCactusKeychainRef(req);
       }
@@ -616,7 +649,7 @@ export class PluginLedgerConnectorBesu
   ): Promise<RunTransactionResponse> {
     const fnTag = `${this.className}#getTxReceipt()`;
 
-    this.log.debug("Received preliminary receipt from Besu node.");
+    this.log.debug("Received preliminary receipt from Parsec node.");
 
     if (txPoolReceipt instanceof Error) {
       this.log.debug(`${fnTag} sendSignedTransaction failed`, txPoolReceipt);
@@ -997,13 +1030,13 @@ export class PluginLedgerConnectorBesu
     const block = await this.web3.eth.getBlock(request.blockHashOrBlockNumber);
     return { block };
   }
-  public async getBesuRecord(
-    request: GetBesuRecordV1Request,
-  ): Promise<GetBesuRecordV1Response> {
-    const fnTag = `${this.className}#getBesuRecord()`;
+  public async getParsecRecord(
+    request: GetParsecRecordV1Request,
+  ): Promise<GetParsecRecordV1Response> {
+    const fnTag = `${this.className}#getParsecRecord()`;
     //////////////////////////////////////////////
     let abi: AbiItem[] | AbiItem = [];
-    const resp: GetBesuRecordV1Response = {};
+    const resp: GetParsecRecordV1Response = {};
     const txHash = request.transactionHash;
 
     if (txHash) {
@@ -1048,7 +1081,7 @@ export class PluginLedgerConnectorBesu
         request.invokeCall.invocationType === EthContractInvocationType.Call
       ) {
         const callOutput = await (method as any).call();
-        const res: GetBesuRecordV1Response = {
+        const res: GetParsecRecordV1Response = {
           callOutput,
         };
         return res;

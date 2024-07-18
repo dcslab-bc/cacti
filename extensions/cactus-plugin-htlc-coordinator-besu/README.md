@@ -1,4 +1,4 @@
-# `@hyperledger/cactus-plugin-htlc-coordinator-besu`
+# `@hyperledger/cactus-plugin-htlc-coordinator-parsec`
 
 Allows Cactus nodes to interact beetwen diferent networks. Using this we can perform:
 * Instantiate an existing HTLC plugin, also the own HTLC and the counterparty HTLC.
@@ -15,12 +15,12 @@ Allows Cactus nodes to interact beetwen diferent networks. Using this we can per
 
 ## Usage
 
-To use this import public-api and create new **PluginFactoryHTLCCoordinatorBesu*. Then use it to create a HTLC Coordinator.
+To use this import public-api and create new **PluginFactoryHTLCCoordinatorParsec*. Then use it to create a HTLC Coordinator.
 ```typescript
-    const factoryHTLC = new PluginFactoryHTLCCoordinatorBesu({
+    const factoryHTLC = new PluginFactoryHTLCCoordinatorParsec({
         pluginImportType: PluginImportType.Local,
     });
-    const pluginHTLCCoordinatorBesu = await factoryHTLC.create(pluginOptions);
+    const pluginHTLCCoordinatorParsec = await factoryHTLC.create(pluginOptions);
 ```
 You can make calls through the htlc coordinator to the plugin API:
 
@@ -33,7 +33,7 @@ async withdrawCounterparty(withdrawCounterpartyRequest: WithdrawCounterpartyRequ
 Call example to create an ownHTLC and instantiate a HTLC contract:
 ```typescript
     const ownHTLCRequest: OwnHTLCRequest = {
-        htlcPackage: HtlcPackage.BesuErc20,
+        htlcPackage: HtlcPackage.ParsecErc20,
         connectorInstanceId,
         keychainId,
         constructorArgs: [],
@@ -54,8 +54,8 @@ Call example to create an ownHTLC and instantiate a HTLC contract:
 The field "htlcPackage" can have the following values:
 ```typescript
     enum HtlcPackage {
-        Besu = 'BESU',
-        BesuErc20 = 'BESU_ERC20'
+        Parsec = 'PARSEC',
+        ParsecErc20 = 'PARSEC_ERC20'
     }
 ```
 

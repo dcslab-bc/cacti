@@ -18,10 +18,10 @@ import {
   IAsyncProvider,
 } from "@hyperledger/cactus-common";
 
-import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-besu";
+import { PluginLedgerConnectorParsec } from "../plugin-ledger-connector-parsec";
 
 export interface IGetPrometheusExporterMetricsEndpointV1Options {
-  connector: PluginLedgerConnectorBesu;
+  connector: PluginLedgerConnectorParsec;
   logLevel?: LogLevelDesc;
 }
 
@@ -57,9 +57,9 @@ export class GetPrometheusExporterMetricsEndpointV1
     return this.handleRequest.bind(this);
   }
 
-  public get oasPath(): (typeof OAS.paths)["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-prometheus-exporter-metrics"] {
+  public get oasPath(): (typeof OAS.paths)["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-prometheus-exporter-metrics"] {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-prometheus-exporter-metrics"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-prometheus-exporter-metrics"
     ];
   }
 

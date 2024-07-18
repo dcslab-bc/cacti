@@ -14,13 +14,13 @@ import {
 } from "@hyperledger/cactus-core-api";
 import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 
-import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-besu";
+import { PluginLedgerConnectorParsec } from "../plugin-ledger-connector-parsec";
 
 import OAS from "../../json/openapi.json";
 
 export interface IGetPastLogsEndpointOptions {
   logLevel?: LogLevelDesc;
-  connector: PluginLedgerConnectorBesu;
+  connector: PluginLedgerConnectorParsec;
 }
 
 export class GetPastLogsEndpoint implements IWebServiceEndpoint {
@@ -42,9 +42,9 @@ export class GetPastLogsEndpoint implements IWebServiceEndpoint {
     this.log = LoggerProvider.getOrCreate({ level, label });
   }
 
-  public get oasPath(): (typeof OAS.paths)["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-past-logs"] {
+  public get oasPath(): (typeof OAS.paths)["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-past-logs"] {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-past-logs"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-past-logs"
     ];
   }
 

@@ -3,7 +3,7 @@ import { PluginRegistry } from "@hyperledger/cactus-core";
 import "jest-extended";
 
 import {
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorParsec,
   PluginFactoryLedgerConnector,
   ReceiptType,
   Web3SigningCredentialType,
@@ -16,29 +16,29 @@ import Web3 from "web3";
 import { PluginImportType } from "@hyperledger/cactus-core-api";
 import { GetTransactionV1Request } from "../../../../main/typescript/generated/openapi/typescript-axios/api";
 
-const testCase = "PluginLedgerConnectorBesu";
+const testCase = "PluginLedgerConnectorParsec";
 describe(testCase, () => {
   const logLevel: LogLevelDesc = "TRACE";
-  const besuTestLedger = new BesuTestLedger();
+  const parsecTestLedger = new BesuTestLedger();
 
   afterAll(async () => {
-    await besuTestLedger.stop();
-    await besuTestLedger.destroy();
+    await parsecTestLedger.stop();
+    await parsecTestLedger.destroy();
   });
 
   test("can get past logs of an account", async () => {
-    await besuTestLedger.start();
+    await parsecTestLedger.start();
 
-    const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
-    const rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
+    const rpcApiHttpHost = await parsecTestLedger.getRpcApiHttpHost();
+    const rpcApiWsHost = await parsecTestLedger.getRpcApiWsHost();
 
     /**
-     * Constant defining the standard 'dev' Besu genesis.json contents.
+     * Constant defining the standard 'dev' Parsec genesis.json contents.
      *
-     * @see https://github.com/hyperledger/besu/blob/1.5.1/config/src/main/resources/dev.json
+     * @see https://github.com/hyperledger/parsec/blob/1.5.1/config/src/main/resources/dev.json
      */
 
-    const firstHighNetWorthAccount = besuTestLedger.getGenesisAccountPubKey();
+    const firstHighNetWorthAccount = parsecTestLedger.getGenesisAccountPubKey();
 
     const web3 = new Web3(rpcApiHttpHost);
     const testEthAccount = web3.eth.accounts.create(uuidv4());
@@ -62,7 +62,7 @@ describe(testCase, () => {
       pluginImportType: PluginImportType.Local,
     });
 
-    const connector: PluginLedgerConnectorBesu = await factory.create({
+    const connector: PluginLedgerConnectorParsec = await factory.create({
       rpcApiHttpHost,
       rpcApiWsHost,
       instanceId: uuidv4(),
@@ -71,7 +71,7 @@ describe(testCase, () => {
 
     await connector.onPluginInit();
 
-    const privateKey = await besuTestLedger.getGenesisAccountPrivKey();
+    const privateKey = await parsecTestLedger.getGenesisAccountPrivKey();
     const { transactionReceipt } = await connector.transact({
       web3SigningCredential: {
         ethAccount: firstHighNetWorthAccount,

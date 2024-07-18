@@ -4,17 +4,17 @@ import { PluginRegistry } from "@hyperledger/cactus-core";
 import {
   EthContractInvocationType,
   Web3SigningCredentialType,
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorParsec,
   PluginFactoryLedgerConnector,
   ReceiptType,
   InvokeContractV1Request,
-  BesuApiClientOptions,
-  BesuApiClient,
-  GetBesuRecordV1Request,
+  ParsecApiClientOptions,
+  ParsecApiClient,
+  GetParsecRecordV1Request,
 } from "../../../../../main/typescript/public-api";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
 import {
-  BesuTestLedger,
+  ParsecTestLedger,
   pruneDockerAllIfGithubAction,
 } from "@hyperledger/cactus-test-tooling";
 import {
@@ -43,27 +43,27 @@ test("BEFORE " + testCase, async (t: Test) => {
 test(testCase, async (t: Test) => {
   const containerImageVersion = "2021-08-24--feat-1244";
   const containerImageName =
-    "ghcr.io/hyperledger/cactus-besu-21-1-6-all-in-one";
-  const besuOptions = { containerImageName, containerImageVersion };
-  const besuTestLedger = new BesuTestLedger(besuOptions);
-  await besuTestLedger.start();
+    "ghcr.io/hyperledger/cactus-parsec-21-1-6-all-in-one";
+  const parsecOptions = { containerImageName, containerImageVersion };
+  const parsecTestLedger = new ParsecTestLedger(parsecOptions);
+  await parsecTestLedger.start();
 
   test.onFinish(async () => {
-    await besuTestLedger.stop();
-    await besuTestLedger.destroy();
+    await parsecTestLedger.stop();
+    await parsecTestLedger.destroy();
   });
 
-  const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
-  const rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
+  const rpcApiHttpHost = await parsecTestLedger.getRpcApiHttpHost();
+  const rpcApiWsHost = await parsecTestLedger.getRpcApiWsHost();
 
   /**
-   * Constant defining the standard 'dev' Besu genesis.json contents.
+   * Constant defining the standard 'dev' Parsec genesis.json contents.
    *
-   * @see https://github.com/hyperledger/besu/blob/21.1.6/config/src/main/resources/dev.json
+   * @see https://github.com/hyperledger/parsec/blob/21.1.6/config/src/main/resources/dev.json
    */
-  const firstHighNetWorthAccount = besuTestLedger.getGenesisAccountPubKey();
-  const besuKeyPair = {
-    privateKey: besuTestLedger.getGenesisAccountPrivKey(),
+  const firstHighNetWorthAccount = parsecTestLedger.getGenesisAccountPubKey();
+  const parsecKeyPair = {
+    privateKey: parsecTestLedger.getGenesisAccountPrivKey(),
   };
 
   const web3 = new Web3(rpcApiHttpHost);
@@ -88,7 +88,7 @@ test(testCase, async (t: Test) => {
     pluginImportType: PluginImportType.Local,
   });
 
-  const connector: PluginLedgerConnectorBesu = await factory.create({
+  const connector: PluginLedgerConnectorParsec = await factory.create({
     rpcApiHttpHost,
     rpcApiWsHost,
     logLevel,
@@ -113,13 +113,15 @@ test(testCase, async (t: Test) => {
   const { address, port } = addressInfo;
   const apiHost = `http://${address}:${port}`;
   t.comment(
-    `Metrics URL: ${apiHost}/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-prometheus-exporter-metrics`,
+    `Metrics URL: ${apiHost}/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-prometheus-exporter-metrics`,
   );
 
   const wsBasePath = apiHost + Constants.SocketIoConnectionPathV1;
   t.comment("WS base path: " + wsBasePath);
-  const besuApiClientOptions = new BesuApiClientOptions({ basePath: apiHost });
-  const api = new BesuApiClient(besuApiClientOptions);
+  const parsecApiClientOptions = new ParsecApiClientOptions({
+    basePath: apiHost,
+  });
+  const api = new ParsecApiClient(parsecApiClientOptions);
 
   await connector.getOrCreateWebServices();
   await connector.registerWebServices(expressApp, wsApi);
@@ -127,7 +129,7 @@ test(testCase, async (t: Test) => {
   await connector.transact({
     web3SigningCredential: {
       ethAccount: firstHighNetWorthAccount,
-      secret: besuKeyPair.privateKey,
+      secret: parsecKeyPair.privateKey,
       type: Web3SigningCredentialType.PrivateKeyHex,
     },
     transactionConfig: {
@@ -156,7 +158,7 @@ test(testCase, async (t: Test) => {
       constructorArgs: [],
       web3SigningCredential: {
         ethAccount: firstHighNetWorthAccount,
-        secret: besuKeyPair.privateKey,
+        secret: parsecKeyPair.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
       bytecode: HelloWorldContractJson.bytecode,
@@ -187,7 +189,7 @@ test(testCase, async (t: Test) => {
       params: [],
       signingCredential: {
         ethAccount: firstHighNetWorthAccount,
-        secret: besuKeyPair.privateKey,
+        secret: parsecKeyPair.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
     });
@@ -198,7 +200,7 @@ test(testCase, async (t: Test) => {
     );
   });
 
-  test("getBesuRecord test 1", async (t2: Test) => {
+  test("getParsecRecord test 1", async (t2: Test) => {
     const testEthAccount2 = web3.eth.accounts.create(uuidv4());
 
     const { rawTransaction } = await web3.eth.accounts.signTransaction(
@@ -224,15 +226,15 @@ test(testCase, async (t: Test) => {
       },
     });
 
-    const request: GetBesuRecordV1Request = {
+    const request: GetParsecRecordV1Request = {
       transactionHash: transactionReceipt.transactionReceipt.transactionHash,
     };
-    const getInputData = await api.getBesuRecordV1(request);
+    const getInputData = await api.getParsecRecordV1(request);
     t2.ok(getInputData, "API response object is truthy");
     t2.end();
   });
 
-  test("getBesuRecord test 2", async (t2: Test) => {
+  test("getParsecRecord test 2", async (t2: Test) => {
     const newName = `DrCactus${uuidv4()}`;
     const setNameOut = await connector.invokeContract({
       contractName: HelloWorldContractJson.contractName,
@@ -288,7 +290,7 @@ test(testCase, async (t: Test) => {
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
     };
-    const { callOutput: getNameOut } = await connector.getBesuRecord({
+    const { callOutput: getNameOut } = await connector.getParsecRecord({
       invokeCall: req,
     });
     t2.equal(getNameOut, newName, `getName() output reflects the update OK`);
@@ -325,7 +327,9 @@ test(testCase, async (t: Test) => {
       },
     };
 
-    const { callOutput } = await connector.getBesuRecord({ invokeCall: req2 });
+    const { callOutput } = await connector.getParsecRecord({
+      invokeCall: req2,
+    });
     t2.equal(
       callOutput,
       newName,

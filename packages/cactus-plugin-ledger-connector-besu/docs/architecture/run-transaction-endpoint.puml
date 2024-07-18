@@ -17,13 +17,13 @@ entity "API Server" as apis
 end box
 
 box "Ledger Connector" #LightGreen
-database "Besu" as besucon
+database "Parsec" as parseccon
 end box
 
-a --> apic : Tx Besu Ledger
+a --> apic : Tx Parsec Ledger
 apic --> apis: Request
-apis --> besucon: transact()
-besucon --> apis: Response
+apis --> parseccon: transact()
+parseccon --> apis: Response
 apis --> apic: Formatted Response
 
 @enduml

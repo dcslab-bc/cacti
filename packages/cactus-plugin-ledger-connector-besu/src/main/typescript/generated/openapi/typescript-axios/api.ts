@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Hyperledger Cactus Plugin - Connector Besu
- * Can perform basic tasks on a Besu ledger
+ * Hyperledger Cactus Plugin - Connector Parsec
+ * Can perform basic tasks on a Parsec ledger
  *
  * The version of the OpenAPI document: v2.0.0-alpha.2
  * 
@@ -22,88 +22,6 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 import type { RequestArgs } from './base';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
-
-/**
- * 
- * @export
- * @interface BesuPrivateTransactionConfig
- */
-export interface BesuPrivateTransactionConfig {
-    /**
-     * 
-     * @type {string}
-     * @memberof BesuPrivateTransactionConfig
-     */
-    'privateFrom': string;
-    /**
-     * 
-     * @type {Array<any>}
-     * @memberof BesuPrivateTransactionConfig
-     */
-    'privateFor': Array<any>;
-}
-/**
- * 
- * @export
- * @interface BesuTransactionConfig
- */
-export interface BesuTransactionConfig {
-    [key: string]: any;
-
-    /**
-     * 
-     * @type {string}
-     * @memberof BesuTransactionConfig
-     */
-    'rawTransaction'?: string;
-    /**
-     * 
-     * @type {Web3BlockHeaderTimestamp}
-     * @memberof BesuTransactionConfig
-     */
-    'from'?: Web3BlockHeaderTimestamp;
-    /**
-     * 
-     * @type {BesuTransactionConfigTo}
-     * @memberof BesuTransactionConfig
-     */
-    'to'?: BesuTransactionConfigTo;
-    /**
-     * 
-     * @type {Web3BlockHeaderTimestamp}
-     * @memberof BesuTransactionConfig
-     */
-    'value'?: Web3BlockHeaderTimestamp;
-    /**
-     * 
-     * @type {Web3BlockHeaderTimestamp}
-     * @memberof BesuTransactionConfig
-     */
-    'gas'?: Web3BlockHeaderTimestamp;
-    /**
-     * 
-     * @type {Web3BlockHeaderTimestamp}
-     * @memberof BesuTransactionConfig
-     */
-    'gasPrice'?: Web3BlockHeaderTimestamp;
-    /**
-     * 
-     * @type {number}
-     * @memberof BesuTransactionConfig
-     */
-    'nonce'?: number;
-    /**
-     * 
-     * @type {BesuTransactionConfigTo}
-     * @memberof BesuTransactionConfig
-     */
-    'data'?: BesuTransactionConfigTo;
-}
-/**
- * @type BesuTransactionConfigTo
- * @export
- */
-export type BesuTransactionConfigTo = string;
 
 /**
  * 
@@ -194,10 +112,10 @@ export interface DeployContractSolidityBytecodeV1Request {
     'timeoutMs'?: number;
     /**
      * 
-     * @type {BesuPrivateTransactionConfig}
+     * @type {ParsecPrivateTransactionConfig}
      * @memberof DeployContractSolidityBytecodeV1Request
      */
-    'privateTransactionConfig'?: BesuPrivateTransactionConfig;
+    'privateTransactionConfig'?: ParsecPrivateTransactionConfig;
 }
 /**
  * 
@@ -504,56 +422,6 @@ export interface GetBalanceV1Response {
 /**
  * 
  * @export
- * @interface GetBesuRecordV1Request
- */
-export interface GetBesuRecordV1Request {
-    /**
-     * 
-     * @type {InvokeContractV1Request}
-     * @memberof GetBesuRecordV1Request
-     */
-    'invokeCall'?: InvokeContractV1Request;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetBesuRecordV1Request
-     */
-    'transactionHash'?: string;
-}
-/**
- * 
- * @export
- * @interface GetBesuRecordV1Response
- */
-export interface GetBesuRecordV1Response {
-    /**
-     * 
-     * @type {string}
-     * @memberof GetBesuRecordV1Response
-     */
-    'ledgerId'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetBesuRecordV1Response
-     */
-    'stateContract'?: string;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetBesuRecordV1Response
-     */
-    'transactionInputData'?: any;
-    /**
-     * 
-     * @type {any}
-     * @memberof GetBesuRecordV1Response
-     */
-    'callOutput'?: any;
-}
-/**
- * 
- * @export
  * @interface GetBlockV1Request
  */
 export interface GetBlockV1Request {
@@ -576,6 +444,56 @@ export interface GetBlockV1Response {
      * @memberof GetBlockV1Response
      */
     'block': EvmBlock;
+}
+/**
+ * 
+ * @export
+ * @interface GetParsecRecordV1Request
+ */
+export interface GetParsecRecordV1Request {
+    /**
+     * 
+     * @type {InvokeContractV1Request}
+     * @memberof GetParsecRecordV1Request
+     */
+    'invokeCall'?: InvokeContractV1Request;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetParsecRecordV1Request
+     */
+    'transactionHash'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetParsecRecordV1Response
+ */
+export interface GetParsecRecordV1Response {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetParsecRecordV1Response
+     */
+    'ledgerId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetParsecRecordV1Response
+     */
+    'stateContract'?: string;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetParsecRecordV1Response
+     */
+    'transactionInputData'?: any;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetParsecRecordV1Response
+     */
+    'callOutput'?: any;
 }
 /**
  * 
@@ -733,10 +651,10 @@ export interface InvokeContractV1Request {
     'keychainId'?: string;
     /**
      * 
-     * @type {BesuPrivateTransactionConfig}
+     * @type {ParsecPrivateTransactionConfig}
      * @memberof InvokeContractV1Request
      */
-    'privateTransactionConfig'?: BesuPrivateTransactionConfig;
+    'privateTransactionConfig'?: ParsecPrivateTransactionConfig;
 }
 
 
@@ -766,6 +684,88 @@ export interface InvokeContractV1Response {
     'success': boolean;
 }
 /**
+ * 
+ * @export
+ * @interface ParsecPrivateTransactionConfig
+ */
+export interface ParsecPrivateTransactionConfig {
+    /**
+     * 
+     * @type {string}
+     * @memberof ParsecPrivateTransactionConfig
+     */
+    'privateFrom': string;
+    /**
+     * 
+     * @type {Array<any>}
+     * @memberof ParsecPrivateTransactionConfig
+     */
+    'privateFor': Array<any>;
+}
+/**
+ * 
+ * @export
+ * @interface ParsecTransactionConfig
+ */
+export interface ParsecTransactionConfig {
+    [key: string]: any;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof ParsecTransactionConfig
+     */
+    'rawTransaction'?: string;
+    /**
+     * 
+     * @type {Web3BlockHeaderTimestamp}
+     * @memberof ParsecTransactionConfig
+     */
+    'from'?: Web3BlockHeaderTimestamp;
+    /**
+     * 
+     * @type {ParsecTransactionConfigTo}
+     * @memberof ParsecTransactionConfig
+     */
+    'to'?: ParsecTransactionConfigTo;
+    /**
+     * 
+     * @type {Web3BlockHeaderTimestamp}
+     * @memberof ParsecTransactionConfig
+     */
+    'value'?: Web3BlockHeaderTimestamp;
+    /**
+     * 
+     * @type {Web3BlockHeaderTimestamp}
+     * @memberof ParsecTransactionConfig
+     */
+    'gas'?: Web3BlockHeaderTimestamp;
+    /**
+     * 
+     * @type {Web3BlockHeaderTimestamp}
+     * @memberof ParsecTransactionConfig
+     */
+    'gasPrice'?: Web3BlockHeaderTimestamp;
+    /**
+     * 
+     * @type {number}
+     * @memberof ParsecTransactionConfig
+     */
+    'nonce'?: number;
+    /**
+     * 
+     * @type {ParsecTransactionConfigTo}
+     * @memberof ParsecTransactionConfig
+     */
+    'data'?: ParsecTransactionConfigTo;
+}
+/**
+ * @type ParsecTransactionConfigTo
+ * @export
+ */
+export type ParsecTransactionConfigTo = string;
+
+/**
  * Enumerates the possible types of receipts that can be waited for by someone or something that has requested the execution of a transaction on a ledger.
  * @export
  * @enum {string}
@@ -793,10 +793,10 @@ export interface RunTransactionRequest {
     'web3SigningCredential': Web3SigningCredential;
     /**
      * 
-     * @type {BesuTransactionConfig}
+     * @type {ParsecTransactionConfig}
      * @memberof RunTransactionRequest
      */
-    'transactionConfig': BesuTransactionConfig;
+    'transactionConfig': ParsecTransactionConfig;
     /**
      * 
      * @type {ConsistencyStrategy}
@@ -805,10 +805,10 @@ export interface RunTransactionRequest {
     'consistencyStrategy': ConsistencyStrategy;
     /**
      * 
-     * @type {BesuPrivateTransactionConfig}
+     * @type {ParsecPrivateTransactionConfig}
      * @memberof RunTransactionRequest
      */
-    'privateTransactionConfig'?: BesuPrivateTransactionConfig;
+    'privateTransactionConfig'?: ParsecPrivateTransactionConfig;
 }
 /**
  * 
@@ -1000,11 +1000,11 @@ export interface SolidityContractJsonArtifactGasEstimatesCreation {
  */
 
 export const WatchBlocksV1 = {
-    Subscribe: 'org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Subscribe',
-    Next: 'org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Next',
-    Unsubscribe: 'org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Unsubscribe',
-    Error: 'org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Error',
-    Complete: 'org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Complete'
+    Subscribe: 'org.hyperledger.cactus.api.async.parsec.WatchBlocksV1.Subscribe',
+    Next: 'org.hyperledger.cactus.api.async.parsec.WatchBlocksV1.Next',
+    Unsubscribe: 'org.hyperledger.cactus.api.async.parsec.WatchBlocksV1.Unsubscribe',
+    Error: 'org.hyperledger.cactus.api.async.parsec.WatchBlocksV1.Error',
+    Complete: 'org.hyperledger.cactus.api.async.parsec.WatchBlocksV1.Complete'
 } as const;
 
 export type WatchBlocksV1 = typeof WatchBlocksV1[keyof typeof WatchBlocksV1];
@@ -1295,7 +1295,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @throws {RequiredError}
          */
         deployContractSolBytecodeV1: async (deployContractSolidityBytecodeV1Request?: DeployContractSolidityBytecodeV1Request, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/deploy-contract-solidity-bytecode`;
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/deploy-contract-solidity-bytecode`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1329,7 +1329,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @throws {RequiredError}
          */
         getBalanceV1: async (getBalanceV1Request?: GetBalanceV1Request, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-balance`;
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-balance`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1357,47 +1357,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
-         * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getBesuRecordV1: async (getBesuRecordV1Request?: GetBesuRecordV1Request, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-besu-record`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(getBesuRecordV1Request, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary Returns a block matching the block
          * @param {GetBlockV1Request} [getBlockV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getBlockV1: async (getBlockV1Request?: GetBlockV1Request, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-block`;
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-block`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1430,7 +1396,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @throws {RequiredError}
          */
         getOpenApiSpecV1: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-open-api-spec`;
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-open-api-spec`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1455,13 +1421,47 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
+         * @param {GetParsecRecordV1Request} [getParsecRecordV1Request] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getParsecRecordV1: async (getParsecRecordV1Request?: GetParsecRecordV1Request, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-parsec-record`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(getParsecRecordV1Request, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Gets past logs, matching the given options.
          * @param {GetPastLogsV1Request} [getPastLogsV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getPastLogsV1: async (getPastLogsV1Request?: GetPastLogsV1Request, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-past-logs`;
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-past-logs`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1494,7 +1494,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @throws {RequiredError}
          */
         getPrometheusMetricsV1: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-prometheus-exporter-metrics`;
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-prometheus-exporter-metrics`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1519,13 +1519,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Executes a transaction on a besu ledger
+         * @summary Executes a transaction on a parsec ledger
          * @param {GetTransactionV1Request} [getTransactionV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getTransactionV1: async (getTransactionV1Request?: GetTransactionV1Request, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-transaction`;
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-transaction`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1553,13 +1553,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Invokes a contract on a besu ledger
+         * @summary Invokes a contract on a parsec ledger
          * @param {InvokeContractV1Request} [invokeContractV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         invokeContractV1: async (invokeContractV1Request?: InvokeContractV1Request, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/invoke-contract`;
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/invoke-contract`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1587,13 +1587,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Executes a transaction on a besu ledger
+         * @summary Executes a transaction on a parsec ledger
          * @param {RunTransactionRequest} [runTransactionRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         runTransactionV1: async (runTransactionRequest?: RunTransactionRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/run-transaction`;
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/run-transaction`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1629,7 +1629,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         signTransactionV1: async (signTransactionRequest: SignTransactionRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'signTransactionRequest' is not null or undefined
             assertParamExists('signTransactionV1', 'signTransactionRequest', signTransactionRequest)
-            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/sign-transaction`;
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/sign-transaction`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1689,17 +1689,6 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
-         * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getBesuRecordV1(getBesuRecordV1Request?: GetBesuRecordV1Request, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetBesuRecordV1Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getBesuRecordV1(getBesuRecordV1Request, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @summary Returns a block matching the block
          * @param {GetBlockV1Request} [getBlockV1Request] 
          * @param {*} [options] Override http request option.
@@ -1717,6 +1706,17 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async getOpenApiSpecV1(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getOpenApiSpecV1(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
+         * @param {GetParsecRecordV1Request} [getParsecRecordV1Request] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getParsecRecordV1(getParsecRecordV1Request?: GetParsecRecordV1Request, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetParsecRecordV1Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getParsecRecordV1(getParsecRecordV1Request, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1742,7 +1742,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Executes a transaction on a besu ledger
+         * @summary Executes a transaction on a parsec ledger
          * @param {GetTransactionV1Request} [getTransactionV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1753,7 +1753,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Invokes a contract on a besu ledger
+         * @summary Invokes a contract on a parsec ledger
          * @param {InvokeContractV1Request} [invokeContractV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1764,7 +1764,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Executes a transaction on a besu ledger
+         * @summary Executes a transaction on a parsec ledger
          * @param {RunTransactionRequest} [runTransactionRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1816,16 +1816,6 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
-         * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getBesuRecordV1(getBesuRecordV1Request?: GetBesuRecordV1Request, options?: any): AxiosPromise<GetBesuRecordV1Response> {
-            return localVarFp.getBesuRecordV1(getBesuRecordV1Request, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary Returns a block matching the block
          * @param {GetBlockV1Request} [getBlockV1Request] 
          * @param {*} [options] Override http request option.
@@ -1842,6 +1832,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         getOpenApiSpecV1(options?: any): AxiosPromise<string> {
             return localVarFp.getOpenApiSpecV1(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
+         * @param {GetParsecRecordV1Request} [getParsecRecordV1Request] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getParsecRecordV1(getParsecRecordV1Request?: GetParsecRecordV1Request, options?: any): AxiosPromise<GetParsecRecordV1Response> {
+            return localVarFp.getParsecRecordV1(getParsecRecordV1Request, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1864,7 +1864,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Executes a transaction on a besu ledger
+         * @summary Executes a transaction on a parsec ledger
          * @param {GetTransactionV1Request} [getTransactionV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1874,7 +1874,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Invokes a contract on a besu ledger
+         * @summary Invokes a contract on a parsec ledger
          * @param {InvokeContractV1Request} [invokeContractV1Request] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1884,7 +1884,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Executes a transaction on a besu ledger
+         * @summary Executes a transaction on a parsec ledger
          * @param {RunTransactionRequest} [runTransactionRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1938,18 +1938,6 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
-     * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public getBesuRecordV1(getBesuRecordV1Request?: GetBesuRecordV1Request, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getBesuRecordV1(getBesuRecordV1Request, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
      * @summary Returns a block matching the block
      * @param {GetBlockV1Request} [getBlockV1Request] 
      * @param {*} [options] Override http request option.
@@ -1969,6 +1957,18 @@ export class DefaultApi extends BaseAPI {
      */
     public getOpenApiSpecV1(options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).getOpenApiSpecV1(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
+     * @param {GetParsecRecordV1Request} [getParsecRecordV1Request] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getParsecRecordV1(getParsecRecordV1Request?: GetParsecRecordV1Request, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getParsecRecordV1(getParsecRecordV1Request, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1996,7 +1996,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @summary Executes a transaction on a besu ledger
+     * @summary Executes a transaction on a parsec ledger
      * @param {GetTransactionV1Request} [getTransactionV1Request] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2008,7 +2008,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @summary Invokes a contract on a besu ledger
+     * @summary Invokes a contract on a parsec ledger
      * @param {InvokeContractV1Request} [invokeContractV1Request] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2020,7 +2020,7 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @summary Executes a transaction on a besu ledger
+     * @summary Executes a transaction on a parsec ledger
      * @param {RunTransactionRequest} [runTransactionRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

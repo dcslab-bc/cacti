@@ -3,27 +3,27 @@ sequenceDiagram
 autonumber
     participant Bob
     participant HTLC Coordinator Bob
-    participant HTLC Plugin Besu ERC20
+    participant HTLC Plugin Parsec ERC20
     participant HTLC Plugin Counterparty
     participant HTLC Contract Bob
     participant HTLC Contract Counterparty
     
     Note over Bob: We assumped that the offer take place on the front end
     Note over Bob: Bob is the first to deploy the HTLC contract
-    Bob ->> HTLC Coordinator Bob: newCoordinator(HTLC Plugin Besu)
+    Bob ->> HTLC Coordinator Bob: newCoordinator(HTLC Plugin Parsec)
     activate HTLC Coordinator Bob
-        HTLC Coordinator Bob ->> HTLC Plugin Besu ERC20:newInstance()
-        activate HTLC Plugin Besu ERC20
-            HTLC Plugin Besu ERC20-->> HTLC Coordinator Bob: plugin instance
-        deactivate HTLC Plugin Besu ERC20
-        HTLC Coordinator Bob ->> HTLC Plugin Besu ERC20:newContract()
-            activate  HTLC Plugin Besu ERC20
-                HTLC Plugin Besu ERC20->> HTLC Contract Bob: deployContract()
+        HTLC Coordinator Bob ->> HTLC Plugin Parsec ERC20:newInstance()
+        activate HTLC Plugin Parsec ERC20
+            HTLC Plugin Parsec ERC20-->> HTLC Coordinator Bob: plugin instance
+        deactivate HTLC Plugin Parsec ERC20
+        HTLC Coordinator Bob ->> HTLC Plugin Parsec ERC20:newContract()
+            activate  HTLC Plugin Parsec ERC20
+                HTLC Plugin Parsec ERC20->> HTLC Contract Bob: deployContract()
                 activate HTLC Contract Bob
-                    HTLC Contract Bob -->> HTLC Plugin Besu ERC20:ok
+                    HTLC Contract Bob -->> HTLC Plugin Parsec ERC20:ok
                 deactivate HTLC Contract Bob
-                HTLC Plugin Besu ERC20-->>  HTLC Coordinator Bob: ok
-                HTLC Plugin Besu ERC20-->>  HTLC Plugin Besu ERC20:Listening contract events
+                HTLC Plugin Parsec ERC20-->>  HTLC Coordinator Bob: ok
+                HTLC Plugin Parsec ERC20-->>  HTLC Plugin Parsec ERC20:Listening contract events
            
         HTLC Coordinator Bob ->> Bob: Bob HTLC Coordinator instance
     deactivate HTLC Coordinator Bob
@@ -59,8 +59,8 @@ autonumber
         deactivate HTLC Plugin Counterparty
     HTLC Coordinator Bob -->> Bob: ok
     deactivate HTLC Coordinator Bob
-     HTLC Plugin Besu ERC20-->> HTLC Coordinator Bob: Event - CounterParty withdraw
-    deactivate HTLC Plugin Besu ERC20
+     HTLC Plugin Parsec ERC20-->> HTLC Coordinator Bob: Event - CounterParty withdraw
+    deactivate HTLC Plugin Parsec ERC20
     activate HTLC Coordinator Bob
         HTLC Coordinator Bob -->> Bob: Counterparty withdraw notification
     deactivate HTLC Coordinator Bob

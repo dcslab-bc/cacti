@@ -4,9 +4,9 @@ import { Server as SocketIoServer } from "socket.io";
 import { PluginRegistry } from "@hyperledger/cactus-core";
 import {
   Web3SigningCredentialType,
-  PluginLedgerConnectorBesu,
-  BesuApiClient,
-  IPluginLedgerConnectorBesuOptions,
+  PluginLedgerConnectorParsec,
+  ParsecApiClient,
+  IPluginLedgerConnectorParsecOptions,
   ReceiptType,
   RunTransactionRequest,
   InvokeContractV1Request,
@@ -16,12 +16,12 @@ import {
   GetBalanceV1Request,
   GetPastLogsV1Request,
   GetBlockV1Request,
-  GetBesuRecordV1Request,
+  GetParsecRecordV1Request,
   RunTransactionResponse,
 } from "../../../../../main/typescript/public-api";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
 import {
-  BesuTestLedger,
+  ParsecTestLedger,
   pruneDockerAllIfGithubAction,
 } from "@hyperledger/cactus-test-tooling";
 import KeyEncoder from "key-encoder";
@@ -39,7 +39,7 @@ import bodyParser from "body-parser";
 import http from "http";
 import HelloWorldContractJson from "../../../../solidity/hello-world-contract/HelloWorld.json";
 import { AddressInfo } from "net";
-import { BesuApiClientOptions } from "../../../../../main/typescript/api-client/besu-api-client";
+import { ParsecApiClientOptions } from "../../../../../main/typescript/api-client/parsec-api-client";
 
 import { installOpenapiValidationMiddleware } from "@hyperledger/cactus-core";
 import OAS from "../../../../../main/json/openapi.json";
@@ -49,11 +49,11 @@ const logLevel: LogLevelDesc = "TRACE";
 const testCase = "able to validate OpenAPI requests";
 
 const log = LoggerProvider.getOrCreate({
-  label: "connector-besu-openapi-validation.test.ts",
+  label: "connector-parsec-openapi-validation.test.ts",
   level: logLevel,
 });
 
-describe("PluginLedgerConnectorBesu", () => {
+describe("PluginLedgerConnectorParsec", () => {
   const fDeploy = "deployContractSolBytecodeV1";
   const fInvoke = "invokeContractV1";
   const fRun = "runTransactionV1";
@@ -61,7 +61,7 @@ describe("PluginLedgerConnectorBesu", () => {
   const fBalance = "getBalanceV1";
   const fBlock = "getBlockV1";
   const fPastLogs = "getPastLogsV1";
-  const fRecord = "getBesuRecordV1";
+  const fRecord = "getParsecRecordV1";
   const cOk = "without bad request error";
   const cWithoutParams = "not sending all required parameters";
   const cInvalidParams = "sending invalid parameters";
@@ -72,10 +72,10 @@ describe("PluginLedgerConnectorBesu", () => {
   const keychainRefForSigned = uuidv4();
   const keychainRefForUnsigned = uuidv4();
 
-  let besuTestLedger: BesuTestLedger;
+  let parsecTestLedger: ParsecTestLedger;
   let testEthAccount2: Account;
   let firstHighNetWorthAccount: string;
-  let apiClient: BesuApiClient;
+  let apiClient: ParsecApiClient;
   let testEthAccount1: Account;
   let httpServer: http.Server;
 
@@ -84,22 +84,22 @@ describe("PluginLedgerConnectorBesu", () => {
   });
 
   afterAll(async () => {
-    await besuTestLedger.stop();
-    await besuTestLedger.destroy();
+    await parsecTestLedger.stop();
+    await parsecTestLedger.destroy();
   });
 
   afterAll(async () => await Servers.shutdown(httpServer));
 
   beforeAll(async () => {
-    besuTestLedger = new BesuTestLedger();
-    await besuTestLedger.start();
+    parsecTestLedger = new ParsecTestLedger();
+    await parsecTestLedger.start();
 
-    const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
-    const rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
+    const rpcApiHttpHost = await parsecTestLedger.getRpcApiHttpHost();
+    const rpcApiWsHost = await parsecTestLedger.getRpcApiWsHost();
 
-    testEthAccount1 = await besuTestLedger.createEthTestAccount();
-    testEthAccount2 = await besuTestLedger.createEthTestAccount();
-    firstHighNetWorthAccount = besuTestLedger.getGenesisAccountPubKey();
+    testEthAccount1 = await parsecTestLedger.createEthTestAccount();
+    testEthAccount2 = await parsecTestLedger.createEthTestAccount();
+    firstHighNetWorthAccount = parsecTestLedger.getGenesisAccountPubKey();
 
     // keychainPlugin for signed transactions
     const { privateKey } = Secp256k1Keys.generateKeyPairsBuffer();
@@ -129,14 +129,14 @@ describe("PluginLedgerConnectorBesu", () => {
       plugins: [signedKeychainPlugin, unsignedKeychainPlugin],
     });
 
-    const options: IPluginLedgerConnectorBesuOptions = {
+    const options: IPluginLedgerConnectorParsecOptions = {
       instanceId: uuidv4(),
       rpcApiHttpHost,
       rpcApiWsHost,
       pluginRegistry,
       logLevel,
     };
-    const connector = new PluginLedgerConnectorBesu(options);
+    const connector = new PluginLedgerConnectorParsec(options);
     pluginRegistry.add(connector);
 
     const expressApp = express();
@@ -160,10 +160,10 @@ describe("PluginLedgerConnectorBesu", () => {
     const wsBasePath = apiHost + Constants.SocketIoConnectionPathV1;
     log.info("WS base path: " + wsBasePath);
 
-    const besuApiClientOptions = new BesuApiClientOptions({
+    const parsecApiClientOptions = new ParsecApiClientOptions({
       basePath: apiHost,
     });
-    apiClient = new BesuApiClient(besuApiClientOptions);
+    apiClient = new ParsecApiClient(parsecApiClientOptions);
 
     await installOpenapiValidationMiddleware({
       logLevel,
@@ -682,8 +682,8 @@ describe("PluginLedgerConnectorBesu", () => {
       transactionHash: (runTxRes.data as any).data.transactionReceipt
         .transactionHash,
     };
-    const res = await apiClient.getBesuRecordV1(
-      parameters as GetBesuRecordV1Request,
+    const res = await apiClient.getParsecRecordV1(
+      parameters as GetParsecRecordV1Request,
     );
     expect(res.status).toEqual(200);
     expect(res.data).toBeTruthy();
@@ -692,7 +692,7 @@ describe("PluginLedgerConnectorBesu", () => {
   test(`${testCase} - ${fRecord} - ${cWithoutParams}`, async () => {
     try {
       const parameters = {};
-      await apiClient.getBesuRecordV1(parameters as GetBesuRecordV1Request);
+      await apiClient.getParsecRecordV1(parameters as GetParsecRecordV1Request);
     } catch (e) {
       expect(e.response.status).toEqual(400);
       const fields = e.response.data.map((param: any) =>
@@ -708,7 +708,7 @@ describe("PluginLedgerConnectorBesu", () => {
         transactionHash: "",
         fake: 5,
       };
-      await apiClient.getBesuRecordV1(parameters as GetBesuRecordV1Request);
+      await apiClient.getParsecRecordV1(parameters as GetParsecRecordV1Request);
     } catch (e) {
       expect(e.response.status).toEqual(400);
       const fields = e.response.data.map((param: { readonly path: string }) =>

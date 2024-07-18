@@ -2,14 +2,14 @@ import test, { Test } from "tape-promise/tape";
 import HelloWorldContractJson from "../../../../solidity/hello-world-contract/HelloWorld.json";
 import Web3 from "web3";
 import Web3JsQuorum, { IPrivateTransactionReceipt } from "web3js-quorum";
-import { BesuMpTestLedger } from "@hyperledger/cactus-test-tooling";
+import { ParsecMpTestLedger } from "@hyperledger/cactus-test-tooling";
 import { AbiItem } from "web3-utils";
 import { LogLevelDesc } from "@hyperledger/cactus-common";
 
 const containerImageName =
-  "ghcr.io/hyperledger/cactus-besu-all-in-one-multi-party";
+  "ghcr.io/hyperledger/cactus-parsec-all-in-one-multi-party";
 const containerImageTag = "2023-08-08-pr-2596";
-const testCase = "Executes private transactions on Hyperledger Besu";
+const testCase = "Executes private transactions on Hyperledger Parsec";
 const logLevel: LogLevelDesc = "TRACE";
 
 // WARNING: the keys here are demo purposes ONLY. Please use a tool like Orchestrate or EthSigner for production, rather than hard coding private keys
@@ -25,7 +25,7 @@ const keysStatic = {
       publicKey: "1iTZde/ndBHvzhcl7V68x44Vx7pl8nwx9LqnM/AfJUg=",
     },
   },
-  besu: {
+  parsec: {
     member1: {
       url: "http://127.0.0.1:20000",
       wsUrl: "ws://127.0.0.1:20001",
@@ -55,7 +55,7 @@ test(testCase, async (t: Test) => {
   // At development time one can specify this environment variable if there is
   // a multi-party network already running, which is doable with something like
   // this on the terminal:
-  // docker run   --rm   --privileged   --publish 2222:22   --publish 3000:3000   --publish 8545:8545   --publish 8546:8546   --publish 9001:9001   --publish 9081:9081   --publish 9082:9082   --publish 9083:9083   --publish 9090:9090   --publish 18545:18545   --publish 20000:20000   --publish 20001:20001   --publish 20002:20002   --publish 20003:20003   --publish 20004:20004   --publish 20005:20005   --publish 25000:25000   petermetz/cactus-besu-multi-party-all-in-one:0.1.2
+  // docker run   --rm   --privileged   --publish 2222:22   --publish 3000:3000   --publish 8545:8545   --publish 8546:8546   --publish 9001:9001   --publish 9081:9081   --publish 9082:9082   --publish 9083:9083   --publish 9090:9090   --publish 18545:18545   --publish 20000:20000   --publish 20001:20001   --publish 20002:20002   --publish 20003:20003   --publish 20004:20004   --publish 20005:20005   --publish 25000:25000   petermetz/cactus-parsec-multi-party-all-in-one:0.1.2
   //
   // The upside of this approach is that a new container is not launched from
   // scratch for every test execution which enables faster iteration.
@@ -65,7 +65,7 @@ test(testCase, async (t: Test) => {
   if (preWarmedLedger) {
     keys = keysStatic;
   } else {
-    const ledger = new BesuMpTestLedger({
+    const ledger = new ParsecMpTestLedger({
       logLevel,
       imageName: containerImageName,
       imageTag: containerImageTag,
@@ -76,9 +76,9 @@ test(testCase, async (t: Test) => {
     keys = await ledger.getKeys();
   }
 
-  const rpcApiHttpHostMember1 = keys.besu.member1.url;
-  const rpcApiHttpHostMember2 = keys.besu.member2.url;
-  const rpcApiHttpHostMember3 = keys.besu.member3.url;
+  const rpcApiHttpHostMember1 = keys.parsec.member1.url;
+  const rpcApiHttpHostMember2 = keys.parsec.member2.url;
+  const rpcApiHttpHostMember3 = keys.parsec.member3.url;
 
   const web3Member1 = new Web3(rpcApiHttpHostMember1);
   const web3Member2 = new Web3(rpcApiHttpHostMember2);
@@ -108,7 +108,7 @@ test(testCase, async (t: Test) => {
         keys.tessera.member1.publicKey,
         keys.tessera.member2.publicKey,
       ],
-      privateKey: keys.besu.member1.privateKey,
+      privateKey: keys.parsec.member1.privateKey,
       gasLimit: "0x2DC6C0",
     });
 
@@ -175,7 +175,7 @@ test(testCase, async (t: Test) => {
       data: setNameAbi.signature + functionArgs,
       privateFrom: keys.tessera.member1.publicKey,
       privateFor: [keys.tessera.member2.publicKey],
-      privateKey: keys.besu.member1.privateKey,
+      privateKey: keys.parsec.member1.privateKey,
     };
     const transactionHash =
       await web3QuorumMember1.priv.generateAndSendRawTransaction(
@@ -201,7 +201,7 @@ test(testCase, async (t: Test) => {
       data: getNameAbi.signature + functionArgs,
       privateFrom: keys.tessera.member1.publicKey,
       privateFor: [keys.tessera.member2.publicKey],
-      privateKey: keys.besu.member1.privateKey,
+      privateKey: keys.parsec.member1.privateKey,
     };
 
     const privacyGroupId =
@@ -225,7 +225,7 @@ test(testCase, async (t: Test) => {
       data: contract.methods.getName().encodeABI(),
       privateFrom: keys.tessera.member1.publicKey,
       privateFor: [keys.tessera.member2.publicKey],
-      privateKey: keys.besu.member3.privateKey,
+      privateKey: keys.parsec.member3.privateKey,
     };
 
     const privacyGroupId =
@@ -248,7 +248,7 @@ test(testCase, async (t: Test) => {
       data: setNameAbi.signature + functionArgs,
       privateFrom: keys.tessera.member2.publicKey,
       privateFor: [keys.tessera.member2.publicKey],
-      privateKey: keys.besu.member2.privateKey,
+      privateKey: keys.parsec.member2.privateKey,
     };
     const transactionHash =
       await web3QuorumMember2.priv.generateAndSendRawTransaction(
@@ -272,7 +272,7 @@ test(testCase, async (t: Test) => {
       to: contractDeployReceipt.contractAddress,
       data: setNameAbi.signature + functionArgs,
       privateFrom: keys.tessera.member3.publicKey,
-      privateKey: keys.besu.member3.privateKey,
+      privateKey: keys.parsec.member3.privateKey,
       privateFor: [keys.tessera.member2.publicKey],
     };
     const transactionHash =

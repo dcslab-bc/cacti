@@ -1,17 +1,17 @@
 export {
   E_KEYCHAIN_NOT_FOUND,
-  IPluginLedgerConnectorBesuOptions,
-  PluginLedgerConnectorBesu,
-} from "./plugin-ledger-connector-besu";
+  IPluginLedgerConnectorParsecOptions,
+  PluginLedgerConnectorParsec,
+} from "./plugin-ledger-connector-parsec";
 export { PluginFactoryLedgerConnector } from "./plugin-factory-ledger-connector";
 
 import { IPluginFactoryOptions } from "@hyperledger/cactus-core-api";
 import { PluginFactoryLedgerConnector } from "./plugin-factory-ledger-connector";
 
 export {
-  BesuApiClient,
-  BesuApiClientOptions,
-} from "./api-client/besu-api-client";
+  ParsecApiClient,
+  ParsecApiClientOptions,
+} from "./api-client/parsec-api-client";
 
 export * from "./generated/openapi/typescript-axios/api";
 

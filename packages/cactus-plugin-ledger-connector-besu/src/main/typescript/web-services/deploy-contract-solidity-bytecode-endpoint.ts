@@ -19,13 +19,13 @@ import {
   registerWebServiceEndpoint,
 } from "@hyperledger/cactus-core";
 
-import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-besu";
+import { PluginLedgerConnectorParsec } from "../plugin-ledger-connector-parsec";
 import { DeployContractSolidityBytecodeV1Request } from "../generated/openapi/typescript-axios";
 import OAS from "../../json/openapi.json";
 
 export interface IDeployContractSolidityBytecodeOptions {
   logLevel?: LogLevelDesc;
-  connector: PluginLedgerConnectorBesu;
+  connector: PluginLedgerConnectorParsec;
 }
 
 export class DeployContractSolidityBytecodeEndpoint
@@ -49,9 +49,9 @@ export class DeployContractSolidityBytecodeEndpoint
     this.log = LoggerProvider.getOrCreate({ level, label });
   }
 
-  public get oasPath(): (typeof OAS.paths)["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/deploy-contract-solidity-bytecode"] {
+  public get oasPath(): (typeof OAS.paths)["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/deploy-contract-solidity-bytecode"] {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/deploy-contract-solidity-bytecode"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/deploy-contract-solidity-bytecode"
     ];
   }
 

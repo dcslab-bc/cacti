@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Hyperledger Cactus Plugin - Connector Besu",
-    "description": "Can perform basic tasks on a Besu ledger",
+    "title": "Hyperledger Cactus Plugin - Connector Parsec",
+    "description": "Can perform basic tasks on a Parsec ledger",
     "version": "v2.0.0-alpha.2",
     "license": {
       "name": "Apache-2.0",
@@ -226,11 +226,11 @@
       "WatchBlocksV1": {
         "type": "string",
         "enum": [
-          "org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Subscribe",
-          "org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Next",
-          "org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Unsubscribe",
-          "org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Error",
-          "org.hyperledger.cactus.api.async.besu.WatchBlocksV1.Complete"
+          "org.hyperledger.cactus.api.async.parsec.WatchBlocksV1.Subscribe",
+          "org.hyperledger.cactus.api.async.parsec.WatchBlocksV1.Next",
+          "org.hyperledger.cactus.api.async.parsec.WatchBlocksV1.Unsubscribe",
+          "org.hyperledger.cactus.api.async.parsec.WatchBlocksV1.Error",
+          "org.hyperledger.cactus.api.async.parsec.WatchBlocksV1.Complete"
         ],
         "x-enum-varnames": [
           "Subscribe",
@@ -511,7 +511,7 @@
           }
         }
       },
-      "BesuTransactionConfig": {
+      "ParsecTransactionConfig": {
         "type": "object",
         "additionalProperties": true,
         "properties": {
@@ -578,7 +578,7 @@
           }
         }
       },
-      "BesuPrivateTransactionConfig": {
+      "ParsecPrivateTransactionConfig": {
         "type": "object",
         "required": ["privateFrom", "privateFor"],
         "properties": {
@@ -664,14 +664,14 @@
             "nullable": false
           },
           "transactionConfig": {
-            "$ref": "#/components/schemas/BesuTransactionConfig",
+            "$ref": "#/components/schemas/ParsecTransactionConfig",
             "nullable": false
           },
           "consistencyStrategy": {
             "$ref": "#/components/schemas/ConsistencyStrategy"
           },
           "privateTransactionConfig": {
-            "$ref": "#/components/schemas/BesuPrivateTransactionConfig"
+            "$ref": "#/components/schemas/ParsecPrivateTransactionConfig"
           }
         }
       },
@@ -722,7 +722,7 @@
             "type": "string",
             "nullable": false,
             "minLength": 1,
-            "maxLength": 245760,
+            "maxLength": 24576,
             "description": "See https://ethereum.stackexchange.com/a/47556 regarding the maximum length of the bytecode"
           },
           "keychainId": {
@@ -748,7 +748,7 @@
             "nullable": false
           },
           "privateTransactionConfig": {
-            "$ref": "#/components/schemas/BesuPrivateTransactionConfig"
+            "$ref": "#/components/schemas/ParsecPrivateTransactionConfig"
           }
         }
       },
@@ -856,7 +856,7 @@
             "maxLength": 100
           },
           "privateTransactionConfig": {
-            "$ref": "#/components/schemas/BesuPrivateTransactionConfig"
+            "$ref": "#/components/schemas/ParsecPrivateTransactionConfig"
           }
         }
       },
@@ -917,7 +917,7 @@
         "type": "string",
         "nullable": false
       },
-      "GetBesuRecordV1Request": {
+      "GetParsecRecordV1Request": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -932,7 +932,7 @@
           }
         }
       },
-      "GetBesuRecordV1Response": {
+      "GetParsecRecordV1Response": {
         "type": "object",
         "properties": {
           "ledgerId": {
@@ -948,12 +948,12 @@
     }
   },
   "paths": {
-    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-open-api-spec": {
+    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-open-api-spec": {
       "get": {
         "x-hyperledger-cacti": {
           "http": {
             "verbLowerCase": "get",
-            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-open-api-spec"
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-open-api-spec"
           }
         },
         "operationId": "getOpenApiSpecV1",
@@ -973,12 +973,12 @@
         }
       }
     },
-    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/deploy-contract-solidity-bytecode": {
+    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/deploy-contract-solidity-bytecode": {
       "post": {
         "x-hyperledger-cacti": {
           "http": {
             "verbLowerCase": "post",
-            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/deploy-contract-solidity-bytecode"
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/deploy-contract-solidity-bytecode"
           }
         },
         "operationId": "deployContractSolBytecodeV1",
@@ -1007,12 +1007,12 @@
         }
       }
     },
-    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-balance": {
+    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-balance": {
       "post": {
         "x-hyperledger-cacti": {
           "http": {
             "verbLowerCase": "post",
-            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-balance"
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-balance"
           }
         },
         "operationId": "getBalanceV1",
@@ -1041,12 +1041,12 @@
         }
       }
     },
-    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-block": {
+    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-block": {
       "post": {
         "x-hyperledger-cacti": {
           "http": {
             "verbLowerCase": "post",
-            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-block"
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-block"
           }
         },
         "operationId": "getBlockV1",
@@ -1075,16 +1075,16 @@
         }
       }
     },
-    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/run-transaction": {
+    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/run-transaction": {
       "post": {
         "x-hyperledger-cacti": {
           "http": {
             "verbLowerCase": "post",
-            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/run-transaction"
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/run-transaction"
           }
         },
         "operationId": "runTransactionV1",
-        "summary": "Executes a transaction on a besu ledger",
+        "summary": "Executes a transaction on a parsec ledger",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -1109,16 +1109,16 @@
         }
       }
     },
-    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-transaction": {
+    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-transaction": {
       "post": {
         "x-hyperledger-cacti": {
           "http": {
             "verbLowerCase": "post",
-            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-transaction"
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-transaction"
           }
         },
         "operationId": "getTransactionV1",
-        "summary": "Executes a transaction on a besu ledger",
+        "summary": "Executes a transaction on a parsec ledger",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -1143,12 +1143,12 @@
         }
       }
     },
-    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-past-logs": {
+    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-past-logs": {
       "post": {
         "x-hyperledger-cacti": {
           "http": {
             "verbLowerCase": "post",
-            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-past-logs"
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-past-logs"
           }
         },
         "operationId": "getPastLogsV1",
@@ -1177,16 +1177,16 @@
         }
       }
     },
-    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/invoke-contract": {
+    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/invoke-contract": {
       "post": {
         "x-hyperledger-cacti": {
           "http": {
             "verbLowerCase": "post",
-            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/invoke-contract"
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/invoke-contract"
           }
         },
         "operationId": "invokeContractV1",
-        "summary": "Invokes a contract on a besu ledger",
+        "summary": "Invokes a contract on a parsec ledger",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -1211,12 +1211,12 @@
         }
       }
     },
-    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/sign-transaction": {
+    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/sign-transaction": {
       "post": {
         "x-hyperledger-cacti": {
           "http": {
             "verbLowerCase": "post",
-            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/sign-transaction"
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/sign-transaction"
           }
         },
         "operationId": "signTransactionV1",
@@ -1250,12 +1250,12 @@
         }
       }
     },
-    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-prometheus-exporter-metrics": {
+    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-prometheus-exporter-metrics": {
       "get": {
         "x-hyperledger-cacti": {
           "http": {
             "verbLowerCase": "get",
-            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-prometheus-exporter-metrics"
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-prometheus-exporter-metrics"
           }
         },
         "operationId": "getPrometheusMetricsV1",
@@ -1275,22 +1275,22 @@
         }
       }
     },
-    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-besu-record": {
+    "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-parsec-record": {
       "post": {
         "x-hyperledger-cacti": {
           "http": {
             "verbLowerCase": "post",
-            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-besu-record"
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-parsec-record"
           }
         },
-        "operationId": "getBesuRecordV1",
+        "operationId": "getParsecRecordV1",
         "summary": "Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.",
         "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetBesuRecordV1Request"
+                "$ref": "#/components/schemas/GetParsecRecordV1Request"
               }
             }
           }
@@ -1301,7 +1301,7 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetBesuRecordV1Response"
+                  "$ref": "#/components/schemas/GetParsecRecordV1Response"
                 }
               }
             }

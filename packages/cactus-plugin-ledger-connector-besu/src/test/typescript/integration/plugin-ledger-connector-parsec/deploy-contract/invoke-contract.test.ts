@@ -4,13 +4,13 @@ import { PluginRegistry } from "@hyperledger/cactus-core";
 import {
   EthContractInvocationType,
   Web3SigningCredentialType,
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorParsec,
   PluginFactoryLedgerConnector,
   Web3SigningCredentialCactusKeychainRef,
   ReceiptType,
 } from "../../../../../main/typescript/public-api";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
-import { BesuTestLedger } from "@hyperledger/cactus-test-tooling";
+import { ParsecTestLedger } from "@hyperledger/cactus-test-tooling";
 import { LogLevelDesc } from "@hyperledger/cactus-common";
 import HelloWorldContractJson from "../../../../solidity/hello-world-contract/HelloWorld.json";
 import Web3 from "web3";
@@ -20,27 +20,27 @@ const testCase = "deploys contract via .json file";
 
 describe(testCase, () => {
   afterAll(async () => {
-    await besuTestLedger.stop();
-    await besuTestLedger.destroy();
+    await parsecTestLedger.stop();
+    await parsecTestLedger.destroy();
   });
 
   const logLevel: LogLevelDesc = "TRACE";
-  const besuTestLedger = new BesuTestLedger();
+  const parsecTestLedger = new ParsecTestLedger();
 
   test(testCase, async () => {
-    await besuTestLedger.start();
+    await parsecTestLedger.start();
 
-    const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
-    const rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
+    const rpcApiHttpHost = await parsecTestLedger.getRpcApiHttpHost();
+    const rpcApiWsHost = await parsecTestLedger.getRpcApiWsHost();
 
     /**
-     * Constant defining the standard 'dev' Besu genesis.json contents.
+     * Constant defining the standard 'dev' Parsec genesis.json contents.
      *
-     * @see https://github.com/hyperledger/besu/blob/1.5.1/config/src/main/resources/dev.json
+     * @see https://github.com/hyperledger/parsec/blob/1.5.1/config/src/main/resources/dev.json
      */
-    const firstHighNetWorthAccount = besuTestLedger.getGenesisAccountPubKey();
-    const besuKeyPair = {
-      privateKey: besuTestLedger.getGenesisAccountPrivKey(),
+    const firstHighNetWorthAccount = parsecTestLedger.getGenesisAccountPubKey();
+    const parsecKeyPair = {
+      privateKey: parsecTestLedger.getGenesisAccountPrivKey(),
     };
     const contractName = "HelloWorld";
 
@@ -65,7 +65,7 @@ describe(testCase, () => {
     const factory = new PluginFactoryLedgerConnector({
       pluginImportType: PluginImportType.Local,
     });
-    const connector: PluginLedgerConnectorBesu = await factory.create({
+    const connector: PluginLedgerConnectorParsec = await factory.create({
       rpcApiHttpHost,
       rpcApiWsHost,
       instanceId: uuidv4(),
@@ -77,7 +77,7 @@ describe(testCase, () => {
     await connector.transact({
       web3SigningCredential: {
         ethAccount: firstHighNetWorthAccount,
-        secret: besuKeyPair.privateKey,
+        secret: parsecKeyPair.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
       consistencyStrategy: {
@@ -106,7 +106,7 @@ describe(testCase, () => {
         constructorArgs: [],
         web3SigningCredential: {
           ethAccount: firstHighNetWorthAccount,
-          secret: besuKeyPair.privateKey,
+          secret: parsecKeyPair.privateKey,
           type: Web3SigningCredentialType.PrivateKeyHex,
         },
         bytecode: HelloWorldContractJson.bytecode,
@@ -127,7 +127,7 @@ describe(testCase, () => {
         params: [],
         signingCredential: {
           ethAccount: firstHighNetWorthAccount,
-          secret: besuKeyPair.privateKey,
+          secret: parsecKeyPair.privateKey,
           type: Web3SigningCredentialType.PrivateKeyHex,
         },
       });

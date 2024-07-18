@@ -18,7 +18,7 @@ import {
   registerWebServiceEndpoint,
 } from "@hyperledger/cactus-core";
 import { CounterpartyHTLCRequest } from "../generated/openapi/typescript-axios";
-import { PluginHTLCCoordinatorBesu } from "../plugin-htlc-coordinator-besu";
+import { PluginHTLCCoordinatorParsec } from "../plugin-htlc-coordinator-parsec";
 import OAS from "../../json/openapi.json";
 
 export interface ICounterpartyHTLCOptions {
@@ -49,7 +49,7 @@ export class CounterpartyHTLCEndpoint implements IWebServiceEndpoint {
 
   public getOasPath() {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-coordinator-besu/counterparty-htlc"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-coordinator-parsec/counterparty-htlc"
     ];
   }
 
@@ -97,14 +97,10 @@ export class CounterpartyHTLCEndpoint implements IWebServiceEndpoint {
       const connector = this.options.pluginRegistry.plugins.find((plugin) => {
         return (
           plugin.getPackageName() ==
-          "@hyperledger/cactus-plugin-htlc-coordinator-besu"
+          "@hyperledger/cactus-plugin-htlc-coordinator-parsec"
         );
-      }) as unknown as PluginHTLCCoordinatorBesu;
+      }) as unknown as PluginHTLCCoordinatorParsec;
       const resBody = await connector.counterpartyHTLC(request);
-      res.setHeader(
-        "Strict-Transport-Security",
-        "max-age=31536000; includeSubDomains; preload",
-      );
       res.json(resBody);
     } catch (ex) {
       this.log.error(`Crash while serving ${reqTag}`, ex);

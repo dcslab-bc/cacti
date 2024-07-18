@@ -3,7 +3,7 @@ sequenceDiagram
 autonumber
     participant Alice
     participant HTLC Coordinator Alice
-    participant HTLC Plugin Besu 
+    participant HTLC Plugin Parsec 
     participant HTLC Plugin Counterparty
     participant HTLC Contract Alice
     participant HTLC Contract Counterparty
@@ -28,27 +28,27 @@ autonumber
         HTLC Coordinator Alice ->> Alice: HTLC Plugin Counterparty instance
     deactivate HTLC Coordinator Alice
      Note over Alice: Alice has validated that the Bob contract information is correct
-    Alice ->> HTLC Coordinator Alice: newCoordinator(HTLC Plugin Besu)
+    Alice ->> HTLC Coordinator Alice: newCoordinator(HTLC Plugin Parsec)
     activate HTLC Coordinator Alice
-        HTLC Coordinator Alice ->> HTLC Plugin Besu: newInstance()
-        activate HTLC Plugin Besu
-            HTLC Plugin Besu -->> HTLC Coordinator Alice: plugin instance
-        deactivate HTLC Plugin Besu
-        HTLC Coordinator Alice ->> HTLC Plugin Besu: newContract()
-            activate  HTLC Plugin Besu
-                HTLC Plugin Besu ->> HTLC Contract Alice: deployContract()
+        HTLC Coordinator Alice ->> HTLC Plugin Parsec: newInstance()
+        activate HTLC Plugin Parsec
+            HTLC Plugin Parsec -->> HTLC Coordinator Alice: plugin instance
+        deactivate HTLC Plugin Parsec
+        HTLC Coordinator Alice ->> HTLC Plugin Parsec: newContract()
+            activate  HTLC Plugin Parsec
+                HTLC Plugin Parsec ->> HTLC Contract Alice: deployContract()
                 activate HTLC Contract Alice
-                    HTLC Contract Alice -->> HTLC Plugin Besu: ok
+                    HTLC Contract Alice -->> HTLC Plugin Parsec: ok
                 deactivate HTLC Contract Alice
-                HTLC Plugin Besu -->>  HTLC Coordinator Alice: ok
-                HTLC Plugin Besu -->>  HTLC Plugin Besu: Listening contract events
+                HTLC Plugin Parsec -->>  HTLC Coordinator Alice: ok
+                HTLC Plugin Parsec -->>  HTLC Plugin Parsec: Listening contract events
            
         HTLC Coordinator Alice ->> Alice: Alice HTLC Coordinator instance
     deactivate HTLC Coordinator Alice
     Note over Alice: Alice send all information about her contract to Bob
     Note over Alice: Her counterparty invoke the withdraw function
-    HTLC Plugin Besu -->> HTLC Coordinator Alice: Event - CounterParty withdraw
-    deactivate HTLC Plugin Besu
+    HTLC Plugin Parsec -->> HTLC Coordinator Alice: Event - CounterParty withdraw
+    deactivate HTLC Plugin Parsec
     activate HTLC Coordinator Alice
         HTLC Coordinator Alice -->> Alice: Counterparty withdraw notification
     deactivate HTLC Coordinator Alice

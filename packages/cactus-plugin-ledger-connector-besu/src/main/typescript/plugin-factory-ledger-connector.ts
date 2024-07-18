@@ -3,18 +3,18 @@ import {
   PluginFactory,
 } from "@hyperledger/cactus-core-api";
 import {
-  IPluginLedgerConnectorBesuOptions,
-  PluginLedgerConnectorBesu,
-} from "./plugin-ledger-connector-besu";
+  IPluginLedgerConnectorParsecOptions,
+  PluginLedgerConnectorParsec,
+} from "./plugin-ledger-connector-parsec";
 
 export class PluginFactoryLedgerConnector extends PluginFactory<
-  PluginLedgerConnectorBesu,
-  IPluginLedgerConnectorBesuOptions,
+  PluginLedgerConnectorParsec,
+  IPluginLedgerConnectorParsecOptions,
   IPluginFactoryOptions
 > {
   async create(
-    pluginOptions: IPluginLedgerConnectorBesuOptions,
-  ): Promise<PluginLedgerConnectorBesu> {
-    return new PluginLedgerConnectorBesu(pluginOptions);
+    pluginOptions: IPluginLedgerConnectorParsecOptions,
+  ): Promise<PluginLedgerConnectorParsec> {
+    return new PluginLedgerConnectorParsec(pluginOptions);
   }
 }

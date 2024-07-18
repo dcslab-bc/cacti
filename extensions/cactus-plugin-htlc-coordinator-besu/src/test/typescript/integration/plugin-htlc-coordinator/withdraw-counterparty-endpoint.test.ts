@@ -8,9 +8,9 @@ import { Server as SocketIoServer } from "socket.io";
 import { encodeParameter } from "web3-eth-abi";
 import { keccak256 } from "web3-utils";
 import {
-  DefaultApi as HtlcCoordinatorBesuApi,
-  PluginFactoryHTLCCoordinatorBesu,
-  IPluginHTLCCoordinatorBesuOptions,
+  DefaultApi as HtlcCoordinatorParsecApi,
+  PluginFactoryHTLCCoordinatorParsec,
+  IPluginHTLCCoordinatorParsecOptions,
   HtlcPackage,
   OwnHTLCRequest,
   CounterpartyHTLCRequest,
@@ -18,17 +18,17 @@ import {
   Configuration,
 } from "../../../../main/typescript/public-api";
 import {
-  DefaultApi as BesuApi,
+  DefaultApi as ParsecApi,
   EthContractInvocationType,
   PluginFactoryLedgerConnector,
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorParsec,
   Web3SigningCredentialType,
   Web3SigningCredential,
-} from "@hyperledger/cactus-plugin-ledger-connector-besu";
+} from "@hyperledger/cactus-plugin-ledger-connector-parsec";
 import {
-  IPluginHtlcEthBesuErc20Options,
-  PluginFactoryHtlcEthBesuErc20,
-} from "@hyperledger/cactus-plugin-htlc-eth-besu-erc20";
+  IPluginHtlcEthParsecErc20Options,
+  PluginFactoryHtlcEthParsecErc20,
+} from "@hyperledger/cactus-plugin-htlc-eth-parsec-erc20";
 import {
   LogLevelDesc,
   IListenOptions,
@@ -37,14 +37,14 @@ import {
 import { PluginRegistry } from "@hyperledger/cactus-core";
 import { Constants, PluginImportType } from "@hyperledger/cactus-core-api";
 import {
-  BesuTestLedger,
+  ParsecTestLedger,
   pruneDockerAllIfGithubAction,
 } from "@hyperledger/cactus-test-tooling";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
 
-import HashTimeLockJSON from "@hyperledger/cactus-plugin-htlc-eth-besu-erc20/src/main/solidity/contracts/HashedTimeLockContract.json";
-import TestTokenJSON from "@hyperledger/cactus-test-plugin-htlc-eth-besu-erc20/src/test/solidity/token-erc20-contract/Test_Token.json";
-import DemoHelperJSON from "@hyperledger/cactus-test-plugin-htlc-eth-besu-erc20/src/test/solidity/token-erc20-contract/DemoHelpers.json";
+import HashTimeLockJSON from "@hyperledger/cactus-plugin-htlc-eth-parsec-erc20/src/main/solidity/contracts/HashedTimeLockContract.json";
+import TestTokenJSON from "@hyperledger/cactus-test-plugin-htlc-eth-parsec-erc20/src/test/solidity/token-erc20-contract/Test_Token.json";
+import DemoHelperJSON from "@hyperledger/cactus-test-plugin-htlc-eth-parsec-erc20/src/test/solidity/token-erc20-contract/DemoHelpers.json";
 
 const logLevel: LogLevelDesc = "DEBUG";
 const estimatedGas = 6721975;
@@ -75,17 +75,17 @@ test(testCase, async (t: Test) => {
   const secretEthAbiEncoded = encodeParameter("uint256", secret);
   const hashLock = keccak256(secretEthAbiEncoded);
 
-  t.comment("Starting Besu Test Ledger");
-  const besuTestLedger = new BesuTestLedger();
-  await besuTestLedger.start();
+  t.comment("Starting Parsec Test Ledger");
+  const parsecTestLedger = new ParsecTestLedger();
+  await parsecTestLedger.start();
 
   test.onFinish(async () => {
-    await besuTestLedger.stop();
-    await besuTestLedger.destroy();
+    await parsecTestLedger.stop();
+    await parsecTestLedger.destroy();
   });
 
-  const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
-  const rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
+  const rpcApiHttpHost = await parsecTestLedger.getRpcApiHttpHost();
+  const rpcApiWsHost = await parsecTestLedger.getRpcApiWsHost();
   const keychainId = uuidv4();
   const keychainPlugin = new PluginKeychainMemory({
     instanceId: uuidv4(),
@@ -112,7 +112,7 @@ test(testCase, async (t: Test) => {
   });
 
   const pluginRegistry = new PluginRegistry({});
-  const connector: PluginLedgerConnectorBesu = await factory.create({
+  const connector: PluginLedgerConnectorParsec = await factory.create({
     rpcApiHttpHost,
     rpcApiWsHost,
     logLevel,
@@ -121,29 +121,29 @@ test(testCase, async (t: Test) => {
   });
   pluginRegistry.add(connector);
 
-  const iPluginHtlcEthBesuErc20Options: IPluginHtlcEthBesuErc20Options = {
+  const iPluginHtlcEthParsecErc20Options: IPluginHtlcEthParsecErc20Options = {
     instanceId: uuidv4(),
     keychainId: keychainId,
     pluginRegistry,
   };
-  const pluginFactoryHtlcEthBesuErc20 = new PluginFactoryHtlcEthBesuErc20({
+  const pluginFactoryHtlcEthParsecErc20 = new PluginFactoryHtlcEthParsecErc20({
     pluginImportType: PluginImportType.Local,
   });
-  const pluginHtlcEthBesuErc20 = await pluginFactoryHtlcEthBesuErc20.create(
-    iPluginHtlcEthBesuErc20Options,
+  const pluginHtlcEthParsecErc20 = await pluginFactoryHtlcEthParsecErc20.create(
+    iPluginHtlcEthParsecErc20Options,
   );
-  pluginRegistry.add(pluginHtlcEthBesuErc20);
+  pluginRegistry.add(pluginHtlcEthParsecErc20);
 
-  const pluginOptions: IPluginHTLCCoordinatorBesuOptions = {
+  const pluginOptions: IPluginHTLCCoordinatorParsecOptions = {
     instanceId: uuidv4(),
     logLevel,
     pluginRegistry,
   };
-  const factoryHTLC = new PluginFactoryHTLCCoordinatorBesu({
+  const factoryHTLC = new PluginFactoryHTLCCoordinatorParsec({
     pluginImportType: PluginImportType.Local,
   });
-  const pluginHTLCCoordinatorBesu = await factoryHTLC.create(pluginOptions);
-  pluginRegistry.add(pluginHTLCCoordinatorBesu);
+  const pluginHTLCCoordinatorParsec = await factoryHTLC.create(pluginOptions);
+  pluginRegistry.add(pluginHTLCCoordinatorParsec);
 
   const expressApp = express();
   expressApp.use(bodyParser.json({ limit: "250mb" }));
@@ -159,18 +159,18 @@ test(testCase, async (t: Test) => {
   const apiHost = `http://${address}:${port}`;
 
   const configuration = new Configuration({ basePath: apiHost });
-  const htlcCoordinatorBesuApi = new HtlcCoordinatorBesuApi(configuration);
+  const htlcCoordinatorParsecApi = new HtlcCoordinatorParsecApi(configuration);
 
-  await pluginHTLCCoordinatorBesu.getOrCreateWebServices();
-  await pluginHTLCCoordinatorBesu.registerWebServices(expressApp);
-  const besuWsApi = new SocketIoServer(server, {
+  await pluginHTLCCoordinatorParsec.getOrCreateWebServices();
+  await pluginHTLCCoordinatorParsec.registerWebServices(expressApp);
+  const parsecWsApi = new SocketIoServer(server, {
     path: Constants.SocketIoConnectionPathV1,
   });
-  const besuConnectorConfiguration = new Configuration({ basePath: apiHost });
-  const besuConnectorApi = new BesuApi(besuConnectorConfiguration);
+  const parsecConnectorConfiguration = new Configuration({ basePath: apiHost });
+  const parsecConnectorApi = new ParsecApi(parsecConnectorConfiguration);
 
   await connector.getOrCreateWebServices();
-  await connector.registerWebServices(expressApp, besuWsApi as any);
+  await connector.registerWebServices(expressApp, parsecWsApi as any);
 
   t.comment("Deploys TestToken via .json file on deployContract function");
   const deployOutToken = await connector.deployContract({
@@ -195,7 +195,7 @@ test(testCase, async (t: Test) => {
     .contractAddress as string;
 
   t.comment("Approve 10 Tokens to HashTimeLockAddress");
-  const approveTokensOutput = await besuConnectorApi.invokeContractV1({
+  const approveTokensOutput = await parsecConnectorApi.invokeContractV1({
     contractName: TestTokenJSON.contractName,
     keychainId,
     signingCredential: web3SigningCredential,
@@ -211,7 +211,7 @@ test(testCase, async (t: Test) => {
   );
 
   t.comment("Get account balance");
-  const responseBalance = await besuConnectorApi.invokeContractV1({
+  const responseBalance = await parsecConnectorApi.invokeContractV1({
     contractName: TestTokenJSON.contractName,
     keychainId,
     signingCredential: web3SigningCredential,
@@ -226,7 +226,7 @@ test(testCase, async (t: Test) => {
   );
 
   t.comment("Get HashTimeLock contract and account allowance");
-  const allowanceOutput = await besuConnectorApi.invokeContractV1({
+  const allowanceOutput = await parsecConnectorApi.invokeContractV1({
     contractName: TestTokenJSON.contractName,
     keychainId,
     signingCredential: web3SigningCredential,
@@ -239,7 +239,7 @@ test(testCase, async (t: Test) => {
 
   t.comment("Create and initialize own HTLC");
   const ownHTLCRequest: OwnHTLCRequest = {
-    htlcPackage: HtlcPackage.BesuErc20,
+    htlcPackage: HtlcPackage.ParsecErc20,
     connectorInstanceId,
     keychainId,
     constructorArgs: [],
@@ -255,20 +255,20 @@ test(testCase, async (t: Test) => {
     gas: estimatedGas,
   };
 
-  const response = await htlcCoordinatorBesuApi.ownHtlcV1(ownHTLCRequest);
+  const response = await htlcCoordinatorParsecApi.ownHtlcV1(ownHTLCRequest);
   t.equal(response.status, 200, "response status is 200 OK");
   t.equal(response.data.success, true, "response success is true");
   t.ok(
     response.data,
-    "pluginHTLCCoordinatorBesu.ownHtlcV1() output is truthy OK",
+    "pluginHTLCCoordinatorParsec.ownHtlcV1() output is truthy OK",
   );
   t.ok(
     response.data.out.transactionReceipt,
-    "pluginHTLCCoordinatorBesu.ownHtlcV1() output.transactionReceipt is truthy OK",
+    "pluginHTLCCoordinatorParsec.ownHtlcV1() output.transactionReceipt is truthy OK",
   );
 
   t.comment("Get HTLC id");
-  const responseTxId = await besuConnectorApi.invokeContractV1({
+  const responseTxId = await parsecConnectorApi.invokeContractV1({
     contractName: DemoHelperJSON.contractName,
     keychainId,
     signingCredential: web3SigningCredential,
@@ -287,7 +287,7 @@ test(testCase, async (t: Test) => {
 
   t.comment("Get counterparty HTLC");
   const counterpartyHTLCRequest: CounterpartyHTLCRequest = {
-    htlcPackage: HtlcPackage.BesuErc20,
+    htlcPackage: HtlcPackage.ParsecErc20,
     connectorInstanceId,
     keychainId,
     htlcId: responseTxId.data.callOutput,
@@ -295,7 +295,7 @@ test(testCase, async (t: Test) => {
     gas: estimatedGas,
   };
 
-  const response2 = await htlcCoordinatorBesuApi.counterpartyHtlcV1(
+  const response2 = await htlcCoordinatorParsecApi.counterpartyHtlcV1(
     counterpartyHTLCRequest,
   );
   t.equal(response2.status, 200, "response status is 200 OK");
@@ -304,7 +304,7 @@ test(testCase, async (t: Test) => {
 
   t.comment("Get counterparty HTLC");
   const withdrawCounterparty: WithdrawCounterpartyRequest = {
-    htlcPackage: HtlcPackage.BesuErc20,
+    htlcPackage: HtlcPackage.ParsecErc20,
     connectorInstanceId,
     keychainId,
     web3SigningCredential,
@@ -314,7 +314,7 @@ test(testCase, async (t: Test) => {
   };
 
   const response3 =
-    await htlcCoordinatorBesuApi.withdrawCounterpartyV1(withdrawCounterparty);
+    await htlcCoordinatorParsecApi.withdrawCounterpartyV1(withdrawCounterparty);
   t.equal(response3.status, 200, "response status is 200 OK");
   t.equal(response3.data.success, true, "response success is true");
 

@@ -18,24 +18,24 @@ import {
 
 import { SignTransactionRequest } from "../generated/openapi/typescript-axios/api";
 
-import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-besu";
+import { PluginLedgerConnectorParsec } from "../plugin-ledger-connector-parsec";
 import OAS from "../../json/openapi.json";
 
-export interface IBesuSignTransactionEndpointOptions {
-  connector: PluginLedgerConnectorBesu;
+export interface IParsecSignTransactionEndpointOptions {
+  connector: PluginLedgerConnectorParsec;
   logLevel?: LogLevelDesc;
 }
 
-export class BesuSignTransactionEndpointV1 implements IWebServiceEndpoint {
+export class ParsecSignTransactionEndpointV1 implements IWebServiceEndpoint {
   private readonly log: Logger;
 
-  constructor(public readonly options: IBesuSignTransactionEndpointOptions) {
-    const fnTag = "BesuSignTransactionEndpointV1#constructor()";
+  constructor(public readonly options: IParsecSignTransactionEndpointOptions) {
+    const fnTag = "ParsecSignTransactionEndpointV1#constructor()";
 
     Checks.truthy(options, `${fnTag} options`);
     Checks.truthy(options.connector, `${fnTag} options.connector`);
 
-    const label = "besu-sign-transaction-endpoint";
+    const label = "parsec-sign-transaction-endpoint";
     const level = options.logLevel || "INFO";
     this.log = LoggerProvider.getOrCreate({ label, level });
   }
@@ -54,9 +54,9 @@ export class BesuSignTransactionEndpointV1 implements IWebServiceEndpoint {
     return this.handleRequest.bind(this);
   }
 
-  public get oasPath(): (typeof OAS.paths)["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/sign-transaction"] {
+  public get oasPath(): (typeof OAS.paths)["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/sign-transaction"] {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/sign-transaction"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/sign-transaction"
     ];
   }
 
@@ -80,7 +80,7 @@ export class BesuSignTransactionEndpointV1 implements IWebServiceEndpoint {
   }
 
   async handleRequest(req: Request, res: Response): Promise<void> {
-    const fnTag = "BesuSignTransactionEndpointV1#handleRequest()";
+    const fnTag = "ParsecSignTransactionEndpointV1#handleRequest()";
     this.log.debug(`POST ${this.getPath()}`);
 
     try {

@@ -14,26 +14,26 @@ import {
 } from "@hyperledger/cactus-core-api";
 import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 
-import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-besu";
-import { GetBesuRecordV1Request } from "../generated/openapi/typescript-axios/api";
+import { PluginLedgerConnectorParsec } from "../plugin-ledger-connector-parsec";
+import { GetParsecRecordV1Request } from "../generated/openapi/typescript-axios/api";
 
 import OAS from "../../json/openapi.json";
 
-export interface IGetBesuRecordEndpointV1Options {
+export interface IGetParsecRecordEndpointV1Options {
   logLevel?: LogLevelDesc;
-  connector: PluginLedgerConnectorBesu;
+  connector: PluginLedgerConnectorParsec;
 }
 
-export class GetBesuRecordEndpointV1 implements IWebServiceEndpoint {
-  public static readonly CLASS_NAME = "GetBesuRecordEndpointV1";
+export class GetParsecRecordEndpointV1 implements IWebServiceEndpoint {
+  public static readonly CLASS_NAME = "GetParsecRecordEndpointV1";
 
   private readonly log: Logger;
 
   public get className(): string {
-    return GetBesuRecordEndpointV1.CLASS_NAME;
+    return GetParsecRecordEndpointV1.CLASS_NAME;
   }
 
-  constructor(public readonly options: IGetBesuRecordEndpointV1Options) {
+  constructor(public readonly options: IGetParsecRecordEndpointV1Options) {
     const fnTag = `${this.className}#constructor()`;
     Checks.truthy(options, `${fnTag} arg options`);
     Checks.truthy(options.connector, `${fnTag} arg options.connector`);
@@ -45,7 +45,7 @@ export class GetBesuRecordEndpointV1 implements IWebServiceEndpoint {
 
   public getOasPath() {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-besu-record"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-parsec/get-parsec-record"
     ];
   }
 
@@ -88,9 +88,9 @@ export class GetBesuRecordEndpointV1 implements IWebServiceEndpoint {
     const reqTag = `${this.getVerbLowerCase()} - ${this.getPath()}`;
     this.log.debug(reqTag);
     try {
-      const reqBody: GetBesuRecordV1Request =
-        req.body as GetBesuRecordV1Request;
-      const resBody = await this.options.connector.getBesuRecord(reqBody);
+      const reqBody: GetParsecRecordV1Request =
+        req.body as GetParsecRecordV1Request;
+      const resBody = await this.options.connector.getParsecRecord(reqBody);
       res.json(resBody);
     } catch (ex) {
       this.log.error(`Crash while serving ${reqTag}`, ex);

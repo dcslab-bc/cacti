@@ -1,17 +1,17 @@
 export * from "./generated/openapi/typescript-axios/index";
 import { IPluginFactoryOptions } from "@hyperledger/cactus-core-api";
 export {
-  IPluginHTLCCoordinatorBesuOptions,
-  PluginHTLCCoordinatorBesu,
-} from "./plugin-htlc-coordinator-besu";
+  IPluginHTLCCoordinatorParsecOptions,
+  PluginHTLCCoordinatorParsec,
+} from "./plugin-htlc-coordinator-parsec";
 
-export { PluginFactoryHTLCCoordinatorBesu } from "./plugin-factory-htlc-coordinator-besu";
-import { PluginFactoryHTLCCoordinatorBesu } from "./plugin-factory-htlc-coordinator-besu";
+export { PluginFactoryHTLCCoordinatorParsec } from "./plugin-factory-htlc-coordinator-parsec";
+import { PluginFactoryHTLCCoordinatorParsec } from "./plugin-factory-htlc-coordinator-parsec";
 
 export * from "./generated/openapi/typescript-axios/index";
 
 export async function createPluginFactory(
   pluginFactoryOptions: IPluginFactoryOptions,
-): Promise<PluginFactoryHTLCCoordinatorBesu> {
-  return new PluginFactoryHTLCCoordinatorBesu(pluginFactoryOptions);
+): Promise<PluginFactoryHTLCCoordinatorParsec> {
+  return new PluginFactoryHTLCCoordinatorParsec(pluginFactoryOptions);
 }

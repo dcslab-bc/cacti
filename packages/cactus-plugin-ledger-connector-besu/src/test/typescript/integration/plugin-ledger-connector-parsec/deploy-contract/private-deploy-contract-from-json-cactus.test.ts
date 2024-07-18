@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import HelloWorldContractJson from "../../../../solidity/hello-world-contract/HelloWorld.json";
 import Web3 from "web3";
 import Web3JsQuorum, { IPrivateTransactionReceipt } from "web3js-quorum";
-import { BesuMpTestLedger } from "@hyperledger/cactus-test-tooling";
+import { ParsecMpTestLedger } from "@hyperledger/cactus-test-tooling";
 import { LogLevelDesc } from "@hyperledger/cactus-common";
 import {
   EthContractInvocationType,
@@ -15,9 +15,9 @@ import { PluginRegistry } from "@hyperledger/cactus-core";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
 
 const containerImageName =
-  "ghcr.io/hyperledger/cactus-besu-all-in-one-multi-party";
+  "ghcr.io/hyperledger/cactus-parsec-all-in-one-multi-party";
 const containerImageTag = "2023-08-08-pr-2596";
-const testCase = "Executes private transactions on Hyperledger Besu";
+const testCase = "Executes private transactions on Hyperledger Parsec";
 const logLevel: LogLevelDesc = "TRACE";
 
 const doctorCactusHex =
@@ -36,7 +36,7 @@ const keysStatic = {
       publicKey: "1iTZde/ndBHvzhcl7V68x44Vx7pl8nwx9LqnM/AfJUg=",
     },
   },
-  besu: {
+  parsec: {
     member1: {
       url: "http://127.0.0.1:20000",
       wsUrl: "ws://127.0.0.1:20001",
@@ -66,7 +66,7 @@ test(testCase, async (t: Test) => {
   // At development time one can specify this environment variable if there is
   // a multi-party network already running, which is doable with something like
   // this on the terminal:
-  // docker run   --rm   --privileged   --publish 2222:22   --publish 3000:3000   --publish 8545:8545   --publish 8546:8546   --publish 9001:9001   --publish 9081:9081   --publish 9082:9082   --publish 9083:9083   --publish 9090:9090   --publish 18545:18545   --publish 20000:20000   --publish 20001:20001   --publish 20002:20002   --publish 20003:20003   --publish 20004:20004   --publish 20005:20005   --publish 25000:25000   petermetz/cactus-besu-multi-party-all-in-one:0.1.2
+  // docker run   --rm   --privileged   --publish 2222:22   --publish 3000:3000   --publish 8545:8545   --publish 8546:8546   --publish 9001:9001   --publish 9081:9081   --publish 9082:9082   --publish 9083:9083   --publish 9090:9090   --publish 18545:18545   --publish 20000:20000   --publish 20001:20001   --publish 20002:20002   --publish 20003:20003   --publish 20004:20004   --publish 20005:20005   --publish 25000:25000   petermetz/cactus-parsec-multi-party-all-in-one:0.1.2
   //
   // The upside of this approach is that a new container is not launched from
   // scratch for every test execution which enables faster iteration.
@@ -76,7 +76,7 @@ test(testCase, async (t: Test) => {
   if (preWarmedLedger) {
     keys = keysStatic;
   } else {
-    const ledger = new BesuMpTestLedger({
+    const ledger = new ParsecMpTestLedger({
       logLevel,
       imageName: containerImageName,
       imageTag: containerImageTag,
@@ -87,13 +87,13 @@ test(testCase, async (t: Test) => {
     keys = await ledger.getKeys();
   }
 
-  const rpcApiHttpHostMember1 = keys.besu.member1.url;
-  const rpcApiHttpHostMember2 = keys.besu.member2.url;
-  const rpcApiHttpHostMember3 = keys.besu.member3.url;
+  const rpcApiHttpHostMember1 = keys.parsec.member1.url;
+  const rpcApiHttpHostMember2 = keys.parsec.member2.url;
+  const rpcApiHttpHostMember3 = keys.parsec.member3.url;
 
-  const rpcApiWsHostMember1 = keys.besu.member1.wsUrl;
-  const rpcApiWsHostMember2 = keys.besu.member2.wsUrl;
-  const rpcApiWsHostMember3 = keys.besu.member3.wsUrl;
+  const rpcApiWsHostMember1 = keys.parsec.member1.wsUrl;
+  const rpcApiWsHostMember2 = keys.parsec.member2.wsUrl;
+  const rpcApiWsHostMember3 = keys.parsec.member3.wsUrl;
 
   const web3Member1 = new Web3(rpcApiHttpHostMember1);
   const web3Member2 = new Web3(rpcApiHttpHostMember2);
@@ -107,9 +107,9 @@ test(testCase, async (t: Test) => {
     pluginImportType: PluginImportType.Local,
   });
 
-  const connectorInstanceId1 = "besu1_" + uuidv4();
-  const connectorInstanceId2 = "besu2_" + uuidv4();
-  const connectorInstanceId3 = "besu3_" + uuidv4();
+  const connectorInstanceId1 = "parsec1_" + uuidv4();
+  const connectorInstanceId2 = "parsec2_" + uuidv4();
+  const connectorInstanceId3 = "parsec3_" + uuidv4();
 
   const keychainInstanceId1 = "keychain_instance1_" + uuidv4();
   const keychainId1 = "keychain1_" + uuidv4();
@@ -219,7 +219,7 @@ test(testCase, async (t: Test) => {
       ],
     },
     web3SigningCredential: {
-      secret: keys.besu.member1.privateKey,
+      secret: keys.parsec.member1.privateKey,
       type: Web3SigningCredentialType.PrivateKeyHex,
     },
     keychainId: keychain1.getKeychainId(),
@@ -298,7 +298,7 @@ test(testCase, async (t: Test) => {
       data,
       privateFrom: keys.tessera.member1.publicKey,
       privateFor: [keys.tessera.member2.publicKey],
-      privateKey: keys.besu.member1.privateKey,
+      privateKey: keys.parsec.member1.privateKey,
     };
     const transactionHash =
       await web3QuorumMember1.priv.generateAndSendRawTransaction(
@@ -321,7 +321,7 @@ test(testCase, async (t: Test) => {
       data,
       privateFrom: keys.tessera.member1.publicKey,
       privateFor: [keys.tessera.member2.publicKey],
-      privateKey: keys.besu.member1.privateKey,
+      privateKey: keys.parsec.member1.privateKey,
     };
 
     const privacyGroupId =
@@ -346,7 +346,7 @@ test(testCase, async (t: Test) => {
       data,
       privateFrom: keys.tessera.member1.publicKey,
       privateFor: [keys.tessera.member2.publicKey],
-      privateKey: keys.besu.member3.privateKey,
+      privateKey: keys.parsec.member3.privateKey,
     };
 
     const privacyGroupId =
@@ -367,7 +367,7 @@ test(testCase, async (t: Test) => {
       data,
       privateFrom: keys.tessera.member2.publicKey,
       privateFor: [keys.tessera.member2.publicKey],
-      privateKey: keys.besu.member2.privateKey,
+      privateKey: keys.parsec.member2.privateKey,
     };
     const transactionHash =
       await web3QuorumMember2.priv.generateAndSendRawTransaction(
@@ -389,7 +389,7 @@ test(testCase, async (t: Test) => {
       to: contractDeployReceipt.contractAddress,
       data,
       privateFrom: keys.tessera.member3.publicKey,
-      privateKey: keys.besu.member3.privateKey,
+      privateKey: keys.parsec.member3.privateKey,
       privateFor: [keys.tessera.member2.publicKey],
     };
     const transactionHash =
@@ -423,7 +423,7 @@ test(testCase, async (t: Test) => {
     await t.rejects(
       contractInvocationNoPrivTxConfig,
       /Returned values aren't valid, did it run Out of Gas\? You might also see this error if you are not using the correct ABI for the contract you are retrieving data from, requesting data from a block number that does not exist, or querying a node which is not fully synced\./,
-      "private contract call fails without Besu member credentials OK",
+      "private contract call fails without Parsec member credentials OK",
     );
   }
 
@@ -442,7 +442,7 @@ test(testCase, async (t: Test) => {
         privateFor: [keys.tessera.member2.publicKey],
       },
       signingCredential: {
-        secret: keys.besu.member1.privateKey,
+        secret: keys.parsec.member1.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
     });
@@ -467,7 +467,7 @@ test(testCase, async (t: Test) => {
         privateFor: [keys.tessera.member2.publicKey],
       },
       signingCredential: {
-        secret: keys.besu.member1.privateKey,
+        secret: keys.parsec.member1.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
     });
@@ -496,7 +496,7 @@ test(testCase, async (t: Test) => {
         privateFor: [keys.tessera.member2.publicKey],
       },
       signingCredential: {
-        secret: keys.besu.member1.privateKey,
+        secret: keys.parsec.member1.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
     });
@@ -523,7 +523,7 @@ test(testCase, async (t: Test) => {
         privateFor: [keys.tessera.member2.publicKey],
       },
       signingCredential: {
-        secret: keys.besu.member3.privateKey,
+        secret: keys.parsec.member3.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
     });

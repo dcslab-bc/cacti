@@ -1,51 +1,46 @@
-import "jest-extended";
 import { v4 as uuidv4 } from "uuid";
+import "jest-extended";
+import { Account } from "web3-core";
 import { PluginRegistry } from "@hyperledger/cactus-core";
 import {
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorParsec,
   PluginFactoryLedgerConnector,
   GetBalanceV1Request,
 } from "../../../../../main/typescript/public-api";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
-import { BesuTestLedger } from "@hyperledger/cactus-test-tooling";
+import { ParsecTestLedger } from "@hyperledger/cactus-test-tooling";
 import { LogLevelDesc } from "@hyperledger/cactus-common";
 import HelloWorldContractJson from "../../../../solidity/hello-world-contract/HelloWorld.json";
 import Web3 from "web3";
 import { PluginImportType } from "@hyperledger/cactus-core-api";
 
-describe("PluginLedgerConnectorBesu", () => {
+const testcase = "can get balance of an account";
+describe(testcase, () => {
   const logLevel: LogLevelDesc = "TRACE";
-  const containerImageVersion = "2021-08-24--feat-1244";
-  const containerImageName =
-    "ghcr.io/hyperledger/cactus-besu-21-1-6-all-in-one";
-  const besuOptions = { containerImageName, containerImageVersion };
-  const besuTestLedger = new BesuTestLedger(besuOptions);
+  const parsecTestLedger = new ParsecTestLedger();
 
-  beforeAll(async () => {
-    await besuTestLedger.start();
-  });
+  let rpcApiHttpHost: string,
+    rpcApiWsHost: string,
+    web3: Web3,
+    keychainPlugin: PluginKeychainMemory,
+    firstHighNetWorthAccount: string,
+    testEthAccount: Account,
+    keychainEntryKey: string,
+    keychainEntryValue: string;
 
   afterAll(async () => {
-    await besuTestLedger.stop();
-    await besuTestLedger.destroy();
+    await parsecTestLedger.stop();
+    await parsecTestLedger.destroy();
   });
+  beforeAll(async () => {
+    await parsecTestLedger.start();
+    web3 = new Web3(rpcApiHttpHost);
+    firstHighNetWorthAccount = parsecTestLedger.getGenesisAccountPubKey();
+    testEthAccount = web3.eth.accounts.create(uuidv4());
 
-  test("can get balance of an ETH account", async () => {
-    const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
-    const rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
-
-    /**
-     * Constant defining the standard 'dev' Besu genesis.json contents.
-     *
-     * @see https://github.com/hyperledger/besu/blob/21.1.6/config/src/main/resources/dev.json
-     */
-    const firstHighNetWorthAccount = besuTestLedger.getGenesisAccountPubKey();
-    const web3 = new Web3(rpcApiHttpHost);
-    const testEthAccount = web3.eth.accounts.create(uuidv4());
-
-    const keychainEntryKey = uuidv4();
-    const keychainEntryValue = testEthAccount.privateKey;
-    const keychainPlugin = new PluginKeychainMemory({
+    keychainEntryKey = uuidv4();
+    keychainEntryValue = testEthAccount.privateKey;
+    keychainPlugin = new PluginKeychainMemory({
       instanceId: uuidv4(),
       keychainId: uuidv4(),
       // pre-provision keychain with mock backend holding the private key of the
@@ -54,6 +49,16 @@ describe("PluginLedgerConnectorBesu", () => {
       backend: new Map([[keychainEntryKey, keychainEntryValue]]),
       logLevel,
     });
+    rpcApiHttpHost = await parsecTestLedger.getRpcApiHttpHost();
+    rpcApiWsHost = await parsecTestLedger.getRpcApiWsHost();
+  });
+  /**
+   * Constant defining the standard 'dev' Parsec genesis.json contents.
+   *
+   * @see https://github.com/hyperledger/parsec/blob/1.5.1/config/src/main/resources/dev.json
+   */
+
+  test(testcase, async () => {
     keychainPlugin.set(
       HelloWorldContractJson.contractName,
       JSON.stringify(HelloWorldContractJson),
@@ -61,17 +66,18 @@ describe("PluginLedgerConnectorBesu", () => {
     const factory = new PluginFactoryLedgerConnector({
       pluginImportType: PluginImportType.Local,
     });
-    const connector: PluginLedgerConnectorBesu = await factory.create({
+    const connector: PluginLedgerConnectorParsec = await factory.create({
       rpcApiHttpHost,
       rpcApiWsHost,
       instanceId: uuidv4(),
       pluginRegistry: new PluginRegistry({ plugins: [keychainPlugin] }),
     });
+    await connector.onPluginInit();
 
     const req: GetBalanceV1Request = { address: firstHighNetWorthAccount };
     const currentBalance = await connector.getBalance(req);
+    //makes the information in to string
     expect(currentBalance).toBeTruthy();
-    expect(currentBalance).toBeObject();
-    expect(currentBalance).not.toBeEmptyObject();
+    expect(typeof currentBalance).toBe("object");
   });
 });

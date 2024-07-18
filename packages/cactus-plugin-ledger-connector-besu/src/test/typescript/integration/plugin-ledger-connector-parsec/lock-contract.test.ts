@@ -14,38 +14,38 @@ import LockAssetContractJson from "../../../solidity/hello-world-contract/LockAs
 import {
   EthContractInvocationType,
   Web3SigningCredentialType,
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorParsec,
   PluginFactoryLedgerConnector,
   ReceiptType,
 } from "../../../../main/typescript/public-api";
 
 const logLevel: LogLevelDesc = "INFO";
 
-describe("PluginLedgerConnectorBesu", () => {
-  const besuTestLedger = new BesuTestLedger();
-  let besuKeyPair: { privateKey: string };
+describe("PluginLedgerConnectorParsec", () => {
+  const parsecTestLedger = new BesuTestLedger();
+  let parsecKeyPair: { privateKey: string };
   let firstHighNetWorthAccount: string;
   let keychainPlugin: PluginKeychainMemory;
   let testEthAccount: Account;
-  let connector: PluginLedgerConnectorBesu;
+  let connector: PluginLedgerConnectorParsec;
 
   beforeAll(async () => {
-    await besuTestLedger.start();
+    await parsecTestLedger.start();
 
     /**
-     * Constant defining the standard 'dev' Besu genesis.json contents.
+     * Constant defining the standard 'dev' Parsec genesis.json contents.
      *
-     * @see https://github.com/hyperledger/besu/blob/1.5.1/config/src/main/resources/dev.json
+     * @see https://github.com/hyperledger/parsec/blob/1.5.1/config/src/main/resources/dev.json
      */
-    firstHighNetWorthAccount = besuTestLedger.getGenesisAccountPubKey();
-    besuKeyPair = {
-      privateKey: besuTestLedger.getGenesisAccountPrivKey(),
+    firstHighNetWorthAccount = parsecTestLedger.getGenesisAccountPubKey();
+    parsecKeyPair = {
+      privateKey: parsecTestLedger.getGenesisAccountPrivKey(),
     };
   });
 
   afterAll(async () => {
-    await besuTestLedger.stop();
-    await besuTestLedger.destroy();
+    await parsecTestLedger.stop();
+    await parsecTestLedger.destroy();
   });
 
   afterAll(async () => {
@@ -53,8 +53,8 @@ describe("PluginLedgerConnectorBesu", () => {
   });
 
   it("creates test account from scratch with seed money", async () => {
-    const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
-    const rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
+    const rpcApiHttpHost = await parsecTestLedger.getRpcApiHttpHost();
+    const rpcApiWsHost = await parsecTestLedger.getRpcApiWsHost();
 
     const web3 = new Web3(rpcApiHttpHost);
     testEthAccount = web3.eth.accounts.create(uuidv4());
@@ -88,7 +88,7 @@ describe("PluginLedgerConnectorBesu", () => {
     await connector.transact({
       web3SigningCredential: {
         ethAccount: firstHighNetWorthAccount,
-        secret: besuKeyPair.privateKey,
+        secret: parsecKeyPair.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
       consistencyStrategy: {
@@ -117,7 +117,7 @@ describe("PluginLedgerConnectorBesu", () => {
       constructorArgs: [],
       web3SigningCredential: {
         ethAccount: firstHighNetWorthAccount,
-        secret: besuKeyPair.privateKey,
+        secret: parsecKeyPair.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
       bytecode: LockAssetContractJson.bytecode,
@@ -139,7 +139,7 @@ describe("PluginLedgerConnectorBesu", () => {
       params: ["asset1", 5],
       signingCredential: {
         ethAccount: testEthAccount.address,
-        secret: besuKeyPair.privateKey,
+        secret: parsecKeyPair.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
       gas: 1000000,
@@ -155,7 +155,7 @@ describe("PluginLedgerConnectorBesu", () => {
       params: ["asset1"],
       signingCredential: {
         ethAccount: testEthAccount.address,
-        secret: besuKeyPair.privateKey,
+        secret: parsecKeyPair.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
       gas: 1000000,
@@ -172,7 +172,7 @@ describe("PluginLedgerConnectorBesu", () => {
       params: ["asset1"],
       signingCredential: {
         ethAccount: testEthAccount.address,
-        secret: besuKeyPair.privateKey,
+        secret: parsecKeyPair.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
       gas: 1000000,
@@ -189,7 +189,7 @@ describe("PluginLedgerConnectorBesu", () => {
       params: ["asset1"],
       signingCredential: {
         ethAccount: testEthAccount.address,
-        secret: besuKeyPair.privateKey,
+        secret: parsecKeyPair.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
       gas: 1000000,
@@ -206,7 +206,7 @@ describe("PluginLedgerConnectorBesu", () => {
       params: ["asset1"],
       signingCredential: {
         ethAccount: testEthAccount.address,
-        secret: besuKeyPair.privateKey,
+        secret: parsecKeyPair.privateKey,
         type: Web3SigningCredentialType.PrivateKeyHex,
       },
       gas: 1000000,

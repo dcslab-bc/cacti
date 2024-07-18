@@ -2,25 +2,25 @@ import "jest-extended";
 import { v4 as uuidv4 } from "uuid";
 import { PluginRegistry } from "@hyperledger/cactus-core";
 import {
-  PluginLedgerConnectorBesu,
+  PluginLedgerConnectorParsec,
   PluginFactoryLedgerConnector,
   GetBlockV1Request,
 } from "../../../../../main/typescript/public-api";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
-import { BesuTestLedger } from "@hyperledger/cactus-test-tooling";
+import { ParsecTestLedger } from "@hyperledger/cactus-test-tooling";
 import { LogLevelDesc } from "@hyperledger/cactus-common";
 import HelloWorldContractJson from "../../../../solidity/hello-world-contract/HelloWorld.json";
 import Web3 from "web3";
 import { PluginImportType } from "@hyperledger/cactus-core-api";
 import { Account } from "web3-core";
 
-describe("PluginLedgerConnectorBesu", () => {
+describe("PluginLedgerConnectorParsec", () => {
   const logLevel: LogLevelDesc = "TRACE";
   const containerImageVersion = "2021-08-24--feat-1244";
   const containerImageName =
-    "ghcr.io/hyperledger/cactus-besu-21-1-6-all-in-one";
-  const besuOptions = { containerImageName, containerImageVersion };
-  const besuTestLedger = new BesuTestLedger(besuOptions);
+    "ghcr.io/hyperledger/cactus-parsec-21-1-6-all-in-one";
+  const parsecOptions = { containerImageName, containerImageVersion };
+  const parsecTestLedger = new ParsecTestLedger(parsecOptions);
   const keychainEntryKey = uuidv4();
 
   let rpcApiHttpHost: string;
@@ -28,12 +28,12 @@ describe("PluginLedgerConnectorBesu", () => {
   let web3: Web3;
   let testEthAccount: Account;
   let keychainEntryValue;
-  let connector: PluginLedgerConnectorBesu;
+  let connector: PluginLedgerConnectorParsec;
 
   beforeAll(async () => {
-    await besuTestLedger.start();
-    rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
-    rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
+    await parsecTestLedger.start();
+    rpcApiHttpHost = await parsecTestLedger.getRpcApiHttpHost();
+    rpcApiWsHost = await parsecTestLedger.getRpcApiWsHost();
     web3 = new Web3(rpcApiHttpHost);
     testEthAccount = web3.eth.accounts.create(uuidv4());
     keychainEntryValue = testEthAccount.privateKey;
@@ -63,8 +63,8 @@ describe("PluginLedgerConnectorBesu", () => {
   });
 
   afterAll(async () => {
-    await besuTestLedger.stop();
-    await besuTestLedger.destroy();
+    await parsecTestLedger.stop();
+    await parsecTestLedger.destroy();
   });
 
   it("can query the ledger for specific blocks", async () => {
