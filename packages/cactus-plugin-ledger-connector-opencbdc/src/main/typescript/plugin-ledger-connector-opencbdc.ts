@@ -17,7 +17,7 @@ import type { WebsocketProvider } from "web3-core";
 import Web3JsQuorum, { IWeb3Quorum } from "web3js-quorum";
 
 import { Contract, ContractSendMethod } from "web3-eth-contract";
-import { TransactionReceipt } from "web3-eth";
+
 import {
   GetBalanceV1Request,
   GetBalanceV1Response,
@@ -612,7 +612,7 @@ export class PluginLedgerConnectorOpenCBDC
 
   public async getTxReceipt(
     request: RunTransactionRequest,
-    txPoolReceipt: TransactionReceipt,
+    txPoolReceipt: Web3TransactionReceipt,
   ): Promise<RunTransactionResponse> {
     const fnTag = `${this.className}#getTxReceipt()`;
 
@@ -781,7 +781,7 @@ export class PluginLedgerConnectorOpenCBDC
   public async pollForTxReceipt(
     txHash: string,
     consistencyStrategy: ConsistencyStrategy,
-  ): Promise<TransactionReceipt> {
+  ): Promise<Web3TransactionReceipt> {
     const fnTag = `${this.className}#pollForTxReceipt()`;
     let txReceipt;
     let timedOut = false;
@@ -1101,7 +1101,7 @@ export class PluginLedgerConnectorOpenCBDC
     return result;
   }
 
-  public async getBalanceOpencbdc(getBalanceRequest: any): Promise<any> {
+  public async getBalanceOpenCBDC(getBalanceRequest: any): Promise<any> {
     const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/getbalance', {
       address: getBalanceRequest.address,
     });

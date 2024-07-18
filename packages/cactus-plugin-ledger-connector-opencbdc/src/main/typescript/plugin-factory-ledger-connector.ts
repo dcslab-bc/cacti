@@ -5,7 +5,14 @@ import {
 import {
   IPluginLedgerConnectorOpenCBDCOptions,
   PluginLedgerConnectorOpenCBDC,
+
 } from "./plugin-ledger-connector-opencbdc";
+
+import {
+  PluginHtlcOpenCBDC,
+  IPluginHtlcOpenCBDCOptions,
+} from "./plugin-htlc-opencbdc";
+
 
 export class PluginFactoryLedgerConnector extends PluginFactory<
   PluginLedgerConnectorOpenCBDC,
@@ -18,3 +25,16 @@ export class PluginFactoryLedgerConnector extends PluginFactory<
     return new PluginLedgerConnectorOpenCBDC(pluginOptions);
   }
 }
+
+export class PluginFactoryHtlcOpenCBDC extends PluginFactory<
+  PluginHtlcOpenCBDC,
+  IPluginHtlcOpenCBDCOptions,
+  IPluginFactoryOptions
+> {
+  async create(
+    pluginOptions: IPluginHtlcOpenCBDCOptions,
+  ): Promise<PluginHtlcOpenCBDC> {
+    return new PluginHtlcOpenCBDC(pluginOptions);
+  }
+}
+

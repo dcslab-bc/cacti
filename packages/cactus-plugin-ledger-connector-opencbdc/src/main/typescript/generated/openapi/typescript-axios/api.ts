@@ -2044,3 +2044,309 @@ export class DefaultApi extends BaseAPI {
 }
 
 
+export interface InitializeRequest {
+    /**
+     * connectorId for the connector besu plugin
+     * @type {string}
+     * @memberof InitializeRequest
+     */
+    'connectorId': string;
+    /**
+     * keychainId for the keychain plugin
+     * @type {string}
+     * @memberof InitializeRequest
+     */
+    'keychainId': string;
+    /**
+     * 
+     * @type {Array<any>}
+     * @memberof InitializeRequest
+     */
+    'constructorArgs': Array<any>;
+    /**
+     * 
+     * @type {Web3SigningCredential}
+     * @memberof InitializeRequest
+     */
+    'web3SigningCredential': Web3SigningCredential;
+    /**
+     * 
+     * @type {number}
+     * @memberof InitializeRequest
+     */
+    'gas'?: number;
+}
+export interface NewContractRequest {
+    /**
+     * Contract address
+     * @type {string}
+     * @memberof NewContractRequest
+     */
+    'contractAddress': string;
+    /**
+     * Input amount to lock
+     * @type {number}
+     * @memberof NewContractRequest
+     */
+    'inputAmount': number;
+    /**
+     * Output amount to lock
+     * @type {number}
+     * @memberof NewContractRequest
+     */
+    'outputAmount': number;
+    /**
+     * Timestamp to expire the contract
+     * @type {number}
+     * @memberof NewContractRequest
+     */
+    'expiration': number;
+    /**
+     * Hashlock needed to refund the amount
+     * @type {string}
+     * @memberof NewContractRequest
+     */
+    'hashLock': string;
+    /**
+     * The token address
+     * @type {string}
+     * @memberof NewContractRequest
+     */
+    'tokenAddress': string;
+    /**
+     * The receiver address
+     * @type {string}
+     * @memberof NewContractRequest
+     */
+    'receiver': string;
+    /**
+     * The output network id
+     * @type {string}
+     * @memberof NewContractRequest
+     */
+    'outputNetwork': string;
+    /**
+     * The output address to receive the tokens
+     * @type {string}
+     * @memberof NewContractRequest
+     */
+    'outputAddress': string;
+    /**
+     * 
+     * @type {Web3SigningCredential}
+     * @memberof NewContractRequest
+     */
+    'web3SigningCredential': Web3SigningCredential;
+    /**
+     * connectorId for the connector besu plugin
+     * @type {string}
+     * @memberof NewContractRequest
+     */
+    'connectorId': string;
+    /**
+     * keychainId for the keychian plugin
+     * @type {string}
+     * @memberof NewContractRequest
+     */
+    'keychainId': string;
+    /**
+     * 
+     * @type {NewContractRequestGas}
+     * @memberof NewContractRequest
+     */
+    'gas'?: NewContractRequestGas;
+}
+export type NewContractRequestGas = number | string;
+
+export interface RefundRequest {
+    /**
+     * Contract htlc id for refund
+     * @type {string}
+     * @memberof RefundRequest
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Web3SigningCredential}
+     * @memberof RefundRequest
+     */
+    'web3SigningCredential': Web3SigningCredential;
+    /**
+     * connectorId for the connector besu plugin
+     * @type {string}
+     * @memberof RefundRequest
+     */
+    'connectorId': string;
+    /**
+     * keychainId for the keychain plugin
+     * @type {string}
+     * @memberof RefundRequest
+     */
+    'keychainId': string;
+    /**
+     * 
+     * @type {NewContractRequestGas}
+     * @memberof RefundRequest
+     */
+    'gas'?: NewContractRequestGas;
+}
+
+export interface WithdrawRequest {
+    /**
+     * Contract locked id
+     * @type {string}
+     * @memberof WithdrawRequest
+     */
+    'id': string;
+    /**
+     * Secret need to unlock the contract
+     * @type {string}
+     * @memberof WithdrawRequest
+     */
+    'secret': string;
+    /**
+     * 
+     * @type {Web3SigningCredential}
+     * @memberof WithdrawRequest
+     */
+    'web3SigningCredential': Web3SigningCredential;
+    /**
+     * connectorId for the connector besu plugin
+     * @type {string}
+     * @memberof WithdrawRequest
+     */
+    'connectorId': string;
+    /**
+     * keychainId for the keychain plugin
+     * @type {string}
+     * @memberof WithdrawRequest
+     */
+    'keychainId': string;
+    /**
+     * 
+     * @type {NewContractRequestGas}
+     * @memberof WithdrawRequest
+     */
+    'gas'?: NewContractRequestGas;
+}
+
+
+export interface Web3SigningCredentialCactusKeychainRef {
+  /**
+   * 
+   * @type {Web3SigningCredentialType}
+   * @memberof Web3SigningCredentialCactusKeychainRef
+   */
+  'type': Web3SigningCredentialType;
+  /**
+   * The ethereum account (public key) that the credential  belongs to. Basically the username in the traditional  terminology of authentication.
+   * @type {string}
+   * @memberof Web3SigningCredentialCactusKeychainRef
+   */
+  'ethAccount': string;
+  /**
+   * The key to use when looking up the the keychain entry holding the secret pointed to by the  keychainEntryKey parameter.
+   * @type {string}
+   * @memberof Web3SigningCredentialCactusKeychainRef
+   */
+  'keychainEntryKey': string;
+  /**
+   * The keychain ID to use when looking up the the keychain plugin instance that will be used to retrieve the secret pointed to by the keychainEntryKey parameter.
+   * @type {string}
+   * @memberof Web3SigningCredentialCactusKeychainRef
+   */
+  'keychainId': string;
+}
+
+export interface Web3SigningCredentialNone {
+  /**
+   * 
+   * @type {Web3SigningCredentialType}
+   * @memberof Web3SigningCredentialNone
+   */
+  'type': Web3SigningCredentialType;
+}
+
+export interface Web3SigningCredentialPrivateKeyHex {
+  /**
+   * 
+   * @type {Web3SigningCredentialType}
+   * @memberof Web3SigningCredentialPrivateKeyHex
+   */
+  'type': Web3SigningCredentialType;
+  /**
+   * The ethereum account (public key) that the credential belongs to. Basically the username in the traditional terminology of authentication.
+   * @type {string}
+   * @memberof Web3SigningCredentialPrivateKeyHex
+   */
+  'ethAccount': string;
+  /**
+   * The HEX encoded private key of an eth account.
+   * @type {string}
+   * @memberof Web3SigningCredentialPrivateKeyHex
+   */
+  'secret': string;
+}
+
+export interface GetStatusRequest {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GetStatusRequest
+     */
+    'ids': Array<string>;
+    /**
+     * 
+     * @type {Web3SigningCredential}
+     * @memberof GetStatusRequest
+     */
+    'web3SigningCredential': Web3SigningCredential;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetStatusRequest
+     */
+    'connectorId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetStatusRequest
+     */
+    'keychainId': string;
+  }
+
+  export interface GetSingleStatusRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSingleStatusRequest
+     */
+    'id': string;
+    /**
+     * 
+     * @type {Web3SigningCredential}
+     * @memberof GetSingleStatusRequest
+     */
+    'web3SigningCredential': Web3SigningCredential;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSingleStatusRequest
+     */
+    'connectorId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetSingleStatusRequest
+     */
+    'keychainId': string;
+}
+
+export interface RunTransactionResponse {
+    /**
+     * 
+     * @type {Web3TransactionReceipt}
+     * @memberof RunTransactionResponse
+     */
+    'transactionReceipt': Web3TransactionReceipt;
+}
