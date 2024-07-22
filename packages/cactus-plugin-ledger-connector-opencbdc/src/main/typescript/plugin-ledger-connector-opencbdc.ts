@@ -1072,12 +1072,16 @@ export class PluginLedgerConnectorOpenCBDC
   
   public async getSingleStatus(getSingleStatusRequest: any,): Promise<any> {
     const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/getsinglestatus', {
+      id: getSingleStatusRequest.id,
+      web3SigningCredential: getSingleStatusRequest.web3SigningCredential,
+      connectorId: getSingleStatusRequest.connectorId,
+      keychainId: getSingleStatusRequest.keychainId,
       HTLCId: getSingleStatusRequest.HTLCId,
-      signingCredential: getSingleStatusRequest.signingCredential,
       inputAmount: getSingleStatusRequest.inputAmount,
       receiver: getSingleStatusRequest.receiver,
       hashLock: getSingleStatusRequest.hashLock,
       expiration: getSingleStatusRequest.expiration,
+
     });
 
     return result;
@@ -1085,8 +1089,14 @@ export class PluginLedgerConnectorOpenCBDC
 
   public async withdraw(withdrawRequest: any): Promise<any> {
     const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/withdraw', {
+      id: withdrawRequest.id,
+      secret: withdrawRequest.secret,
+      web3SigningCredential: withdrawRequest.web3SigningCredential,
+      connectorId: withdrawRequest.connectorId,
+      keychainId: withdrawRequest.keychainId,
+      gas: withdrawRequest.gas,
       HTLCId: withdrawRequest.HTLCId,
-      signingCredential: withdrawRequest.signingCredential,
+      
     });
 
     return result;
@@ -1094,8 +1104,13 @@ export class PluginLedgerConnectorOpenCBDC
 
   public async refund(refundRequest: any): Promise<any> {
     const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/refund', {
+      id: refundRequest.id,
+      secret: refundRequest.secret,
+      web3SigningCredential: refundRequest.web3SigningCredential,
+      connectorId: refundRequest.connectorId,
+      keychainId: refundRequest.keychainId,
+      gas: refundRequest.gas,
       HTLCId: refundRequest.HTLCId,
-      signingCredential: refundRequest.signingCredential,
     });
 
     return result;
