@@ -1,0 +1,15 @@
+{
+  "info": {
+    "description": "this file contains data to be used for testing purposes only."
+  },
+  "rpcApi": {
+    "HttpHost": {
+      "ip": "http://localhost",
+      "port": "8765"
+    },
+    "WsHost": {
+      "ip": "ws://localhost",
+      "port": "8546"
+    }
+  }
+}

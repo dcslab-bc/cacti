@@ -8,20 +8,21 @@ import {
     LogLevelDesc,
   } from "@hyperledger/cactus-common";
 import { PluginRegistry } from "@hyperledger/cactus-core";
+import CryptoMaterial from "../../../../crypto-material/crypto-material.json";
+import OpenCBDCMaterial from "../../../../opencbdc-material/opencbdc-material.json";
 
 const connectorId = uuidv4();
 const logLevel: LogLevelDesc = "INFO";
 
 const testCase = "Test deposit";
 describe(testCase, () => {
-  const keychainId = uuidv4();
   test(testCase, async () => {
     const pluginRegistry = new PluginRegistry();
     const options: IPluginLedgerConnectorOpenCBDCOptions = {
-        rpcApiHttpHost: "http://localhost:8545",
-        rpcApiWsHost: "ws://localhost:8546",
+        rpcApiHttpHost:  OpenCBDCMaterial.rpcApi.HttpHost.ip+":"+ OpenCBDCMaterial.rpcApi.HttpHost.port,
+        rpcApiWsHost: OpenCBDCMaterial.rpcApi.WsHost.ip+":"+ OpenCBDCMaterial.rpcApi.WsHost.port,
         pluginRegistry: pluginRegistry,
-        instanceId: "myInstanceId",
+        instanceId: CryptoMaterial.ledger.opencbdc.id,
     };
 
     const plugin = new PluginLedgerConnectorOpenCBDC(options);
@@ -40,7 +41,7 @@ describe(testCase, () => {
         "secret":"0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d",
         "type":"PRIVATE_KEY_HEX"
       },
-      keychainId: keychainId,
+      keychainId: CryptoMaterial.keychains.opencbdc.id,
     });
     console.log(res);
     expect(res.status).toEqual(200);

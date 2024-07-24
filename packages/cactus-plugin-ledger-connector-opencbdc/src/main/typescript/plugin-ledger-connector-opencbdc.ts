@@ -17,6 +17,7 @@ import type { WebsocketProvider } from "web3-core";
 import Web3JsQuorum, { IWeb3Quorum } from "web3js-quorum";
 
 import { Contract, ContractSendMethod } from "web3-eth-contract";
+import OpenCBDCMaterial from "../../opencbdc-material/opencbdc-material.json";
 
 import {
   GetBalanceV1Request,
@@ -1052,7 +1053,7 @@ export class PluginLedgerConnectorOpenCBDC
   public async deposit(newContractRequest: any,): Promise<any> {
 
     console.log(newContractRequest);
-    const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/deposit',{
+    const result = await axios.post(OpenCBDCMaterial.rpcApi.HttpHost.ip + ':' + OpenCBDCMaterial.rpcApi.HttpHost.port +'/api/opencbdc/deposit',{
       contractAddress: newContractRequest.contractAddress,
       inputAmount: newContractRequest.inputAmount,
       outputAmount: newContractRequest.outputAmount,
@@ -1071,7 +1072,7 @@ export class PluginLedgerConnectorOpenCBDC
   } 
   
   public async getSingleStatus(getSingleStatusRequest: any,): Promise<any> {
-    const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/getsinglestatus', {
+    const result = await axios.post(OpenCBDCMaterial.rpcApi.HttpHost.ip + ':' + OpenCBDCMaterial.rpcApi.HttpHost.port + '/api/opencbdc/getsinglestatus', {
       id: getSingleStatusRequest.id,
       web3SigningCredential: getSingleStatusRequest.web3SigningCredential,
       connectorId: getSingleStatusRequest.connectorId,
@@ -1088,7 +1089,7 @@ export class PluginLedgerConnectorOpenCBDC
   }
 
   public async withdraw(withdrawRequest: any): Promise<any> {
-    const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/withdraw', {
+    const result = await axios.post(OpenCBDCMaterial.rpcApi.HttpHost.ip + ':' + OpenCBDCMaterial.rpcApi.HttpHost.port + '/api/opencbdc/withdraw', {
       id: withdrawRequest.id,
       secret: withdrawRequest.secret,
       web3SigningCredential: withdrawRequest.web3SigningCredential,
@@ -1103,7 +1104,7 @@ export class PluginLedgerConnectorOpenCBDC
   }
 
   public async refund(refundRequest: any): Promise<any> {
-    const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/refund', {
+    const result = await axios.post(OpenCBDCMaterial.rpcApi.HttpHost.ip + ':' + OpenCBDCMaterial.rpcApi.HttpHost.port + '/api/opencbdc/refund', {
       id: refundRequest.id,
       secret: refundRequest.secret,
       web3SigningCredential: refundRequest.web3SigningCredential,
@@ -1117,7 +1118,7 @@ export class PluginLedgerConnectorOpenCBDC
   }
 
   public async getBalanceOpenCBDC(getBalanceRequest: any): Promise<any> {
-    const result = await axios.post('http://147.46.240.229:8765/api/opencbdc/getbalance', {
+    const result = await axios.post(OpenCBDCMaterial.rpcApi.HttpHost.ip + ':' + OpenCBDCMaterial.rpcApi.HttpHost.port + '/api/opencbdc/getbalance', {
       address: getBalanceRequest.address,
     });
     
