@@ -1051,8 +1051,6 @@ export class PluginLedgerConnectorOpenCBDC
   }
 
   public async deposit(newContractRequest: any,): Promise<any> {
-
-    console.log(newContractRequest);
     const result = await axios.post(OpenCBDCMaterial.rpcApi.HttpHost.ip + ':' + OpenCBDCMaterial.rpcApi.HttpHost.port +'/api/opencbdc/deposit',{
       contractAddress: newContractRequest.contractAddress,
       inputAmount: newContractRequest.inputAmount,
