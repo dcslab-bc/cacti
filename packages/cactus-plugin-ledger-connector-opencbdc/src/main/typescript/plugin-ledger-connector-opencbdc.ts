@@ -1125,4 +1125,19 @@ export class PluginLedgerConnectorOpenCBDC
     return result;
   }
 
+  public async getSecret(getSecretRequest: any): Promise<any> {
+    const result = await axios.post(OpenCBDCMaterial.rpcApi.HttpHost.ip + ':' + OpenCBDCMaterial.rpcApi.HttpHost.port + '/api/opencbdc/getsecret', {
+      address: getSecretRequest.address,
+    });
+    
+    return result;
+  }
+
+  public async init(initRequest: any): Promise<any> {
+    const result = await axios.post(OpenCBDCMaterial.rpcApi.HttpHost.ip + ':' + OpenCBDCMaterial.rpcApi.HttpHost.port + '/api/opencbdc/init', {
+    });
+    
+    return result;
+  }
+
 }

@@ -5,7 +5,7 @@
   "rpcApi": {
     "HttpHost": {
       "ip": "http://localhost",
-      "port": "8765"
+      "port": "65432"
     },
     "WsHost": {
       "ip": "ws://localhost",

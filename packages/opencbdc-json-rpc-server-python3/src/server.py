@@ -21,9 +21,37 @@ def opencbdc():
         'getsinglestatus': '/api/opencbdc/getsinglestatus',
         'withdraw': '/api/opencbdc/withdraw',
         'refund': '/api/opencbdc/refund',
-        'getbalance': '/api/opencbdc/getbalance'
+        'getbalance': '/api/opencbdc/getbalance',
+        'init': '/api/opencbdc/init'
     })
 
+@app.route('/api/opencbdc/init', methods=['POST'])
+def init():
+    response = {
+        "success": True,
+    }
+
+    log_request(request)
+    return jsonify(response), 200
+
+@app.route('/api/opencbdc/getsecret', methods=['POST'])
+def get_secret():
+    data = request.get_json()
+
+    address = data.get('address')
+
+    print("Address:", address)
+
+    response = {
+        "secret": '0x50216399786df46d2dd627774101951f5dcd8d4b9dd4dadfa125320af1a2ab12',
+    }
+
+    log_request(request)
+    return jsonify(response), 200
+
+
+
+    
 @app.route('/api/opencbdc/deposit', methods=['POST'])
 def new_contract():
     data = request.get_json()
