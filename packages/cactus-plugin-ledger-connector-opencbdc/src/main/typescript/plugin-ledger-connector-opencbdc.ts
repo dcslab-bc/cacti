@@ -1064,14 +1064,14 @@ export class PluginLedgerConnectorOpenCBDC
           outputAmount: newContractRequest.outputAmount,
           expiration: newContractRequest.expiration,
           hashLock: newContractRequest.hashLock,
-          tokenAddress: newContractRequest.tokenAddress,
           receiver: newContractRequest.receiver,
           outputNetwork: newContractRequest.outputNetwork,
           outputAddress: newContractRequest.outputAddress,
           web3SigningCredential: newContractRequest.web3SigningCredential,
           connectorId: newContractRequest.connectorId,
           keychainId: newContractRequest.keychainId,
-          
+          preimage: newContractRequest.preimage,
+          senderAddress: newContractRequest.senderAddress,
         };
         client.write(JSON.stringify(requestPayload));
       });
@@ -1135,6 +1135,7 @@ export class PluginLedgerConnectorOpenCBDC
           keychainId: withdrawRequest.keychainId,
           gas: withdrawRequest.gas,
           HTLCId: withdrawRequest.HTLCId,
+          preimage: withdrawRequest.preimage
         };
         client.write(JSON.stringify(requestPayload));
       });
