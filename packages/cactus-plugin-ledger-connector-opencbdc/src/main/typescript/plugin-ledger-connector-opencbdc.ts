@@ -1135,7 +1135,6 @@ export class PluginLedgerConnectorOpenCBDC
           keychainId: withdrawRequest.keychainId,
           gas: withdrawRequest.gas,
           HTLCId: withdrawRequest.HTLCId,
-          preimage: withdrawRequest.preimage
         };
         client.write(JSON.stringify(requestPayload));
       });
@@ -1213,7 +1212,7 @@ export class PluginLedgerConnectorOpenCBDC
         const requestType = 7;
         const requestPayload = {
           requestType: requestType,
-          address: getSecretRequest.address
+          HTLCId: refundRequest.HTLCId
         };
         client.write(JSON.stringify(requestPayload));
       });
