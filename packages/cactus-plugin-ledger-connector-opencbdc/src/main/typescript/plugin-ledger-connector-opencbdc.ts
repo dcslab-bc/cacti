@@ -1,4 +1,4 @@
-import axios from "axios";
+import * as net from 'net';
 
 import { Server } from "http";
 import { Server as SecureServer } from "https";
@@ -1051,91 +1051,204 @@ export class PluginLedgerConnectorOpenCBDC
   }
 
   public async deposit(newContractRequest: any,): Promise<any> {
-    const result = await axios.post(OpenCBDCMaterial.rpcApi.HttpHost.ip + ':' + OpenCBDCMaterial.rpcApi.HttpHost.port +'/api/opencbdc/deposit',{
-      contractAddress: newContractRequest.contractAddress,
-      inputAmount: newContractRequest.inputAmount,
-      outputAmount: newContractRequest.outputAmount,
-      expiration: newContractRequest.expiration,
-      hashLock: newContractRequest.hashLock,
-      tokenAddress: newContractRequest.tokenAddress,
-      receiver: newContractRequest.receiver,
-      outputNetwork: newContractRequest.outputNetwork,
-      outputAddress: newContractRequest.outputAddress,
-      web3SigningCredential: newContractRequest.web3SigningCredential,
-      connectorId: newContractRequest.connectorId,
-      keychainId: newContractRequest.keychainId
-    });
+    return new Promise((resolve, reject) => {
+      const client = new net.Socket();
+      client.connect(OpenCBDCMaterial.rpcApi.socketHost.port, OpenCBDCMaterial.rpcApi.socketHost.ip, () => {
+        console.log('Connected to server');
+        // Send the request type for "DEPOSIT", which we assume to be 1
+        const requestType = 1;
+        const requestPayload = {
+          requestType: requestType,
+          contractAddress: newContractRequest.contractAddress,
+          inputAmount: newContractRequest.inputAmount,
+          outputAmount: newContractRequest.outputAmount,
+          expiration: newContractRequest.expiration,
+          hashLock: newContractRequest.hashLock,
+          tokenAddress: newContractRequest.tokenAddress,
+          receiver: newContractRequest.receiver,
+          outputNetwork: newContractRequest.outputNetwork,
+          outputAddress: newContractRequest.outputAddress,
+          web3SigningCredential: newContractRequest.web3SigningCredential,
+          connectorId: newContractRequest.connectorId,
+          keychainId: newContractRequest.keychainId,
+          
+        };
+        client.write(JSON.stringify(requestPayload));
+      });
+      client.on('data', (data) => {
+        resolve(JSON.parse(data.toString()));
+        client.destroy(); 
+      });
 
-    return result;
+      client.on('error', (err) => {
+        reject(err);
+      });
+    });
+    
   } 
   
   public async getSingleStatus(getSingleStatusRequest: any,): Promise<any> {
-    const result = await axios.post(OpenCBDCMaterial.rpcApi.HttpHost.ip + ':' + OpenCBDCMaterial.rpcApi.HttpHost.port + '/api/opencbdc/getsinglestatus', {
-      id: getSingleStatusRequest.id,
-      web3SigningCredential: getSingleStatusRequest.web3SigningCredential,
-      connectorId: getSingleStatusRequest.connectorId,
-      keychainId: getSingleStatusRequest.keychainId,
-      HTLCId: getSingleStatusRequest.HTLCId,
-      inputAmount: getSingleStatusRequest.inputAmount,
-      receiver: getSingleStatusRequest.receiver,
-      hashLock: getSingleStatusRequest.hashLock,
-      expiration: getSingleStatusRequest.expiration,
+    return new Promise((resolve, reject) => {
+      const client = new net.Socket();
+      client.connect(OpenCBDCMaterial.rpcApi.socketHost.port, OpenCBDCMaterial.rpcApi.socketHost.ip, () => {
+        console.log('Connected to server');
+        // Send the request type for "GET_SINGLE_STATUS", which we assume to be 8
+        const requestType = 8;
+        const requestPayload = {
+          requestType: requestType,
+          id: getSingleStatusRequest.id,
+          web3SigningCredential: getSingleStatusRequest.web3SigningCredential,
+          connectorId: getSingleStatusRequest.connectorId,
+          keychainId: getSingleStatusRequest.keychainId,
+          HTLCId: getSingleStatusRequest.HTLCId,
+          inputAmount: getSingleStatusRequest.inputAmount,
+          receiver: getSingleStatusRequest.receiver,
+          hashLock: getSingleStatusRequest.hashLock,
+          expiration: getSingleStatusRequest.expiration,
+        };
+        client.write(JSON.stringify(requestPayload));
+      });
+      client.on('data', (data) => {
+        resolve(JSON.parse(data.toString()));
+        client.destroy(); 
+      });
 
+      client.on('error', (err) => {
+        reject(err);
+      });
     });
-
-    return result;
   }
 
   public async withdraw(withdrawRequest: any): Promise<any> {
-    const result = await axios.post(OpenCBDCMaterial.rpcApi.HttpHost.ip + ':' + OpenCBDCMaterial.rpcApi.HttpHost.port + '/api/opencbdc/withdraw', {
-      id: withdrawRequest.id,
-      secret: withdrawRequest.secret,
-      web3SigningCredential: withdrawRequest.web3SigningCredential,
-      connectorId: withdrawRequest.connectorId,
-      keychainId: withdrawRequest.keychainId,
-      gas: withdrawRequest.gas,
-      HTLCId: withdrawRequest.HTLCId,
-      
+    return new Promise((resolve, reject) => {
+      const client = new net.Socket();
+      client.connect(OpenCBDCMaterial.rpcApi.socketHost.port, OpenCBDCMaterial.rpcApi.socketHost.ip, () => {
+        console.log('Connected to server');
+        // Send the request type for "WITHDRAW", which we assume to be 2
+        const requestType = 2;
+        const requestPayload = {
+          requestType: requestType,
+          id: withdrawRequest.id,
+          secret: withdrawRequest.secret,
+          web3SigningCredential: withdrawRequest.web3SigningCredential,
+          connectorId: withdrawRequest.connectorId,
+          keychainId: withdrawRequest.keychainId,
+          gas: withdrawRequest.gas,
+          HTLCId: withdrawRequest.HTLCId,
+        };
+        client.write(JSON.stringify(requestPayload));
+      });
+      client.on('data', (data) => {
+        resolve(JSON.parse(data.toString()));
+        client.destroy(); 
+      });
+      client.on('error', (err) => {
+        reject(err);
+      });
     });
-
-    return result;
   }
 
   public async refund(refundRequest: any): Promise<any> {
-    const result = await axios.post(OpenCBDCMaterial.rpcApi.HttpHost.ip + ':' + OpenCBDCMaterial.rpcApi.HttpHost.port + '/api/opencbdc/refund', {
-      id: refundRequest.id,
-      secret: refundRequest.secret,
-      web3SigningCredential: refundRequest.web3SigningCredential,
-      connectorId: refundRequest.connectorId,
-      keychainId: refundRequest.keychainId,
-      gas: refundRequest.gas,
-      HTLCId: refundRequest.HTLCId,
-    });
+    return new Promise((resolve, reject) => {
+      const client = new net.Socket();
+      client.connect(OpenCBDCMaterial.rpcApi.socketHost.port, OpenCBDCMaterial.rpcApi.socketHost.ip, () => {
+        console.log('Connected to server');
+        // Send the request type for "REFUND", which we assume to be 3
+        const requestType = 3;
+        const requestPayload = {
+          requestType: requestType,
+          id: refundRequest.id,
+          secret: refundRequest.secret,
+          web3SigningCredential: refundRequest.web3SigningCredential,
+          connectorId: refundRequest.connectorId,
+          keychainId: refundRequest.keychainId,
+          gas: refundRequest.gas,
+          HTLCId: refundRequest.HTLCId,
+        };
+        client.write(JSON.stringify(requestPayload));
+      });
+      client.on('data', (data) => {
+        resolve(JSON.parse(data.toString()));
+        client.destroy(); 
+      });
 
-    return result;
+      client.on('error', (err) => {
+        reject(err);
+      });
+    });
+    
   }
 
   public async getBalanceOpenCBDC(getBalanceRequest: any): Promise<any> {
-    const result = await axios.post(OpenCBDCMaterial.rpcApi.HttpHost.ip + ':' + OpenCBDCMaterial.rpcApi.HttpHost.port + '/api/opencbdc/getbalance', {
-      address: getBalanceRequest.address,
+    return new Promise((resolve, reject) => {
+      const client = new net.Socket();
+      client.connect(OpenCBDCMaterial.rpcApi.socketHost.port, OpenCBDCMaterial.rpcApi.socketHost.ip, () => {
+        console.log('Connected to server');
+        // Send the request type for "GET_BALANCE", which we assume to be 6
+        const requestType = 6;
+        const requestPayload = {
+          requestType: requestType,
+          address: getBalanceRequest.address
+        };
+        client.write(JSON.stringify(requestPayload));
+      });
+      client.on('data', (data) => {
+        resolve(JSON.parse(data.toString()));
+        client.destroy(); 
+      });
+
+      client.on('error', (err) => {
+        reject(err);
+      });
     });
-    
-    return result;
   }
 
   public async getSecret(getSecretRequest: any): Promise<any> {
-    const result = await axios.post(OpenCBDCMaterial.rpcApi.HttpHost.ip + ':' + OpenCBDCMaterial.rpcApi.HttpHost.port + '/api/opencbdc/getsecret', {
-      address: getSecretRequest.address,
+    return new Promise((resolve, reject) => {
+      const client = new net.Socket();
+      client.connect(OpenCBDCMaterial.rpcApi.socketHost.port, OpenCBDCMaterial.rpcApi.socketHost.ip, () => {
+        console.log('Connected to server');
+        // Send the request type for "GET_SECCRET", which we assume to be 7
+        const requestType = 7;
+        const requestPayload = {
+          requestType: requestType,
+          address: getSecretRequest.address
+        };
+        client.write(JSON.stringify(requestPayload));
+      });
+      client.on('data', (data) => {
+        resolve(JSON.parse(data.toString()));
+        client.destroy(); 
+      });
+      client.on('error', (err) => {
+        reject(err);
+      });
     });
-    
-    return result;
+
   }
 
   public async init(initRequest: any): Promise<any> {
-    const result = await axios.post(OpenCBDCMaterial.rpcApi.HttpHost.ip + ':' + OpenCBDCMaterial.rpcApi.HttpHost.port + '/api/opencbdc/init', {
+    return new Promise((resolve, reject) => {
+      const client = new net.Socket();
+      client.connect(OpenCBDCMaterial.rpcApi.socketHost.port, OpenCBDCMaterial.rpcApi.socketHost.ip, () => {
+        console.log('Connected to server');
+        // Send the request type for "INIT", which we assume to be 4
+        const requestType = 4;
+        const requestPayload = {
+          requestType: requestType,
+        };
+        client.write(JSON.stringify(requestPayload));
+      });
+      client.on('data', (data) => {
+        resolve(JSON.parse(data.toString()));
+        client.destroy(); 
+      });
+
+
+      client.on('error', (err) => {
+        reject(err);
+      });
     });
-    
-    return result;
   }
 
 }
