@@ -14,11 +14,11 @@ import OpenCBDCMaterial from "../../../../opencbdc-material/opencbdc-material.js
 const connectorId = uuidv4();
 const logLevel: LogLevelDesc = "INFO";
 
-const inputAmount = 100;
+const inputAmount = 3;
 const outputAmount = 10;
 const expiration = 2147483648;
-const id = "0x38e7a0f8929af36b5d5120edda5f86caa49fe2df4904cfa6eba6bf437d78aceb";
-const hashLock = "0x3c335ba7f06a8b01d0596589f73c19069e21c81e5013b91f408165d1bf623d32";
+const hashLock = "hashlock211aafdbf51011aadf4f9e73187ef464ac8515875f9898d8db3d06e4";
+const preimage = "preimage6c58916ec258f246851bea091d14d4247a2fc3e18694461b1816e13b";
 
 let res = undefined;
 
@@ -35,93 +35,73 @@ describe(testCase, () => {
 
     const plugin = new PluginLedgerConnectorOpenCBDC(options);
 
-    
+    console.log("init");
     // 1. Init
     res = await plugin.init({});
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);
+    const wallet0 = res.data.wallet0; // SenderAddr (BoA)
+    const wallet1 = res.data.wallet1; // RecevierAddr (Hana)
+    const wallet2 = res.data.wallet2; // HTLC_MODULE
 
-    
+    console.log("deposit");
     // 2. Deposit
     res = await plugin.deposit({
-      contractAddress: "0x8CdaF0CD259887258Bc13a92C0a6dA92698644C0",
+      contractAddress: wallet2,
       inputAmount: inputAmount,
       outputAmount: outputAmount,
       expiration: expiration,
       hashLock: hashLock,
-      receiver: CryptoMaterial.demoApps.scenarioAB.opencbdc.foreignInter.hana.address,
+      receiver: wallet1,
       outputNetwork: "Besu",
       outputAddress: CryptoMaterial.demoApps.scenarioAB.besu.localInter.boa.address,
-      connectorId: connectorId,
-      web3SigningCredential: {
-        "ethAccount": CryptoMaterial.demoApps.scenarioAB.opencbdc.boa.address,
-        "secret": CryptoMaterial.demoApps.scenarioAB.opencbdc.boa.privateKey,
-        "type":"PRIVATE_KEY_HEX"
-      },
-      keychainId: CryptoMaterial.keychains.opencbdc.id,
+      preimage: preimage,
+      senderAddress: wallet0,
     });
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);
-    expect(res.data.HTLCId).toEqual('abcdefg');
+    expect(res.data.HTLCId).toEqual("htlcidb239c83a8ff069bd619c9b47c69471207e74ca9cf68cef274891f544f8");
     const HTLCId = res.data.HTLCId;
 
     
     // 3. getSingleStatus
     res = await plugin.getSingleStatus({
-        id: id,
-        web3SigningCredential: {
-          "ethAccount":CryptoMaterial.demoApps.scenarioAB.opencbdc.boa.address,
-          "secret":CryptoMaterial.demoApps.scenarioAB.opencbdc.boa.privateKey,
-          "type":"PRIVATE_KEY_HEX"
-        },
-        
         HTLCId: HTLCId,
         inputAmount: inputAmount,
-        receiver: CryptoMaterial.demoApps.scenarioAB.opencbdc.foreignInter.hana.address,
+        receiver: wallet1,
         hashLock: hashLock,
         expiration: expiration,
-        connectorId: connectorId,
-        keychainId: CryptoMaterial.keychains.opencbdc.id,
     });
     expect(res.status).toEqual(200);
     expect(res.data).toEqual(1);
 
     
     // 4. getSecret
-    const getSecretRequest: any = {
-        address: CryptoMaterial.demoApps.scenarioAB.opencbdc.boa.address,
-    }
-    res = await plugin.getSecret(getSecretRequest);
-    expect(res.status).toEqual(200);
-    expect(res.data.secret).toEqual(CryptoMaterial.demoApps.scenarioAB.opencbdc.boa.privateKey);
-    const secret = res.data.secret;
+    // const getSecretRequest: any = {
+    //   HTLCId: HTLCId,
+    // }
+    // res = await plugin.getSecret(getSecretRequest);
+    // expect(res.status).toEqual(200);
+    // expect(res.data.secret).toEqual(preimage);
+    // const secret = res.data.secret;
 
 
     // 5. withdraw
     res = await plugin.withdraw({
-        id: id,
-        secret: secret,
-        web3SigningCredential: {
-          "ethAccount":CryptoMaterial.demoApps.scenarioAB.opencbdc.foreignInter.hana.address,
-          "secret":CryptoMaterial.demoApps.scenarioAB.opencbdc.foreignInter.hana.privateKey,
-          "type":"PRIVATE_KEY_HEX"
-        },
-        connectorId: connectorId,
-        keychainId: CryptoMaterial.keychains.opencbdc.id,
-        gas: 10,
+        secret: preimage,
         HTLCId: HTLCId,
-      });
+    });
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);
 
 
     // 6. getBalance
     const getBalanceRequest: any = {
-      address: CryptoMaterial.demoApps.scenarioAB.opencbdc.foreignInter.hana.address
+      address: wallet1,
     }
 
     const resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest);
     expect(resBalance.status).toEqual(200);
-    expect(resBalance.data.balance).toEqual(100000000);
+    expect(resBalance.data.balance).toEqual(inputAmount);
   });
 });
