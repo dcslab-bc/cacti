@@ -1212,7 +1212,7 @@ export class PluginLedgerConnectorOpenCBDC
         const requestType = 7;
         const requestPayload = {
           requestType: requestType,
-          HTLCId: refundRequest.HTLCId
+          HTLCId: getSecretRequest.HTLCId
         };
         client.write(JSON.stringify(requestPayload));
       });
