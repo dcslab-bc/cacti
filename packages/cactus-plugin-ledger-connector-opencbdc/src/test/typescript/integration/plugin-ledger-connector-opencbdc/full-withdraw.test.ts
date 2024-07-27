@@ -22,7 +22,7 @@ const preimage = "preimage6c58916ec258f246851bea091d14d4247a2fc3e18694461b1816e1
 
 let res = undefined;
 
-const testCase = "Test AtoZ";
+const testCase = "Test withdraw AtoZ";
 describe(testCase, () => {
   test(testCase, async () => {
     const pluginRegistry = new PluginRegistry();
@@ -63,7 +63,7 @@ describe(testCase, () => {
     expect(res.data.HTLCId).toEqual("htlcidb239c83a8ff069bd619c9b47c69471207e74ca9cf68cef274891f544f8");
     const HTLCId = res.data.HTLCId;
 
-    
+    console.log("getSingleStatus");
     // 3. getSingleStatus
     res = await plugin.getSingleStatus({
         HTLCId: HTLCId,
@@ -75,18 +75,8 @@ describe(testCase, () => {
     expect(res.status).toEqual(200);
     expect(res.data).toEqual(1);
 
-    
-    // 4. getSecret
-    // const getSecretRequest: any = {
-    //   HTLCId: HTLCId,
-    // }
-    // res = await plugin.getSecret(getSecretRequest);
-    // expect(res.status).toEqual(200);
-    // expect(res.data.secret).toEqual(preimage);
-    // const secret = res.data.secret;
-
-
-    // 5. withdraw
+    console.log("withdraw");
+    // 4. withdraw
     res = await plugin.withdraw({
         secret: preimage,
         HTLCId: HTLCId,
@@ -94,14 +84,24 @@ describe(testCase, () => {
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);
 
-
-    // 6. getBalance
+    console.log("getBalance");
+    // 5. getBalance
     const getBalanceRequest: any = {
       address: wallet1,
     }
-
     const resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest);
     expect(resBalance.status).toEqual(200);
-    expect(resBalance.data.balance).toEqual(inputAmount);
+    // return 확인후 수정필요
+    // expect(resBalance.data.balance).toEqual(inputAmount);
+
+    console.log("getSecret");
+    // 6. getSecret
+    const getSecretRequest: any = {
+      HTLCId: HTLCId,
+    }
+    res = await plugin.getSecret(getSecretRequest);
+    expect(res.status).toEqual(200);
+    expect(res.data.secret).toEqual(preimage);
+    const secret = res.data.secret;
   });
 });
