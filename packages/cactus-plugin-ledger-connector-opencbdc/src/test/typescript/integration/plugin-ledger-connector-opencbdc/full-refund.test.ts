@@ -14,10 +14,10 @@ import OpenCBDCMaterial from "../../../../opencbdc-material/opencbdc-material.js
 const connectorId = uuidv4();
 const logLevel: LogLevelDesc = "INFO";
 
+const initAmount = 50;
 const inputAmount = 3;
 const outputAmount = 10;
 const expiration = 2147483648;
-const id = "0x38e7a0f8929af36b5d5120edda5f86caa49fe2df4904cfa6eba6bf437d78aceb";
 const hashLock = "0x3c335ba7f06a8b01d0596589f73c19069e21c81e5013b91f408165d1bf623d32";
 const preimage = "preimage6c58916ec258f246851bea091d14d4247a2fc3e18694461b1816e13b";
 
@@ -85,14 +85,25 @@ describe(testCase, () => {
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);
 
+    console.log("getSingleStatus");
+    // 5. getSingleStatus
+    res = await plugin.getSingleStatus({
+        HTLCId: HTLCId,
+        inputAmount: inputAmount,
+        receiver: wallet1,
+        hashLock: hashLock,
+        expiration: expiration,
+    });
+    expect(res.status).toEqual(200);
+    expect(res.data).toEqual(2);
+
     console.log("getBalance");
-    // 5. getBalance
+    // 6. getBalance - SenderAddr (BoA)
     const getBalanceRequest: any = {
-      address: wallet1,
+      address: 0,
     }
     const resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest);
     expect(resBalance.status).toEqual(200);
-    // return 확인후 수정필요
-    // expect(resBalance.data.balance).toEqual(inputAmount);
+    expect(resBalance.data.balance).toEqual(initAmount);
   });
 });

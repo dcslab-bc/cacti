@@ -78,24 +78,35 @@ describe(testCase, () => {
     console.log("withdraw");
     // 4. withdraw
     res = await plugin.withdraw({
-        secret: preimage,
+        secret: hashLock,
         HTLCId: HTLCId,
     });
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);
 
+    console.log("getSingleStatus");
+    // 5. getSingleStatus
+    res = await plugin.getSingleStatus({
+      HTLCId: HTLCId,
+      inputAmount: inputAmount,
+      receiver: wallet1,
+      hashLock: hashLock,
+      expiration: expiration,
+    });
+    expect(res.status).toEqual(200);
+    expect(res.data).toEqual(3);
+
     console.log("getBalance");
-    // 5. getBalance
+    // 6. getBalance - RecevierAddr (Hana)
     const getBalanceRequest: any = {
-      address: wallet1,
+      address: 1,
     }
     const resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest);
     expect(resBalance.status).toEqual(200);
-    // return 확인후 수정필요
-    // expect(resBalance.data.balance).toEqual(inputAmount);
+     expect(resBalance.data.balance).toEqual(inputAmount);
 
     console.log("getSecret");
-    // 6. getSecret
+    // 7. getSecret
     const getSecretRequest: any = {
       HTLCId: HTLCId,
     }
