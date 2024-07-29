@@ -1251,4 +1251,31 @@ export class PluginLedgerConnectorOpenCBDC
     });
   }
 
+  public async transfer(transferRequest: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const client = new net.Socket();
+      client.connect(OpenCBDCMaterial.rpcApi.socketHost.port, OpenCBDCMaterial.rpcApi.socketHost.ip, () => {
+        console.log('Connected to server');
+        // Send the request type for "transfer", which we assume to be 9
+        const requestType = 9;
+        const requestPayload = {
+          requestType: requestType,
+          senderAddress: transferRequest.senderAddress,
+          receiver: transferRequest.receiver,
+          receiverNum: transferRequest.receiverNum,
+          inputAmount: transferRequest.inputAmount,
+        };
+        client.write(JSON.stringify(requestPayload));
+      });
+      client.on('data', (data) => {
+        resolve(JSON.parse(data.toString()));
+        client.destroy(); 
+      });
+
+      client.on('error', (err) => {
+        reject(err);
+      });
+    });
+  }
+
 }

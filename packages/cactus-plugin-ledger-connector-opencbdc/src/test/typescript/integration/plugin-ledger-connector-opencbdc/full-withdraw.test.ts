@@ -14,8 +14,9 @@ import OpenCBDCMaterial from "../../../../opencbdc-material/opencbdc-material.js
 const connectorId = uuidv4();
 const logLevel: LogLevelDesc = "INFO";
 
-const inputAmount = 3;
-const outputAmount = 10;
+const initAmount = 50;
+const inputAmount = 10;
+const outputAmount = 20;
 const expiration = 2147483648;
 const hashLock = "hashlock211aafdbf51011aadf4f9e73187ef464ac8515875f9898d8db3d06e4";
 const preimage = "preimage6c58916ec258f246851bea091d14d4247a2fc3e18694461b1816e13b";
@@ -103,7 +104,7 @@ describe(testCase, () => {
     }
     const resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest);
     expect(resBalance.status).toEqual(200);
-     expect(resBalance.data.balance).toEqual(inputAmount);
+    expect(resBalance.data.balance).toEqual(inputAmount);
 
     console.log("getSecret");
     // 7. getSecret
@@ -114,5 +115,25 @@ describe(testCase, () => {
     expect(res.status).toEqual(200);
     expect(res.data.secret).toEqual(preimage);
     const secret = res.data.secret;
+
+    console.log("transfer");
+    // 8. transfer
+    res = await plugin.transfer({
+      senderAddress: 1,
+      receiver: wallet0,
+      receiverNum: 0,
+      inputAmount: inputAmount,
+    });
+    expect(res.status).toEqual(200);
+    expect(res.data.success).toEqual(true);
+
+    console.log("getBalance");
+    // 6. getBalance - SenderAddr (BoA)
+    const getBalanceRequest2: any = {
+      address: 0,
+    }
+    const resBalance2 = await plugin.getBalanceOpenCBDC(getBalanceRequest2);
+    expect(resBalance2.status).toEqual(200);
+     expect(resBalance2.data.balance).toEqual(initAmount);
   });
 });
