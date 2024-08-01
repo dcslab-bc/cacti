@@ -40,39 +40,22 @@ describe(testCase, () => {
 
     console.log("init");
     // 1. Init
-    res = await plugin.init({isScenarioAB: 1});
+    res = await plugin.init({isScenarioAB: 0});
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);
-    const wallet0 = res.data.wallet0; // MintAddr
-    const wallet1 = res.data.wallet1; // SenderAddr (BoA)
-    const wallet2 = res.data.wallet2; // RecevierAddr (Hana)
+    const wallet0 = res.data.wallet0; // 고객B
+    const wallet1 = res.data.wallet1; // BQ
+    const wallet2 = res.data.wallet2; // HN
     const wallet3 = res.data.wallet3; // HTLC_MODULE
 
     console.log("getBalance");
-    // 2. getBalance - MintAddr = initAmount
-    resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest0);
+    // 2. getBalance - BQ = initAmount
+    resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest1);
     expect(resBalance.status).toEqual(200);
     expect(resBalance.data.balance).toEqual(initAmount);
 
-    console.log("transfer");
-    // 3. transfer
-    res = await plugin.transfer({
-      senderNum: 0,
-      receiver: wallet1,
-      receiverNum: 1,
-      inputAmount: inputAmount,
-    });
-    expect(res.status).toEqual(200);
-    expect(res.data.success).toEqual(true);
-
-    console.log("getBalance");
-    // 4. getBalance - SenderAddr (BoA) = inputAmount
-    resBalance= await plugin.getBalanceOpenCBDC(getBalanceRequest1);
-    expect(resBalance.status).toEqual(200);
-    expect(resBalance.data.balance).toEqual(inputAmount);
-
     console.log("deposit");
-    // 5. Deposit
+    // 3. Deposit
     res = await plugin.deposit({
       contractAddress: wallet3,
       inputAmount: inputAmount,
@@ -87,7 +70,7 @@ describe(testCase, () => {
     const hashLock = res.data.hashLock;
 
     console.log("getSingleStatus");
-    // 6. getSingleStatus
+    // 4. getSingleStatus
     res = await plugin.getSingleStatus({
         inputAmount: inputAmount,
         sender: wallet1,
@@ -99,7 +82,7 @@ describe(testCase, () => {
     expect(res.data).toEqual(1);
 
     console.log("withdraw");
-    // 7. withdraw
+    // 5. withdraw
     res = await plugin.withdraw({
         secret: preimage,
         HTLCId: HTLCId,
@@ -108,7 +91,7 @@ describe(testCase, () => {
     expect(res.data.success).toEqual(true);
 
     console.log("getSingleStatus");
-    // 8. getSingleStatus
+    // 6. getSingleStatus
     res = await plugin.getSingleStatus({
       inputAmount: inputAmount,
       sender: wallet1,
@@ -120,7 +103,7 @@ describe(testCase, () => {
     expect(res.data).toEqual(3);
 
     console.log("getSecret");
-    // 9. getSecret
+    // 7. getSecret
     const getSecretRequest: any = {
       HTLCId: HTLCId,
     }
@@ -129,21 +112,32 @@ describe(testCase, () => {
     expect(res.data.secret).toEqual(preimage);
     const secret = res.data.secret;
 
+    console.log("transfer");
+    // 8. transfer
+    res = await plugin.transfer({
+      senderNum: 2,
+      receiver: wallet0,
+      receiverNum: 0,
+      inputAmount: inputAmount,
+    });
+    expect(res.status).toEqual(200);
+    expect(res.data.success).toEqual(true);
+
     console.log("getBalance");
-    // 10. getBalance - RecevierAddr (Hana) = inputAmount
-    resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest2);
+    // 9. getBalance - 고객B = inputAmount
+    resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest0);
     expect(resBalance.status).toEqual(200);
     expect(resBalance.data.balance).toEqual(inputAmount);
 
     console.log("getBalance");
-    // 11. getBalance - SenderAddr (BoA) = 0
-    resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest1);
+    // 10. getBalance - HN
+    resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest2);
     expect(resBalance.status).toEqual(200);
     expect(resBalance.data.balance).toEqual(0);
 
     console.log("getBalance");
-    // 12. getBalance - MintAddr = initAmount - inputAmount
-    resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest0);
+    // 11. getBalance - BQ = initAmount - inputAmount
+    resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest1);
     expect(resBalance.status).toEqual(200);
     expect(resBalance.data.balance).toEqual(initAmount - inputAmount);
   });

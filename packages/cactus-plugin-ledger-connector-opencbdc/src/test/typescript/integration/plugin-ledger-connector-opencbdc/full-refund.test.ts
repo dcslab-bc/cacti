@@ -14,16 +14,19 @@ import OpenCBDCMaterial from "../../../../opencbdc-material/opencbdc-material.js
 const connectorId = uuidv4();
 const logLevel: LogLevelDesc = "INFO";
 
-const initAmount = 50;
-const inputAmount = 10;
-const outputAmount = 20;
+const initAmount = 500;
+const inputAmount = 100;
 const expiration = 2147483648;
-const hashLock = "0x3c335ba7f06a8b01d0596589f73c19069e21c81e5013b91f408165d1bf623d32";
 const preimage = "preimage6c58916ec258f246851bea091d14d4247a2fc3e18694461b1816e13b";
-
+const hashLock = "0x3c335ba7f06a8b01d0596589f73c19069e21c81e5013b91f408165d1bf623d32";
+const getBalanceRequest0: any = {address: 0};
+const getBalanceRequest1: any = {address: 1};
+const getBalanceRequest2: any = {address: 2};
+const getBalanceRequest3: any = {address: 3};
+let resBalance = undefined;
 let res = undefined;
 
-const testCase = "Test AtoZ";
+const testCase = "Test withdraw AtoZ";
 describe(testCase, () => {
   test(testCase, async () => {
     const pluginRegistry = new PluginRegistry();
@@ -38,38 +41,57 @@ describe(testCase, () => {
 
     console.log("init");
     // 1. Init
-    res = await plugin.init({});
+    res = await plugin.init({isScenarioAB: 1});
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);
-    const wallet0 = res.data.wallet0; // SenderAddr (BoA)
-    const wallet1 = res.data.wallet1; // RecevierAddr (Hana)
-    const wallet2 = res.data.wallet2; // HTLC_MODULE
+    const wallet0 = res.data.wallet0; // MintAddr
+    const wallet1 = res.data.wallet1; // SenderAddr (BoA)
+    const wallet2 = res.data.wallet2; // RecevierAddr (Hana)
+    const wallet3 = res.data.wallet3; // HTLC_MODULE
 
-    console.log("deposit");
-    // 2. Deposit
-    res = await plugin.deposit({
-      contractAddress: wallet2,
-      inputAmount: inputAmount,
-      outputAmount: outputAmount,
-      expiration: expiration,
-      hashLock: hashLock,
+    console.log("getBalance");
+    // 2. getBalance - MintAddr = initAmount
+    resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest0);
+    expect(resBalance.status).toEqual(200);
+    expect(resBalance.data.balance).toEqual(initAmount);
+
+    console.log("transfer");
+    // 3. transfer
+    res = await plugin.transfer({
+      senderNum: 0,
       receiver: wallet1,
-      outputNetwork: "Besu",
-      outputAddress: CryptoMaterial.demoApps.scenarioAB.besu.localInter.boa.address,
-      preimage: preimage,
-      senderAddress: wallet0,
+      receiverNum: 1,
+      inputAmount: inputAmount,
     });
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);
-    expect(res.data.HTLCId).toEqual("htlcidb239c83a8ff069bd619c9b47c69471207e74ca9cf68cef274891f544f8");
+
+    console.log("getBalance");
+    // 4. getBalance - SenderAddr (BoA) = inputAmount
+    resBalance= await plugin.getBalanceOpenCBDC(getBalanceRequest1);
+    expect(resBalance.status).toEqual(200);
+    expect(resBalance.data.balance).toEqual(inputAmount);
+
+    console.log("deposit");
+    // 5. Deposit
+    res = await plugin.deposit({
+      contractAddress: wallet3,
+      inputAmount: inputAmount,
+      expiration: expiration,
+      hashLock: hashLock,
+      senderAddress: wallet1,
+      receiver: wallet2,
+    });
+    expect(res.status).toEqual(200);
+    expect(res.data.success).toEqual(true);
     const HTLCId = res.data.HTLCId;
 
     console.log("getSingleStatus");
-    // 3. getSingleStatus
+    // 6. getSingleStatus
     res = await plugin.getSingleStatus({
-        HTLCId: HTLCId,
         inputAmount: inputAmount,
-        receiver: wallet1,
+        sender: wallet1,
+        receiver: wallet2,
         hashLock: hashLock,
         expiration: expiration,
     });
@@ -77,33 +99,41 @@ describe(testCase, () => {
     expect(res.data).toEqual(1);
 
     console.log("refund");
-    // 4. refund
+    // 7. refund
     res = await plugin.refund({
-      secret: preimage,
-      HTLCId: HTLCId,
+        HTLCId: HTLCId,
     });
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);
 
     console.log("getSingleStatus");
-    // 5. getSingleStatus
+    // 8. getSingleStatus
     res = await plugin.getSingleStatus({
-        HTLCId: HTLCId,
-        inputAmount: inputAmount,
-        receiver: wallet1,
-        hashLock: hashLock,
-        expiration: expiration,
-    });
+      inputAmount: inputAmount,
+      sender: wallet1,
+      receiver: wallet2,
+      hashLock: hashLock,
+      expiration: expiration,
+  });
     expect(res.status).toEqual(200);
     expect(res.data).toEqual(2);
 
     console.log("getBalance");
-    // 6. getBalance - SenderAddr (BoA)
-    const getBalanceRequest: any = {
-      address: 0,
-    }
-    const resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest);
+    // 9. getBalance - RecevierAddr (Hana) = 0
+    resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest2);
     expect(resBalance.status).toEqual(200);
-    expect(resBalance.data.balance).toEqual(initAmount);
+    expect(resBalance.data.balance).toEqual(0);
+
+    console.log("getBalance");
+    // 10. getBalance - SenderAddr (BoA) = inputAmount
+    resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest1);
+    expect(resBalance.status).toEqual(200);
+    expect(resBalance.data.balance).toEqual(inputAmount);
+
+    console.log("getBalance");
+    // 11. getBalance - MintAddr = initAmount - inputAmount
+    resBalance = await plugin.getBalanceOpenCBDC(getBalanceRequest0);
+    expect(resBalance.status).toEqual(200);
+    expect(resBalance.data.balance).toEqual(initAmount - inputAmount);
   });
 });

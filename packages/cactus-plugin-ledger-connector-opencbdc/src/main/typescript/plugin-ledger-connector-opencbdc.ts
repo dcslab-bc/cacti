@@ -1061,16 +1061,12 @@ export class PluginLedgerConnectorOpenCBDC
           requestType: requestType,
           contractAddress: newContractRequest.contractAddress,
           inputAmount: newContractRequest.inputAmount,
-          outputAmount: newContractRequest.outputAmount,
           expiration: newContractRequest.expiration,
           hashLock: newContractRequest.hashLock,
           receiver: newContractRequest.receiver,
-          outputNetwork: newContractRequest.outputNetwork,
-          outputAddress: newContractRequest.outputAddress,
           web3SigningCredential: newContractRequest.web3SigningCredential,
           connectorId: newContractRequest.connectorId,
           keychainId: newContractRequest.keychainId,
-          preimage: newContractRequest.preimage,
           senderAddress: newContractRequest.senderAddress,
         };
         client.write(JSON.stringify(requestPayload));
@@ -1085,7 +1081,7 @@ export class PluginLedgerConnectorOpenCBDC
       });
     });
     
-  } 
+  }
   
   public async getSingleStatus(getSingleStatusRequest: any,): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -1100,8 +1096,8 @@ export class PluginLedgerConnectorOpenCBDC
           web3SigningCredential: getSingleStatusRequest.web3SigningCredential,
           connectorId: getSingleStatusRequest.connectorId,
           keychainId: getSingleStatusRequest.keychainId,
-          HTLCId: getSingleStatusRequest.HTLCId,
           inputAmount: getSingleStatusRequest.inputAmount,
+          sender: getSingleStatusRequest.sender,
           receiver: getSingleStatusRequest.receiver,
           hashLock: getSingleStatusRequest.hashLock,
           expiration: getSingleStatusRequest.expiration,
@@ -1158,7 +1154,6 @@ export class PluginLedgerConnectorOpenCBDC
         const requestPayload = {
           requestType: requestType,
           id: refundRequest.id,
-          secret: refundRequest.secret,
           web3SigningCredential: refundRequest.web3SigningCredential,
           connectorId: refundRequest.connectorId,
           keychainId: refundRequest.keychainId,
@@ -1236,6 +1231,7 @@ export class PluginLedgerConnectorOpenCBDC
         const requestType = 4;
         const requestPayload = {
           requestType: requestType,
+          isScenarioAB: initRequest.isScenarioAB
         };
         client.write(JSON.stringify(requestPayload));
       });
@@ -1260,7 +1256,7 @@ export class PluginLedgerConnectorOpenCBDC
         const requestType = 9;
         const requestPayload = {
           requestType: requestType,
-          senderAddress: transferRequest.senderAddress,
+          senderNum: transferRequest.senderNum,
           receiver: transferRequest.receiver,
           receiverNum: transferRequest.receiverNum,
           inputAmount: transferRequest.inputAmount,
