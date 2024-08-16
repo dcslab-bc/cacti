@@ -83,6 +83,7 @@ describe(testCase, () => {
       hashLock: hashLock,
       senderAddress: wallet1,
       receiver: wallet2,
+      fromWalletNum: 1,
     });
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);
@@ -105,6 +106,8 @@ describe(testCase, () => {
     res = await plugin.withdraw({
         secret: preimage,
         HTLCId: HTLCId,
+        fromWalletNum: 1, 
+        toWalletNum: 2,
     });
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);
@@ -147,6 +150,7 @@ describe(testCase, () => {
       expiration: expiration_B,
       senderAddress: wallet2,
       receiver: wallet1,
+      fromWalletNum: 2,
     });
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);
@@ -170,6 +174,8 @@ describe(testCase, () => {
     res = await plugin.withdraw({
         secret: preimage_B,
         HTLCId: HTLCId_B,
+        fromWalletNum: 2, 
+        toWalletNum: 1,
     });
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);
@@ -193,7 +199,7 @@ describe(testCase, () => {
     }
     res = await plugin.getSecret(getSecretRequest);
     expect(res.status).toEqual(200);
-    expect(res.data.secret).toEqual(preimage);
+    expect(res.data.secret).toEqual(preimage_B);
     const secret = res.data.secret;
 
     console.log("getBalance");

@@ -14,7 +14,7 @@ import OpenCBDCMaterial from "../../../../opencbdc-material/opencbdc-material.js
 const connectorId = uuidv4();
 const logLevel: LogLevelDesc = "INFO";
 
-const initAmount = 500;
+const initAmount = 1000;
 const inputAmount = 100;
 const expiration = 2147483648;
 const preimage = "preimage6c58916ec258f246851bea091d14d4247a2fc3e18694461b1816e13b";
@@ -63,6 +63,7 @@ describe(testCase, () => {
       //hashLock: hashLock,
       senderAddress: wallet1,
       receiver: wallet2,
+      fromWalletNum: 1,
     });
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);
@@ -86,6 +87,8 @@ describe(testCase, () => {
     res = await plugin.withdraw({
         secret: preimage,
         HTLCId: HTLCId,
+        fromWalletNum: 1,
+        toWalletNum: 2,
     });
     expect(res.status).toEqual(200);
     expect(res.data.success).toEqual(true);

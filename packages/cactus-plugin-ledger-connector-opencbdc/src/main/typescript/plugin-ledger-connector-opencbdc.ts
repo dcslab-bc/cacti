@@ -1068,6 +1068,7 @@ export class PluginLedgerConnectorOpenCBDC
           connectorId: newContractRequest.connectorId,
           keychainId: newContractRequest.keychainId,
           senderAddress: newContractRequest.senderAddress,
+          fromWalletNum: newContractRequest.fromWalletNum,
         };
         client.write(JSON.stringify(requestPayload));
       });
@@ -1131,6 +1132,8 @@ export class PluginLedgerConnectorOpenCBDC
           keychainId: withdrawRequest.keychainId,
           gas: withdrawRequest.gas,
           HTLCId: withdrawRequest.HTLCId,
+          fromWalletNum: withdrawRequest.fromWalletNum,
+          toWalletNum: withdrawRequest.toWalletNum,
         };
         client.write(JSON.stringify(requestPayload));
       });
@@ -1159,6 +1162,8 @@ export class PluginLedgerConnectorOpenCBDC
           keychainId: refundRequest.keychainId,
           gas: refundRequest.gas,
           HTLCId: refundRequest.HTLCId,
+          fromWalletNum: refundRequest.fromWalletNum,
+          toWalletNum: refundRequest.toWalletNum,
         };
         client.write(JSON.stringify(requestPayload));
       });
